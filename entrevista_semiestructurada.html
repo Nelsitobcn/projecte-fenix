@@ -428,8 +428,11 @@
         <button class="tab active" onclick="showSection('guio')">📋 Guió</button>
         <button class="tab" onclick="showSection('consentiment')">✍️ Consentiment</button>
         <button class="tab" onclick="showSection('graella')">📊 Graella Anàlisi</button>
+        <button class="tab" onclick="showSection('gravacio')" style="background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.3);color:#f87171;">🎙️ Gravació</button>
     </div>
     <button class="print-btn" onclick="window.print()">🖨️ Imprimir PDF</button>
+    <a href="formulari.html" class="print-btn" style="background:var(--fenix-green);text-decoration:none;margin-left:4px;">📝 Formulari</a>
+    <a href="dashboard.html" class="print-btn" style="background:#f59e0b;text-decoration:none;margin-left:4px;">📊 Dashboard</a>
 </nav>
 
 <!-- ════════════════════════════════════════
@@ -449,7 +452,7 @@
             </div>
             <div class="meta-item">
                 <span class="label">Mostra objectiu</span>
-                <span class="value">8–12 conductors</span>
+                <span class="value">16 conductors</span>
             </div>
             <div class="meta-item">
                 <span class="label">Format</span>
@@ -660,27 +663,27 @@
 
         <h3>Dono el meu consentiment per a...</h3>
 
-        <div class="consent-check">
-            <div class="checkbox"></div>
+        <div class="consent-check" style="cursor:pointer" onclick="this.querySelector('input').checked=!this.querySelector('input').checked">
+            <input type="checkbox" style="width:22px;height:22px;accent-color:var(--fenix-green);cursor:pointer;flex-shrink:0;" onclick="event.stopPropagation()">
             <p>Participar en l'entrevista semiestructurada sobre el Projecte Fènix de TMBinnova.</p>
         </div>
-        <div class="consent-check">
-            <div class="checkbox"></div>
-            <p>La gravació d'àudio de l'entrevista per facilitar l'anàlisi posterior (optional). La gravació serà destruïda un cop transcrita.</p>
+        <div class="consent-check" style="cursor:pointer" onclick="this.querySelector('input').checked=!this.querySelector('input').checked">
+            <input type="checkbox" style="width:22px;height:22px;accent-color:var(--fenix-green);cursor:pointer;flex-shrink:0;" onclick="event.stopPropagation()">
+            <p>La gravació d'àudio de l'entrevista per facilitar l'anàlisi posterior (opcional). La gravació serà destruïda un cop transcrita.</p>
         </div>
-        <div class="consent-check">
-            <div class="checkbox"></div>
+        <div class="consent-check" style="cursor:pointer" onclick="this.querySelector('input').checked=!this.querySelector('input').checked">
+            <input type="checkbox" style="width:22px;height:22px;accent-color:var(--fenix-green);cursor:pointer;flex-shrink:0;" onclick="event.stopPropagation()">
             <p>L'ús anònim i agregat de les meves opinions en l'informe final del projecte, sense que es pugui identificar la meva persona.</p>
         </div>
 
         <div class="signature-row">
             <div class="signature-field">
                 <label>Nom i cognoms del participant</label>
-                <div class="signature-line"></div>
+                <input type="text" style="width:100%;border:none;border-bottom:2px solid #cbd5e1;height:42px;font-size:0.9rem;font-family:'Inter',sans-serif;outline:none;background:transparent;" placeholder="Escriu aquí...">
             </div>
             <div class="signature-field">
                 <label>Data</label>
-                <div class="signature-line"></div>
+                <input type="date" style="width:100%;border:none;border-bottom:2px solid #cbd5e1;height:42px;font-size:0.9rem;font-family:'Inter',sans-serif;outline:none;background:transparent;">
             </div>
             <div class="signature-field">
                 <label>Signatura del participant</label>
@@ -745,7 +748,7 @@
             </tr>
         </thead>
         <tbody>
-            <!-- 12 files per a 12 participants -->
+            <!-- 16 files per a 16 participants (TMB Day) -->
             <tr>
                 <td>1</td>
                 <td><span class="write-line"></span></td>
@@ -878,6 +881,50 @@
                 <td><span class="write-line"></span></td>
                 <td><span class="write-line"></span></td>
             </tr>
+            <tr>
+                <td>13</td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+            </tr>
+            <tr>
+                <td>14</td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+            </tr>
+            <tr>
+                <td>15</td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+            </tr>
+            <tr>
+                <td>16</td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+            </tr>
         </tbody>
     </table>
 
@@ -898,7 +945,7 @@
             </div>
             <div>
                 <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">% QUE CREURIEN NOTAR LA DIFERÈNCIA</div>
-                <div class="notes-area" style="min-height:80px">_____ / 12 = _____%</div>
+                <div class="notes-area" style="min-height:80px">_____ / 16 = _____%</div>
             </div>
             <div>
                 <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">PARAULES CLAU (P12) — núvol de paraules</div>
@@ -914,12 +961,190 @@
 
 </div>
 
+<!-- SECCIÓ 4: GRAVACIÓ D'ÀUDIO -->
+<div class="section" id="gravacio">
+    <div class="header-card" style="background:linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);">
+        <div class="tag" style="background:#ef4444;">Eina de Camp</div>
+        <h1>🎙️ Gravació d'Entrevistes</h1>
+        <p>Grava cada entrevista semiestructurada directament des del navegador.<br>
+           Els àudios es guarden localment al dispositiu.</p>
+    </div>
+
+    <div style="background:#fff;border-radius:16px;padding:28px;box-shadow:0 2px 16px rgba(0,0,0,.06);margin-bottom:20px;">
+        <div style="display:flex;gap:12px;margin-bottom:20px;align-items:center;">
+            <label style="font-weight:600;font-size:.9rem;">Conductor:</label>
+            <input type="text" id="recConductorId" placeholder="Ex: C-01" style="padding:10px 16px;border-radius:10px;border:1.5px solid #e2e8f0;font-size:.95rem;flex:1;font-family:inherit;">
+        </div>
+
+        <div id="recorderUI" style="text-align:center;padding:30px 0;">
+            <div id="recStatus" style="font-size:1rem;font-weight:600;margin-bottom:16px;color:#64748b;">Preparat per gravar</div>
+            <div id="recTimer" style="font-size:2.5rem;font-weight:800;font-family:monospace;margin-bottom:20px;color:#0f172a;">00:00</div>
+            <div id="recWave" style="height:40px;display:flex;align-items:center;justify-content:center;gap:3px;margin-bottom:20px;">
+            </div>
+            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+                <button id="btnRecord" onclick="toggleRecording()" style="padding:14px 32px;border-radius:14px;border:none;background:#ef4444;color:#fff;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;transition:.2s;">
+                    🎙️ Iniciar Gravació
+                </button>
+                <button id="btnPause" onclick="pauseRecording()" style="padding:14px 24px;border-radius:14px;border:1.5px solid #e2e8f0;background:#fff;color:#0f172a;font-weight:600;font-size:.9rem;cursor:pointer;font-family:inherit;display:none;">
+                    ⏸️ Pausa
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div style="background:#fff;border-radius:16px;padding:28px;box-shadow:0 2px 16px rgba(0,0,0,.06);">
+        <h3 style="font-size:1rem;margin-bottom:16px;">📁 Gravacions realitzades</h3>
+        <div id="recordingsList" style="font-size:.85rem;color:#64748b;">Cap gravació encara.</div>
+    </div>
+
+    <div style="margin-top:16px;text-align:center;">
+        <a href="formulari.html" style="display:inline-block;padding:14px 28px;background:var(--fenix-green);color:#fff;border-radius:12px;text-decoration:none;font-weight:700;font-size:.95rem;">📝 Passar al Formulari →</a>
+    </div>
+</div>
+
 <script>
     function showSection(id) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         event.target.classList.add('active');
+    }
+
+    // ===== AUDIO RECORDER =====
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
+    let isPaused = false;
+    let timerInterval = null;
+    let seconds = 0;
+    let recordings = JSON.parse(localStorage.getItem('fenix_recordings_meta') || '[]');
+
+    function updateTimer() {
+        seconds++;
+        const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+        const s = String(seconds % 60).padStart(2, '0');
+        document.getElementById('recTimer').textContent = m + ':' + s;
+    }
+
+    function showWave() {
+        const wave = document.getElementById('recWave');
+        wave.innerHTML = '';
+        for (let i = 0; i < 20; i++) {
+            const bar = document.createElement('div');
+            bar.style.cssText = 'width:4px;border-radius:2px;background:#ef4444;transition:height .15s;height:' + (Math.random() * 30 + 5) + 'px;';
+            wave.appendChild(bar);
+        }
+    }
+
+    async function toggleRecording() {
+        const btn = document.getElementById('btnRecord');
+        const btnPause = document.getElementById('btnPause');
+        const status = document.getElementById('recStatus');
+
+        if (!isRecording) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (e) => {
+                    if (e.data.size > 0) audioChunks.push(e.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const conductorId = document.getElementById('recConductorId').value || 'Anònim';
+                    const url = URL.createObjectURL(blob);
+                    const timestamp = new Date().toISOString();
+
+                    // Save metadata
+                    recordings.push({
+                        conductor: conductorId,
+                        timestamp: timestamp,
+                        duration: seconds,
+                        filename: 'entrevista_' + conductorId + '_' + timestamp.slice(0,10) + '.webm'
+                    });
+                    localStorage.setItem('fenix_recordings_meta', JSON.stringify(recordings));
+
+                    // Add download link
+                    addRecordingToList(conductorId, seconds, url, recordings.length);
+                    seconds = 0;
+                    document.getElementById('recTimer').textContent = '00:00';
+                    document.getElementById('recWave').innerHTML = '';
+                };
+
+                mediaRecorder.start(1000);
+                isRecording = true;
+                btn.innerHTML = '⏹️ Aturar i Guardar';
+                btn.style.background = '#1e293b';
+                btnPause.style.display = 'inline-flex';
+                status.textContent = '🔴 Gravant...';
+                status.style.color = '#ef4444';
+                timerInterval = setInterval(() => {
+                    updateTimer();
+                    showWave();
+                }, 1000);
+
+            } catch (err) {
+                alert('Error accedint al micròfon. Comprova els permisos del navegador.\n\n' + err.message);
+            }
+        } else {
+            // Stop
+            mediaRecorder.stop();
+            mediaRecorder.stream.getTracks().forEach(t => t.stop());
+            clearInterval(timerInterval);
+            isRecording = false;
+            isPaused = false;
+            btn.innerHTML = '🎙️ Iniciar Gravació';
+            btn.style.background = '#ef4444';
+            btnPause.style.display = 'none';
+            status.textContent = '✅ Gravació guardada!';
+            status.style.color = 'var(--fenix-green)';
+            setTimeout(() => {
+                status.textContent = 'Preparat per gravar';
+                status.style.color = '#64748b';
+            }, 3000);
+        }
+    }
+
+    function pauseRecording() {
+        const btnPause = document.getElementById('btnPause');
+        const status = document.getElementById('recStatus');
+        if (!isPaused) {
+            mediaRecorder.pause();
+            clearInterval(timerInterval);
+            isPaused = true;
+            btnPause.innerHTML = '▶️ Reprendre';
+            status.textContent = '⏸️ En pausa';
+            status.style.color = '#f59e0b';
+        } else {
+            mediaRecorder.resume();
+            timerInterval = setInterval(() => { updateTimer(); showWave(); }, 1000);
+            isPaused = false;
+            btnPause.innerHTML = '⏸️ Pausa';
+            status.textContent = '🔴 Gravant...';
+            status.style.color = '#ef4444';
+        }
+    }
+
+    function addRecordingToList(conductor, dur, url, num) {
+        const list = document.getElementById('recordingsList');
+        if (list.textContent === 'Cap gravació encara.') list.innerHTML = '';
+        const m = String(Math.floor(dur / 60)).padStart(2, '0');
+        const s = String(dur % 60).padStart(2, '0');
+        const div = document.createElement('div');
+        div.style.cssText = 'display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;background:#f8fafc;margin-bottom:8px;border:1px solid #e2e8f0;';
+        div.innerHTML = '<span style="font-size:1.2rem">🎵</span>' +
+            '<div style="flex:1"><strong>#' + num + ' — ' + conductor + '</strong><br>' +
+            '<span style="font-size:.78rem;color:#94a3b8;">' + m + ':' + s + ' · ' + new Date().toLocaleTimeString('ca') + '</span></div>' +
+            '<audio controls src="' + url + '" style="height:32px;"></audio>' +
+            '<a href="' + url + '" download="entrevista_' + conductor + '.webm" style="padding:6px 12px;background:var(--fenix-blue);color:#fff;border-radius:8px;text-decoration:none;font-size:.75rem;font-weight:600;">💾</a>';
+        list.appendChild(div);
+    }
+
+    // Load existing recordings count
+    if (recordings.length > 0) {
+        document.getElementById('recordingsList').innerHTML = '<p style="margin-bottom:12px">📊 ' + recordings.length + ' gravacions realitzades en sessions anteriors.</p>';
     }
 </script>
 

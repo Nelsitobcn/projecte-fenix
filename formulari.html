@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Projecte Fènix — Formulari de Validació</title>
+<style>
+:root{--green:#2ECC71;--green-dark:#27ae60;--blue:#3498DB;--dark:#0A1628;--card:rgba(255,255,255,.07);--border:rgba(255,255,255,.13);--text:#fff;--muted:rgba(255,255,255,.55)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:linear-gradient(160deg,#0A1628,#132B4F,#0A1628);color:var(--text);min-height:100vh;padding:0}
+
+.top-bar{background:rgba(10,22,40,.95);padding:12px 20px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.top-bar .logo{font-weight:800;font-size:1rem}
+.top-bar .logo span{color:#E30613}
+.top-bar .badge{background:var(--green);color:#fff;font-size:.65rem;font-weight:700;padding:3px 10px;border-radius:20px;margin-left:auto}
+
+.hero-form{text-align:center;padding:28px 20px 20px}
+.hero-form h1{font-size:1.5rem;margin-bottom:6px}
+.hero-form p{color:var(--muted);font-size:.85rem;line-height:1.5}
+.conductor-id{margin:16px auto;max-width:320px}
+.conductor-id label{font-size:.78rem;color:var(--muted);display:block;margin-bottom:6px}
+.conductor-id input{width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);background:var(--card);color:#fff;font-size:1rem;font-family:inherit;text-align:center}
+.conductor-id input:focus{outline:none;border-color:var(--green)}
+.conductor-id input::placeholder{color:var(--muted)}
+
+.progress-container{padding:0 20px;max-width:500px;margin:0 auto 8px}
+.progress-bar{height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--blue));border-radius:3px;transition:width .4s ease}
+.step-label{font-size:.75rem;color:var(--muted);text-align:center;margin-top:6px;margin-bottom:16px}
+
+.form-container{max-width:500px;margin:0 auto;padding:0 16px 100px}
+.step{display:none;animation:fadeIn .3s ease}
+.step.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.question{margin-bottom:24px}
+.question label{display:block;font-size:.9rem;font-weight:600;margin-bottom:12px;line-height:1.4}
+.question .hint{font-size:.75rem;color:var(--muted);margin-top:-8px;margin-bottom:10px}
+
+.emoji-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.emoji-btn{width:56px;height:56px;border-radius:14px;border:2px solid var(--border);background:var(--card);cursor:pointer;font-size:1.4rem;display:flex;align-items:center;justify-content:center;transition:.2s;-webkit-tap-highlight-color:transparent}
+.emoji-btn:active,.emoji-btn.active{border-color:var(--green);background:rgba(46,204,113,.15);transform:scale(1.1);box-shadow:0 0 16px rgba(46,204,113,.3)}
+
+.radio-group{display:flex;flex-direction:column;gap:8px}
+.radio-opt{padding:14px 18px;border-radius:12px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;font-size:.9rem;transition:.2s;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;gap:10px}
+.radio-opt:active,.radio-opt.active{border-color:var(--green);background:rgba(46,204,113,.1)}
+
+.scale-row{display:flex;gap:6px;justify-content:center}
+.scale-btn{width:48px;height:48px;border-radius:12px;border:2px solid var(--border);background:var(--card);cursor:pointer;font-size:1rem;font-weight:700;display:flex;align-items:center;justify-content:center;transition:.2s;-webkit-tap-highlight-color:transparent}
+.scale-btn:active,.scale-btn.active{border-color:var(--blue);background:rgba(52,152,219,.15)}
+.scale-labels{display:flex;justify-content:space-between;font-size:.65rem;color:var(--muted);margin-top:4px;padding:0 4px}
+
+textarea{width:100%;padding:14px;border-radius:12px;border:1.5px solid var(--border);background:var(--card);color:#fff;font-family:inherit;font-size:.95rem;resize:none;min-height:70px}
+textarea:focus{outline:none;border-color:var(--blue)}
+textarea::placeholder{color:var(--muted)}
+
+.nav-buttons{display:flex;gap:10px;margin-top:24px}
+.btn{flex:1;padding:16px;border-radius:14px;border:none;font-weight:700;font-size:.95rem;cursor:pointer;transition:.2s;font-family:inherit}
+.btn-next{background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff}
+.btn-next:active{transform:scale(.97)}
+.btn-back{background:rgba(255,255,255,.08);color:#fff;border:1px solid var(--border)}
+.btn-submit{background:linear-gradient(135deg,var(--green),#1abc9c);color:#fff;font-size:1.05rem;padding:18px}
+
+/* RESULT */
+.result{text-align:center;padding:40px 20px}
+.result .big-icon{font-size:4rem;margin-bottom:16px}
+.result h2{margin-bottom:8px}
+.result p{color:var(--muted);font-size:.9rem;margin-bottom:6px}
+.result .count{font-size:1.3rem;font-weight:700;color:var(--green);margin:16px 0}
+.btn-new{margin-top:16px;padding:14px 28px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:#fff;cursor:pointer;font-size:.9rem;font-family:inherit}
+
+/* QR */
+.qr-section{text-align:center;padding:24px 20px;border-top:1px solid var(--border);margin-top:20px}
+.qr-section h3{font-size:.95rem;margin-bottom:8px}
+.qr-section p{font-size:.75rem;color:var(--muted);margin-bottom:12px}
+#qrCanvas{margin:0 auto;border-radius:12px;background:#fff;padding:12px}
+.qr-url{font-size:.7rem;color:var(--muted);word-break:break-all;margin-top:8px;padding:8px;background:var(--card);border-radius:8px}
+
+/* Footer */
+.form-footer{text-align:center;padding:20px;font-size:.75rem;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="logo">🔥 <span>TMB</span>innova</div>
+  <div style="font-size:.85rem">Formulari de Validació</div>
+  <div class="badge">TMB DAY</div>
+</div>
+
+<div class="hero-form">
+  <h1>🦅 Projecte Fènix</h1>
+  <p>Ajuda'ns a validar la Sala de Benestar.<br>10 preguntes · 3 minuts · Anònim</p>
+</div>
+
+<div class="conductor-id">
+  <label>Identificador (opcional — es pot deixar en blanc)</label>
+  <input type="text" id="conductorId" placeholder="Ex: C-01, C-02...">
+</div>
+
+<div class="progress-container">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:20%"></div></div>
+  <div class="step-label" id="stepLabel">Pas 1 de 5 — Estat actual</div>
+</div>
+
+<div class="form-container">
+  <!-- STEP 1: ESTAT ACTUAL -->
+  <div class="step active" id="step1">
+    <div class="question">
+      <label>P1 — Com descriuries el teu nivell de fatiga habitual al final d'un torn?</label>
+      <div class="emoji-row">
+        <div class="emoji-btn" onclick="pick(this,'p1','😊 Bé')">😊</div>
+        <div class="emoji-btn" onclick="pick(this,'p1','🙂 Acceptable')">🙂</div>
+        <div class="emoji-btn" onclick="pick(this,'p1','😐 Regular')">😐</div>
+        <div class="emoji-btn" onclick="pick(this,'p1','😩 Cansat')">😩</div>
+        <div class="emoji-btn" onclick="pick(this,'p1','🔴 Exhaust')">🔴</div>
+      </div>
+    </div>
+    <div class="question">
+      <label>P2 — Quin torn fas habitualment?</label>
+      <div class="radio-group">
+        <div class="radio-opt" onclick="pickR(this,'p2','Matí')">☀️ Matí</div>
+        <div class="radio-opt" onclick="pickR(this,'p2','Tarda')">🌤️ Tarda</div>
+        <div class="radio-opt" onclick="pickR(this,'p2','Nit')">🌙 Nit</div>
+        <div class="radio-opt" onclick="pickR(this,'p2','Rotatiu')">🔄 Rotatiu</div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-next" onclick="goStep(2)">Següent →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: PERFIL -->
+  <div class="step" id="step2">
+    <div class="question">
+      <label>P3 — Quants anys portes conduint a TMB?</label>
+      <div class="radio-group">
+        <div class="radio-opt" onclick="pickR(this,'p3','< 2 anys')">🆕 Menys de 2 anys</div>
+        <div class="radio-opt" onclick="pickR(this,'p3','2-10 anys')">📅 2 a 10 anys</div>
+        <div class="radio-opt" onclick="pickR(this,'p3','> 10 anys')">🏅 Més de 10 anys</div>
+      </div>
+    </div>
+    <div class="question">
+      <label>P4 — Tens un espai adequat per descansar durant la jornada?</label>
+      <div class="radio-group">
+        <div class="radio-opt" onclick="pickR(this,'p4','Sí, adequat')">✅ Sí, adequat</div>
+        <div class="radio-opt" onclick="pickR(this,'p4','Existeix però no serveix')">⚠️ Existeix però no serveix</div>
+        <div class="radio-opt" onclick="pickR(this,'p4','No existeix')">❌ No existeix</div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="goStep(1)">← Tornar</button>
+      <button class="btn btn-next" onclick="goStep(3)">Següent →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: REACCIÓ AL CONCEPTE -->
+  <div class="step" id="step3">
+    <div class="question">
+      <label>P5 — Quina és la teva primera reacció al concepte Sala Fènix?</label>
+      <p class="hint">(Després de veure el prototip)</p>
+      <div class="radio-group">
+        <div class="radio-opt" onclick="pickR(this,'p5','Molt positiva')">🟢 Molt positiva — la necessitem ja</div>
+        <div class="radio-opt" onclick="pickR(this,'p5','Positiva amb dubtes')">🟡 Positiva però tinc dubtes</div>
+        <div class="radio-opt" onclick="pickR(this,'p5','Neutral')">⚪ Neutral — he de pensar-ho</div>
+        <div class="radio-opt" onclick="pickR(this,'p5','Escèptic')">🔴 Escèptic/a — no ho veig clar</div>
+      </div>
+    </div>
+    <div class="question">
+      <label>P6 — Quina zona t'atreu més?</label>
+      <div class="radio-group">
+        <div class="radio-opt" onclick="pickR(this,'p6','Zona Activa')">🟢 Zona Activa — moviment i estiraments</div>
+        <div class="radio-opt" onclick="pickR(this,'p6','Zona de Calma')">🟡 Zona de Calma — relaxació sensorial</div>
+        <div class="radio-opt" onclick="pickR(this,'p6','Zona Recuperació')">🔵 Zona de Recuperació — micro-descans</div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="goStep(2)">← Tornar</button>
+      <button class="btn btn-next" onclick="goStep(4)">Següent →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: BARRERES I IMPACTE -->
+  <div class="step" id="step4">
+    <div class="question">
+      <label>P7 — Quina és la principal barrera que veus?</label>
+      <div class="radio-group">
+        <div class="radio-opt" onclick="pickR(this,'p7','Temps')">⏱️ No tinc temps entre serveis</div>
+        <div class="radio-opt" onclick="pickR(this,'p7','Vergonya')">😶 Em faria vergonya usar-la</div>
+        <div class="radio-opt" onclick="pickR(this,'p7','Estigma')">🚫 Estigma — "això és per febles"</div>
+        <div class="radio-opt" onclick="pickR(this,'p7','Cap barrera')">✅ Cap barrera — la usaria</div>
+      </div>
+    </div>
+    <div class="question">
+      <label>P8 — Com valores la comoditat dels espais actuals? (1-5)</label>
+      <div class="scale-row">
+        <div class="scale-btn" onclick="pickS(this,'p8',1)">1</div>
+        <div class="scale-btn" onclick="pickS(this,'p8',2)">2</div>
+        <div class="scale-btn" onclick="pickS(this,'p8',3)">3</div>
+        <div class="scale-btn" onclick="pickS(this,'p8',4)">4</div>
+        <div class="scale-btn" onclick="pickS(this,'p8',5)">5</div>
+      </div>
+      <div class="scale-labels"><span>Molt dolent</span><span>Excel·lent</span></div>
+    </div>
+    <div class="question">
+      <label>P9 — Repetiríes l'ús de la Sala Fènix?</label>
+      <div class="radio-group">
+        <div class="radio-opt" onclick="pickR(this,'p9','Sí, segur')">✅ Sí, segur</div>
+        <div class="radio-opt" onclick="pickR(this,'p9','Probablement sí')">🤔 Probablement sí</div>
+        <div class="radio-opt" onclick="pickR(this,'p9','No ho sé')">😐 No ho sé</div>
+        <div class="radio-opt" onclick="pickR(this,'p9','No')">❌ No</div>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="goStep(3)">← Tornar</button>
+      <button class="btn btn-next" onclick="goStep(5)">Últim pas →</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: TANCAMENT -->
+  <div class="step" id="step5">
+    <div class="question">
+      <label>P10 — Una paraula que defineixi el Projecte Fènix per a tu:</label>
+      <textarea id="p10" placeholder="Escriu una paraula o frase curta..."></textarea>
+    </div>
+    <div class="question">
+      <label>P11 — Vols afegir algun comentari o suggeriment? (opcional)</label>
+      <textarea id="p11" placeholder="Qualsevol idea és benvinguda..." style="min-height:90px"></textarea>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="goStep(4)">← Tornar</button>
+      <button class="btn btn-submit" onclick="submitForm()">✅ Enviar valoració</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="step" id="stepResult">
+    <div class="result">
+      <div class="big-icon">🎉</div>
+      <h2>Gràcies per participar!</h2>
+      <p>La teva opinió ajuda a construir la Sala Fènix.</p>
+      <div class="count" id="resCount">📊 Respostes: 0 / 16</div>
+      <button class="btn btn-next" onclick="resetForm()">🔄 Nova valoració</button>
+      <button class="btn-new" onclick="exportCSV()">📥 Exportar dades (CSV)</button>
+      <button class="btn-new" onclick="window.open('dashboard.html','_blank')">📊 Veure dashboard</button>
+    </div>
+  </div>
+
+  <!-- QR SECTION -->
+  <div class="qr-section" id="qrSection">
+    <h3>📱 Codi QR per a conductors</h3>
+    <p>Escaneja per obrir el formulari al mòbil</p>
+    <canvas id="qrCanvas" width="200" height="200"></canvas>
+    <div class="qr-url" id="qrUrl"></div>
+    <p style="margin-top:8px;font-size:.7rem">Comparteix aquest enllaç o imprimeix el QR</p>
+  </div>
+</div>
+
+<div class="form-footer">
+  Projecte Fènix · TMBinnova 2025 · Reto #38<br>
+  <a href="index.html" style="color:var(--blue)">← Tornar al prototip</a> ·
+  <a href="entrevista_semiestructurada.html" style="color:var(--green)">📋 Entrevista</a> ·
+  <a href="dashboard.html" style="color:var(--green)">📊 Dashboard</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script>
+const D = {};
+let step = 1;
+const STORAGE = 'fenix_validacio_v2';
+
+function pick(el, field, val) {
+  el.parentElement.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  D[field] = val;
+}
+function pickR(el, field, val) {
+  el.parentElement.querySelectorAll('.radio-opt').forEach(r => r.classList.remove('active'));
+  el.classList.add('active');
+  D[field] = val;
+}
+function pickS(el, field, val) {
+  el.parentElement.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  D[field] = val;
+}
+
+function goStep(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+  step = n;
+  const pct = {1:'20%',2:'40%',3:'60%',4:'80%',5:'95%'};
+  const lbl = {1:'Pas 1 de 5 — Estat actual',2:'Pas 2 de 5 — Perfil',3:'Pas 3 de 5 — Reacció',4:'Pas 4 de 5 — Barreres',5:'Pas 5 de 5 — Tancament'};
+  document.getElementById('progressFill').style.width = pct[n] || '100%';
+  document.getElementById('stepLabel').textContent = lbl[n] || 'Completat!';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function submitForm() {
+  D.p10_paraula = document.getElementById('p10')?.value || '';
+  D.p11_comentari = document.getElementById('p11')?.value || '';
+  D.conductor_id = document.getElementById('conductorId')?.value || '';
+  D.timestamp = new Date().toISOString();
+  D.id = Date.now();
+
+  const all = JSON.parse(localStorage.getItem(STORAGE) || '[]');
+  all.push({...D});
+  localStorage.setItem(STORAGE, JSON.stringify(all));
+
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('stepResult').classList.add('active');
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('stepLabel').textContent = 'Completat!';
+  document.getElementById('resCount').textContent = '📊 Respostes recollides: ' + all.length + ' / 16';
+}
+
+function resetForm() {
+  Object.keys(D).forEach(k => delete D[k]);
+  document.querySelectorAll('.emoji-btn,.radio-opt,.scale-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('p10').value = '';
+  document.getElementById('p11').value = '';
+  document.getElementById('conductorId').value = '';
+  goStep(1);
+}
+
+function exportCSV() {
+  const all = JSON.parse(localStorage.getItem(STORAGE) || '[]');
+  if (!all.length) { alert('No hi ha dades.'); return; }
+  const fields = ['id','conductor_id','timestamp','p1','p2','p3','p4','p5','p6','p7','p8','p9','p10_paraula','p11_comentari'];
+  const header = fields.join(',');
+  const rows = all.map(r => fields.map(f => '"' + String(r[f] || '').replace(/"/g, '""') + '"').join(','));
+  const csv = '\ufeff' + header + '\n' + rows.join('\n');
+  const blob = new Blob([csv], {type: 'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'fenix_validacio_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+
+// QR Code generation
+try {
+  const url = window.location.href;
+  document.getElementById('qrUrl').textContent = url;
+  if (typeof qrcode !== 'undefined') {
+    const qr = qrcode(0, 'M');
+    qr.addData(url);
+    qr.make();
+    const canvas = document.getElementById('qrCanvas');
+    const ctx = canvas.getContext('2d');
+    const size = qr.getModuleCount();
+    const cellSize = Math.floor(176 / size);
+    canvas.width = cellSize * size + 24;
+    canvas.height = cellSize * size + 24;
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#0A1628';
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        if (qr.isDark(r, c)) {
+          ctx.fillRect(12 + c * cellSize, 12 + r * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+  }
+} catch(e) { console.log('QR generation skipped'); }
+
+// Show count on load
+const existing = JSON.parse(localStorage.getItem(STORAGE) || '[]');
+if (existing.length > 0) {
+  document.getElementById('qrSection').insertAdjacentHTML('beforebegin',
+    '<div style="text-align:center;padding:12px;margin:0 16px;border-radius:12px;background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.2)"><span style="font-size:.85rem">📊 Ja tens <strong>' + existing.length + '</strong> respostes recollides</span></div>'
+  );
+}
+</script>
+</body>
+</html>
