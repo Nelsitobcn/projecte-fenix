@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projecte Fènix — Guió Entrevista Semiestructurada</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --fenix-green:  #22c55e;
+            --fenix-yellow: #f59e0b;
+            --fenix-blue:   #3b82f6;
+            --fenix-dark:   #0f172a;
+            --fenix-gray:   #64748b;
+            --fenix-light:  #f8fafc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            color: var(--fenix-dark);
+        }
+
+        /* ── NAV ── */
+        nav {
+            background: var(--fenix-dark);
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav .logo { color: #fff; font-weight: 800; font-size: 1.1rem; }
+        nav .logo span { color: var(--fenix-green); }
+        nav .tabs { display: flex; gap: 8px; margin-left: auto; }
+        nav .tab {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #94a3b8;
+            padding: 6px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        nav .tab:hover, nav .tab.active {
+            background: var(--fenix-green);
+            border-color: var(--fenix-green);
+            color: #fff;
+        }
+        nav .print-btn {
+            background: var(--fenix-blue);
+            color: #fff;
+            border: none;
+            padding: 7px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            margin-left: 12px;
+            transition: opacity 0.2s;
+        }
+        nav .print-btn:hover { opacity: 0.85; }
+
+        /* ── SECTIONS ── */
+        .section { display: none; max-width: 860px; margin: 40px auto; padding: 0 24px 80px; }
+        .section.active { display: block; }
+
+        /* ── HEADER CARD ── */
+        .header-card {
+            background: linear-gradient(135deg, var(--fenix-dark) 0%, #1e293b 100%);
+            border-radius: 20px;
+            padding: 36px 40px;
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+        .header-card::before {
+            content: '🦅';
+            position: absolute;
+            right: 32px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 5rem;
+            opacity: 0.12;
+        }
+        .header-card .tag {
+            display: inline-block;
+            background: var(--fenix-green);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+        .header-card h1 {
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 8px;
+        }
+        .header-card p { color: #94a3b8; font-size: 0.9rem; line-height: 1.6; }
+        .header-card .meta {
+            display: flex;
+            gap: 24px;
+            margin-top: 20px;
+        }
+        .header-card .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .header-card .meta-item .label {
+            color: #64748b;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+        }
+        .header-card .meta-item .value {
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* ── INTRO BOX ── */
+        .intro-box {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid var(--fenix-blue);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 28px;
+        }
+        .intro-box h3 { color: var(--fenix-blue); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; font-weight: 700; }
+        .intro-box p { color: #475569; font-size: 0.9rem; line-height: 1.7; font-style: italic; }
+
+        /* ── BLOC ── */
+        .bloc {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 28px 32px;
+            margin-bottom: 20px;
+        }
+        .bloc-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .bloc-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .dot-red    { background: #fef2f2; }
+        .dot-blue   { background: #eff6ff; }
+        .dot-yellow { background: #fffbeb; }
+        .dot-green  { background: #f0fdf4; }
+
+        .bloc-header h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--fenix-dark);
+        }
+        .bloc-header .time-badge {
+            margin-left: auto;
+            background: #f1f5f9;
+            color: var(--fenix-gray);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        /* ── QUESTION ── */
+        .question {
+            margin-bottom: 22px;
+            padding: 16px 20px;
+            background: #fafafa;
+            border-radius: 10px;
+            border: 1px solid #f1f5f9;
+        }
+        .question:last-child { margin-bottom: 0; }
+        .question .q-number {
+            display: inline-block;
+            background: var(--fenix-dark);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        .question .q-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e293b;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        .question .q-probe {
+            background: #eff6ff;
+            border-left: 3px solid var(--fenix-blue);
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 0.82rem;
+            color: #3730a3;
+            font-style: italic;
+        }
+        .question .q-probe strong { font-style: normal; font-weight: 600; }
+        .question .q-options {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .q-option-pill {
+            background: #fff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 0.8rem;
+            color: #475569;
+            font-weight: 500;
+        }
+        .pill-green  { border-color: var(--fenix-green);  color: #15803d; background: #f0fdf4; }
+        .pill-yellow { border-color: var(--fenix-yellow); color: #92400e; background: #fffbeb; }
+        .pill-blue   { border-color: var(--fenix-blue);   color: #1d4ed8; background: #eff6ff; }
+
+        /* ── NOTES AREA ── */
+        .notes-area {
+            margin-top: 12px;
+            background: #fff;
+            border: 1.5px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 10px 14px;
+            min-height: 60px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        /* ── TIP BOX ── */
+        .tip-box {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .tip-box .tip-icon { font-size: 1.1rem; flex-shrink: 0; }
+        .tip-box p { font-size: 0.82rem; color: #92400e; line-height: 1.6; }
+
+        /* ── TANAMENT ── */
+        .tancament-box {
+            background: linear-gradient(135deg, var(--fenix-green), #16a34a);
+            border-radius: 12px;
+            padding: 20px 24px;
+            color: #fff;
+            margin-top: 10px;
+        }
+        .tancament-box h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; opacity: 0.85; }
+        .tancament-box p { font-size: 0.85rem; font-style: italic; line-height: 1.6; }
+
+        /* ── CONSENT PAGE ── */
+        .consent-form {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 48px 52px;
+        }
+        .consent-form .consent-logo {
+            text-align: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        .consent-form .consent-logo .emoji { font-size: 3rem; display: block; margin-bottom: 8px; }
+        .consent-form .consent-logo h2 { font-size: 1.4rem; font-weight: 800; color: var(--fenix-dark); }
+        .consent-form .consent-logo p { color: var(--fenix-gray); font-size: 0.85rem; margin-top: 4px; }
+        .consent-form h3 { font-size: 1rem; font-weight: 700; color: var(--fenix-dark); margin: 24px 0 12px; }
+        .consent-form ul { padding-left: 20px; color: #475569; font-size: 0.88rem; line-height: 2; }
+        .consent-form .consent-check {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin: 8px 0;
+        }
+        .consent-check .checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #cbd5e1;
+            border-radius: 5px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .consent-check p { font-size: 0.85rem; color: #374151; line-height: 1.5; }
+        .signature-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 32px;
+        }
+        .signature-field label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--fenix-gray);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .signature-line {
+            height: 42px;
+            border-bottom: 2px solid #cbd5e1;
+            width: 100%;
+        }
+
+        /* ── GRAELLA ── */
+        .graella-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        .graella-table th {
+            background: var(--fenix-dark);
+            color: #e2e8f0;
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .graella-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #374151;
+            vertical-align: top;
+        }
+        .graella-table tr:last-child td { border-bottom: none; }
+        .graella-table tr:nth-child(even) td { background: #fafafa; }
+        .graella-table .write-line {
+            height: 28px;
+            border-bottom: 1px solid #e2e8f0;
+            display: block;
+            width: 100%;
+        }
+        .fatigue-scale {
+            display: flex;
+            gap: 6px;
+        }
+        .fatigue-btn {
+            width: 32px;
+            height: 32px;
+            border: 2px solid #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        /* ── KPI CARDS ── */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+        .kpi-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 18px 20px;
+            text-align: center;
+        }
+        .kpi-card .kpi-icon { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+        .kpi-card .kpi-label { font-size: 0.75rem; color: var(--fenix-gray); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+        .kpi-card .kpi-formula { font-size: 0.78rem; color: var(--fenix-blue); font-weight: 600; margin-top: 6px; }
+
+        /* ── PRINT ── */
+        @media print {
+            nav, .tabs, .print-btn { display: none !important; }
+            body { background: #fff; }
+            .section { display: block !important; max-width: 100%; margin: 0; padding: 20px; }
+            .section:not(:first-child) { page-break-before: always; }
+            .header-card { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+            .bloc { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">🦅 Projecte <span>Fènix</span></div>
+    <div class="tabs">
+        <button class="tab active" onclick="showSection('guio')">📋 Guió</button>
+        <button class="tab" onclick="showSection('consentiment')">✍️ Consentiment</button>
+        <button class="tab" onclick="showSection('graella')">📊 Graella Anàlisi</button>
+    </div>
+    <button class="print-btn" onclick="window.print()">🖨️ Imprimir PDF</button>
+</nav>
+
+<!-- ════════════════════════════════════════
+     SECCIÓ 1: GUIÓ ENTREVISTA
+════════════════════════════════════════ -->
+<div class="section active" id="guio">
+
+    <div class="header-card">
+        <div class="tag">Document Intern · Confidencial</div>
+        <h1>Guió d'Entrevista Semiestructurada</h1>
+        <p>Validació qualitativa del Projecte Fènix amb conductors reals de TMB.<br>
+           Destinat a l'entrevistador. No compartir amb participants.</p>
+        <div class="meta">
+            <div class="meta-item">
+                <span class="label">Durada estimada</span>
+                <span class="value">15–20 minuts</span>
+            </div>
+            <div class="meta-item">
+                <span class="label">Mostra objectiu</span>
+                <span class="value">8–12 conductors</span>
+            </div>
+            <div class="meta-item">
+                <span class="label">Format</span>
+                <span class="value">Presencial / Individual</span>
+            </div>
+            <div class="meta-item">
+                <span class="label">Enregistrament</span>
+                <span class="value">Audio (amb consentiment)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRESENTACIÓ -->
+    <div class="intro-box">
+        <h3>🎙️ Text de presentació — llegir en veu alta</h3>
+        <p>"Hola, moltes gràcies per participar. Estem fent un projecte per millorar el benestar dels conductors de TMB. La teva opinió és completament anònima i molt valuosa. No hi ha respostes correctes ni incorrectes. L'entrevista durarà uns 15-20 minuts. Et sembla bé si la gravem per no perdre cap detall? La gravació és confidencial i s'esborrarà un cop processada."</p>
+    </div>
+
+    <!-- BLOC A -->
+    <div class="bloc">
+        <div class="bloc-header">
+            <div class="bloc-dot dot-red">🔴</div>
+            <div>
+                <h2>BLOC A — Experiència actual de fatiga</h2>
+                <div style="font-size:0.8rem;color:#94a3b8;margin-top:3px">Explorar el context real del conductor</div>
+            </div>
+            <span class="time-badge">⏱ ~5 min</span>
+        </div>
+
+        <div class="question">
+            <span class="q-number">P1</span>
+            <div class="q-text">Com descriuries el teu nivell de cansament habitual al final d'un torn?</div>
+            <div class="q-probe">
+                <strong>🔍 Sonda:</strong> Físic, mental o emocional? Hi ha diferència entre torn de matí, tarda o nit? Algun dia de la setmana pitjor?
+            </div>
+            <div class="notes-area">Notes: _______________________________________________</div>
+        </div>
+
+        <div class="question">
+            <span class="q-number">P2</span>
+            <div class="q-text">Hi ha moments concrets de la jornada on la fatiga és especialment intensa?</div>
+            <div class="q-probe">
+                <strong>🔍 Sonda:</strong> Hora del dia, tram de ruta, condicions de trànsit, densitat de passatgers?
+            </div>
+            <div class="notes-area">Notes: _______________________________________________</div>
+        </div>
+
+        <div class="question">
+            <span class="q-number">P3</span>
+            <div class="q-text">Ara mateix, quan necessites descansar o desconnectar, on vas i què fas?</div>
+            <div class="q-probe">
+                <strong>🔍 Sonda:</strong> Cabina, cafeteria, sortir al carrer? Et sents còmode en aquell espai? Tens temps real per fer-ho?
+            </div>
+            <div class="notes-area">Notes: _______________________________________________</div>
+        </div>
+    </div>
+
+    <!-- BLOC B -->
+    <div class="bloc">
+        <div class="bloc-header">
+            <div class="bloc-dot dot-blue">🔵</div>
+            <div>
+                <h2>BLOC B — Reacció al concepte Sala Fènix</h2>
+                <div style="font-size:0.8rem;color:#94a3b8;margin-top:3px">Validar l'acceptació i les barreres d'ús</div>
+            </div>
+            <span class="time-badge">⏱ ~7 min</span>
+        </div>
+
+        <div class="tip-box" style="margin-bottom:18px;">
+            <span class="tip-icon">💡</span>
+            <p><strong>Abans de P4:</strong> Descriure breument les 3 zones de la Sala Fènix. Pots mostrar una imatge o fer-ho verbalment: <em>"La Sala Fènix és un espai dins de TMB amb tres zones: una zona activa per moure el cos, una zona de calma per relaxar-se, i una zona de recuperació per micro-descansos en silenci."</em></p>
+        </div>
+
+        <div class="question">
+            <span class="q-number">P4</span>
+            <div class="q-text">Quin és el teu primer pensament quan t'explico la Sala Fènix?</div>
+            <div class="q-probe">
+                <strong>🔍 Sonda:</strong> Utilitat real, confiança, vergonya d'usar-la, sobretot la zona de calma, dubtes sobre el temps disponible?
+            </div>
+            <div class="notes-area">Notes: _______________________________________________</div>
+        </div>
+
+        <div class="question">
+            <span class="q-number">P5</span>
+            <div class="q-text">De les tres zones, quina creus que usaries més? Per quin motiu?</div>
+            <div class="q-options">
+                <span class="q-option-pill pill-green">🟢 Zona Activa (moviment, estiraments)</span>
+                <span class="q-option-pill pill-yellow">🟡 Zona de Calma (relaxació, respiració)</span>
+                <span class="q-option-pill pill-blue">🔵 Zona de Recuperació (silenci, micro-descans)</span>
+            </div>
+            <div class="notes-area" style="margin-top:10px">Zona escollida + motiu: _______________________________________________</div>
+        </div>
+
+        <div class="question">
+            <span class="q-number">P6</span>
+            <div class="q-text">Quin seria el motiu principal que et faria <u>NO</u> usar la sala, fins i tot si estigués disponible?</div>
+            <div class="q-probe">
+                <strong>🔍 Sonda:</strong> Falta de temps, distància, vergonya, no creure que funcioni, preferir comunicar-se amb companys, no saber on és?
+            </div>
+            <div class="notes-area">Barrera principal: _______________________________________________</div>
+        </div>
+
+        <div class="question">
+            <span class="q-number">P7</span>
+            <div class="q-text">Quines condicions necessitaries perquè la usessis de manera habitual?</div>
+            <div class="q-probe">
+                <strong>🔍 Sonda:</strong> Horari flexible, garantia de privacitat, reconeixement per part de l'empresa, que ho usessin també companys, durada mínima de pausa?
+            </div>
+            <div class="notes-area">Condicions: _______________________________________________</div>
+        </div>
+    </div>
+
+    <!-- BLOC C -->
+    <div class="bloc">
+        <div class="bloc-header">
+            <div class="bloc-dot dot-yellow">🟡</div>
+            <div>
+                <h2>BLOC C — Impacte esperat i extrapolabilitat</h2>
+                <div style="font-size:0.8rem;color:#94a3b8;margin-top:3px">Proxy de recuperació i visió de futur</div>
+            </div>
+            <span class="time-badge">⏱ ~4 min</span>
+        </div>
+
+        <div class="question">
+            <span class="q-number">P8</span>
+            <div class="q-text">Si tinguessis 10 minuts de pausa garantida per usar la sala, creus que notaries la diferència?</div>
+            <div class="q-probe">
+                <strong>🔍 Sonda (proxy de recuperació):</strong> En la conducció? En el teu estat d'ànim? En la seguretat vial? En com tractes als passatgers?
+            </div>
+            <div class="notes-area">Resposta: _______________________________________________</div>
+        </div>
+
+        <div class="question">
+            <span class="q-number">P9</span>
+            <div class="q-text">Coneixes algun perfil de company/a que creus que ho necessitaria especialment?</div>
+            <div class="q-probe">
+                <strong>🔍 Sonda:</strong> Sense noms. Perfil de conductor més vulnerable a la fatiga: edat, torn, anys d'experiència, tipus de ruta?
+            </div>
+            <div class="notes-area">Perfil vulnerable: _______________________________________________</div>
+        </div>
+
+        <div class="question">
+            <span class="q-number">P10</span>
+            <div class="q-text">Si portem el Projecte Fènix al Metro o a altres col·lectius de TMB, creus que tindria sentit?</div>
+            <div class="q-probe">
+                <strong>🔍 Sonda:</strong> Similituds i diferències amb la feina de conductor d'autobús. Seria necessari adaptar-ho? Com?
+            </div>
+            <div class="notes-area">Extrapolabilitat: _______________________________________________</div>
+        </div>
+    </div>
+
+    <!-- TANCAMENT -->
+    <div class="bloc">
+        <div class="bloc-header">
+            <div class="bloc-dot dot-green">🟢</div>
+            <div>
+                <h2>TANCAMENT</h2>
+            </div>
+            <span class="time-badge">⏱ ~2 min</span>
+        </div>
+
+        <div class="question">
+            <span class="q-number">P11</span>
+            <div class="q-text">Hi ha alguna cosa que no t'hem preguntat i creus que és important que sapiguem?</div>
+            <div class="notes-area">Comentari lliure: _______________________________________________</div>
+        </div>
+
+        <div class="question">
+            <span class="q-number">P12</span>
+            <div class="q-text">En una paraula, com definiríes el que necessiten els conductors de TMB per estar millor?</div>
+            <div class="notes-area" style="min-height:42px;">Paraula clau: ___________________</div>
+        </div>
+
+        <div class="tancament-box">
+            <h3>🙏 Text de tancament — llegir en veu alta</h3>
+            <p>"Moltes gràcies per la teva col·laboració. La teva opinió és molt valuosa per millorar les condicions de treball de tots els conductors de TMB. Recorda que la gravació s'esborrarà i tot és anònim. Si tens alguna pregunta sobre el projecte, pots contactar-nos en qualsevol moment."</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- ════════════════════════════════════════
+     SECCIÓ 2: CONSENTIMENT INFORMAT
+════════════════════════════════════════ -->
+<div class="section" id="consentiment">
+    <div class="consent-form">
+        <div class="consent-logo">
+            <span class="emoji">🦅</span>
+            <h2>Projecte Fènix — TMBinnova</h2>
+            <p>Full de Consentiment Informat · RGPD Compliant</p>
+        </div>
+
+        <h3>Sobre l'estudi</h3>
+        <ul>
+            <li>Estàs participant en la validació del <strong>Projecte Fènix</strong>, una iniciativa de TMBinnova per millorar el benestar dels conductors.</li>
+            <li>L'entrevista tindrà una durada aproximada de <strong>15-20 minuts</strong>.</li>
+            <li>Les dades recollides seran processades de forma <strong>anònima i agregada</strong>.</li>
+            <li>La teva participació és <strong>voluntària</strong> i pots retirar-te en qualsevol moment.</li>
+        </ul>
+
+        <h3>Drets RGPD</h3>
+        <ul>
+            <li>Tens dret d'accés, rectificació, cancel·lació i oposició al tractament de les teves dades.</li>
+            <li>Les dades seran tractades conforme al <strong>Reglament General de Protecció de Dades (UE) 2016/679</strong>.</li>
+            <li>La gravació d'àudio, si autoritzada, s'esborrarà un cop transcrita i analitzada.</li>
+            <li>En cap cas les teves dades seran cedides a tercers ni usades per a fins comercials.</li>
+        </ul>
+
+        <h3>Dono el meu consentiment per a...</h3>
+
+        <div class="consent-check">
+            <div class="checkbox"></div>
+            <p>Participar en l'entrevista semiestructurada sobre el Projecte Fènix de TMBinnova.</p>
+        </div>
+        <div class="consent-check">
+            <div class="checkbox"></div>
+            <p>La gravació d'àudio de l'entrevista per facilitar l'anàlisi posterior (optional). La gravació serà destruïda un cop transcrita.</p>
+        </div>
+        <div class="consent-check">
+            <div class="checkbox"></div>
+            <p>L'ús anònim i agregat de les meves opinions en l'informe final del projecte, sense que es pugui identificar la meva persona.</p>
+        </div>
+
+        <div class="signature-row">
+            <div class="signature-field">
+                <label>Nom i cognoms del participant</label>
+                <div class="signature-line"></div>
+            </div>
+            <div class="signature-field">
+                <label>Data</label>
+                <div class="signature-line"></div>
+            </div>
+            <div class="signature-field">
+                <label>Signatura del participant</label>
+                <div class="signature-line"></div>
+            </div>
+            <div class="signature-field">
+                <label>Signatura de l'investigador/a</label>
+                <div class="signature-line"></div>
+            </div>
+        </div>
+
+        <div class="tip-box" style="margin-top:28px;">
+            <span class="tip-icon">📋</span>
+            <p><strong>Nota per a l'investigador/a:</strong> Emplenar el codi d'anonimat del participant (intern) a la graella d'anàlisi. No anotar ni nom ni número de conductor en cap document d'anàlisi. Conservar aquest document en carpeta tancada i separada de les dades.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SECCIÓ 3: GRAELLA D'ANÀLISI
+════════════════════════════════════════ -->
+<div class="section" id="graella">
+
+    <div class="header-card">
+        <div class="tag">Eina d'Anàlisi Qualitativa</div>
+        <h1>Graella de Buidat d'Entrevistes</h1>
+        <p>Registre estructurat per comparar respostes entre participants.<br>Omplir un full per cada entrevista realitzada.</p>
+    </div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <span class="kpi-icon">📉</span>
+            <div class="kpi-label">KPI Principal</div>
+            <div class="kpi-formula">Δ Fatiga = P6 − P1<br>(pre/post)</div>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-icon">🎯</span>
+            <div class="kpi-label">Proxy Recuperació</div>
+            <div class="kpi-formula">P8: % que "nota<br>la diferència"</div>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-icon">🚧</span>
+            <div class="kpi-label">Barrera Principal</div>
+            <div class="kpi-formula">P6: top 3<br>barreres d'ús</div>
+        </div>
+    </div>
+
+    <br>
+
+    <table class="graella-table">
+        <thead>
+            <tr>
+                <th style="width:38px">#</th>
+                <th style="width:100px">Codi Anon.</th>
+                <th style="width:90px">Torn habitual</th>
+                <th>A — Fatiga actual (P1-P3)</th>
+                <th>B — Reacció Fènix (P4-P7)</th>
+                <th>Zona preferida</th>
+                <th>Barrera principal</th>
+                <th>C — Impacte esperat (P8)</th>
+                <th>Paraula clau (P12)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 12 files per a 12 participants -->
+            <tr>
+                <td>1</td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+                <td><span class="write-line"></span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="bloc" style="margin-top:24px;">
+        <div class="bloc-header">
+            <div class="bloc-dot dot-yellow">📊</div>
+            <div><h2>Patrons emergents i conclusions</h2></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div>
+                <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">TOP BARRERES D'ÚS</div>
+                <div class="notes-area" style="min-height:80px">1. _______________<br>2. _______________<br>3. _______________</div>
+            </div>
+            <div>
+                <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">ZONA MÉS DEMANDADA</div>
+                <div class="notes-area" style="min-height:80px">Activa __ / Calma __ / Recuperació __</div>
+            </div>
+            <div>
+                <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">% QUE CREURIEN NOTAR LA DIFERÈNCIA</div>
+                <div class="notes-area" style="min-height:80px">_____ / 12 = _____%</div>
+            </div>
+            <div>
+                <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">PARAULES CLAU (P12) — núvol de paraules</div>
+                <div class="notes-area" style="min-height:80px">_______________________________</div>
+            </div>
+        </div>
+
+        <div style="margin-top:16px;">
+            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">CONCLUSIONS I RECOMANACIONS PER AL DISSENY</div>
+            <div class="notes-area" style="min-height:100px"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        event.target.classList.add('active');
+    }
+</script>
+
+</body>
+</html>
