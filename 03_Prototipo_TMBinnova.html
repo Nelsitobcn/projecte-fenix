@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMBinnova Prototipo - Reunión Noir</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00bcd4, #4caf50);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .urgency-badge {
+            display: inline-block;
+            background: #ff4081;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .zones-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .zone {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .zone:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+        
+        .zone h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .zone-icon {
+            font-size: 2rem;
+        }
+        
+        .zone-1 { border-left: 5px solid #00bcd4; }
+        .zone-2 { border-left: 5px solid #4caf50; }
+        .zone-3 { border-left: 5px solid #ff9800; }
+        
+        .features {
+            list-style: none;
+            margin: 20px 0;
+        }
+        
+        .features li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .features li:before {
+            content: "✓";
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .status-ready { background: #4caf50; }
+        .status-dev { background: #ff9800; }
+        .status-planning { background: #9c27b0; }
+        
+        .demo-button {
+            display: inline-block;
+            background: linear-gradient(90deg, #00bcd4, #2196f3);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: transform 0.3s;
+        }
+        
+        .demo-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .meeting-info {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+            border: 2px solid #ff4081;
+        }
+        
+        .meeting-info h3 {
+            color: #ff4081;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .timeline:before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .timeline-item {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .timeline-dot {
+            width: 40px;
+            height: 40px;
+            background: #00bcd4;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            .zones-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 TMBinnova Prototipo MVP</h1>
+            <div class="subtitle">Solución integral para el Reto de Innovación Urbana 2025</div>
+            <div class="urgency-badge">REUNIÓN CON NOIR - HOY</div>
+        </header>
+        
+        <div class="zones-container">
+            <!-- ZONA 1: ANÁLISIS -->
+            <div class="zone zone-1">
+                <h2><span class="zone-icon">📊</span> Zona 1: Análisis del Contexto</h2>
+                <p>Plataforma interactiva para comprender el problema urbano y sus dimensiones.</p>
+                
+                <ul class="features">
+                    <li>Resumen ejecutivo del informe TMBinnova</li>
+                    <li>Mapa interactivo de zonas afectadas</li>
+                    <li>Timeline del proyecto con hitos clave</li>
+                    <li>Datos demográficos y estadísticas</li>
+                    <li>Análisis de stakeholders y actores</li>
+                </ul>
+                
+                <div class="status status-ready">✅ LISTO PARA DEMO</div>
+                <a href="#" class="demo-button">Ver Demo Interactiva</a>
+            </div>
+            
+            <!-- ZONA 2: ENCUESTA -->
+            <div class="zone zone-2">
+                <h2><span class="zone-icon">📝</span> Zona 2: Encuesta Ciudadana</h2>
+                <p>Sistema de participación para recoger feedback y propuestas de la comunidad.</p>
+                
+                <ul class="features">
+                    <li>Formulario Typeform profesional integrado</li>
+                    <li>Sistema de votación de ideas populares</li>
+                    <li>Subida de propuestas con imágenes/planos</li>
+                    <li>Geolocalización de sugerencias</li>
+                    <li>Panel de moderación en tiempo real</li>
+                </ul>
+                
+                <div class="status status-dev">⚡ EN DESARROLLO (80%)</div>
+                <a href="#" class="demo-button">Probar Encuesta Beta</a>
+            </div>
+            
+            <!-- ZONA 3: DASHBOARD -->
+            <div class="zone zone-3">
+                <h2><span class="zone-icon">📈</span> Zona 3: Dashboard de Datos</h2>
+                <p>Visualización en tiempo real de métricas, participación y progreso.</p>
+                
+                <ul class="features">
+                    <li>Gráficos de participación por zona/distrito</li>
+                    <li>Análisis de sentimiento de propuestas</li>
+                    <li>Métricas de impacto estimado</li>
+                    <li>Comparativas con proyectos similares</li>
+                    <li>Reportes automáticos para evaluación</li>
+                </ul>
+                
+                <div class="status status-planning">📅 PLANIFICADO</div>
+                <a href="#" class="demo-button">Ver Mockups</a>
+            </div>
+        </div>
+        
+        <div class="meeting-info">
+            <h3>🎯 Puntos Clave para la Reunión con Noir</h3>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot">1</div>
+                    <div><strong>Demostrar</strong> capacidad técnica</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">2</div>
+                    <div><strong>Presentar</strong> prototipo funcional</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">3</div>
+                    <div><strong>Solicitar</strong> datos adicionales</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">4</div>
+                    <div><strong>Definir</strong> próximos pasos</div>
+                </div>
+            </div>
+            
+            <p><strong>💡 Propuesta de Valor:</strong> Ofrecemos una solución completa (análisis + participación + dashboard) en lugar de enfoques fragmentados tradicionales.</p>
+            <p><strong>⏱️ Tiempo de Desarrollo:</strong> Prototipo completo en 2 semanas, implementación en 1 mes.</p>
+            <p><strong>📊 Métricas de Éxito:</strong> +30% participación ciudadana, reducción del 50% en tiempo de análisis, escalabilidad a otros distritos.</p>
+        </div>
+        
+        <footer>
+            <p>Prototipo desarrollado por <strong>Equipo TMBinnova</strong> | Reunión: 2026-02-04</p>
+            <p>Contacto: Nelson Vicente Ordóñez Cabrera | Asistente: Alfred 🎩</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Interactividad básica
+        document.querySelectorAll('.demo-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const zone = this.closest('.zone').querySelector('h2').textContent;
+                alert(`🚀 Demo de ${zone}\n\nEsta funcionalidad está en desarrollo activo.\nPara la reunión, podemos mostrar:\n1. Prototipo interactivo\n2. Flujos de usuario\n3. Datos de ejemplo\n4. Roadmap de desarrollo`);
+            });
+        });
+        
+        // Actualizar hora en tiempo real
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('es-ES', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            const dateString = now.toLocaleDateString('es-ES', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            document.querySelector('.subtitle').innerHTML = 
+                `Solución integral para el Reto de Innovación Urbana 2025<br>
+                 <small>${dateString} - ${timeString}</small>`;
+        }
+        
+        updateTime();
+        setInterval(updateTime, 1000);
+    </script>
+</body>
+</html>
