@@ -56,6 +56,7 @@ td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04)}
 <body>
 
 <div class="top-bar">
+  <a href="index.html" style="color:#fff;text-decoration:none;font-size:1.1rem;padding:4px 10px;border-radius:8px;border:1px solid var(--border);background:var(--card);" title="Tornar a l'inici">← 🏠</a>
   <div class="logo">🔥 <span>TMB</span>innova</div>
   <div style="font-size:.9rem;font-weight:600">📊 Dashboard</div>
   <div class="badge" id="liveBadge">EN VIU</div>
@@ -201,7 +202,7 @@ function loadData() {
   renderBars('chartAnys', countField(data, 'p3'), [COLORS.blue, COLORS.green, COLORS.yellow]);
 
   // Word cloud
-  const words = data.map(d => d.p10_paraula).filter(w => w && w.trim());
+  const words = data.map(d => d.p12_paraula).filter(w => w && w.trim());
   const wc = document.getElementById('wordCloud');
   if (words.length > 0) {
     const wordCount = {};
@@ -217,8 +218,8 @@ function loadData() {
   }
 
   // Raw table
-  const fields = ['conductor_id','p1','p2','p3','p5','p6','p7','p8','p9','p10_paraula'];
-  const headers = ['ID','Fatiga','Torn','Anys','Reacció','Zona','Barrera','CAD','Repetir','Paraula'];
+  const fields = ['edat','sexe','rol','p1','p2','p3','p5','p6','p7','p8','p9','p10','p12_paraula'];
+  const headers = ['Edat','Sexe','Rol','Fatiga','Torn','Anys','Reacció','Zona','Barrera','CAD','Repetir','Food Truck','Paraula'];
   let html = '<table><thead><tr>' + headers.map(h => '<th>' + h + '</th>').join('') + '</tr></thead><tbody>';
   data.forEach((r, i) => {
     html += '<tr>' + fields.map(f => '<td>' + (r[f] || '—') + '</td>').join('') + '</tr>';
@@ -260,10 +261,20 @@ function renderBars(containerId, counts, colors) {
   }).join('');
 }
 
+function checkAdminAccess() {
+  const pw = prompt('🔒 Accés restringit. Introdueix la contrasenya d\'administrador:');
+  if (!pw) return false;
+  const valid = ['fenix2025', 'araceli', 'manolo'];
+  if (valid.includes(pw.toLowerCase().trim())) return true;
+  alert('❌ Contrasenya incorrecta.');
+  return false;
+}
+
 function exportCSV() {
+  if (!checkAdminAccess()) return;
   const data = JSON.parse(localStorage.getItem(STORAGE) || '[]');
   if (!data.length) { alert('No hi ha dades.'); return; }
-  const fields = ['id','conductor_id','timestamp','p1','p2','p3','p4','p5','p6','p7','p8','p9','p10_paraula','p11_comentari'];
+  const fields = ['id','edat','sexe','rol','timestamp','p1','p2','p3','p4','p5','p6','p7','p8','p9','p10','p11','p12_paraula','p13_comentari'];
   const header = fields.join(',');
   const rows = data.map(r => fields.map(f => '"' + String(r[f] || '').replace(/"/g,'""') + '"').join(','));
   const csv = '\ufeff' + header + '\n' + rows.join('\n');

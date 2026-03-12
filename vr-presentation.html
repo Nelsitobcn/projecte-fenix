@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROJECTE FÈNIX - Experiència Immersiva 360 | TMBinnova 2025</title>
+
+    <!-- A-Frame 1.6.0 - Quest 3 WebXR -->
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+
+    <style>
+        #loading-screen {
+            position: fixed; inset: 0; background: #0a0a1a;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 9999; font-family: 'Segoe UI', system-ui, sans-serif; color: white;
+            transition: opacity 0.8s;
+        }
+        #loading-screen.hidden { opacity: 0; pointer-events: none; }
+        #loading-logo { font-size: 2.5rem; font-weight: 700; color: #003DA5; margin-bottom: 1rem; letter-spacing: 0.15em; }
+        #loading-bar-container { width: 280px; height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; overflow: hidden; margin-bottom: 1rem; }
+        #loading-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #003DA5, #00A3E0); border-radius: 3px; transition: width 0.3s; }
+        #loading-text { font-size: 0.85rem; opacity: 0.7; }
+        #hud-2d {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,20,60,0.9); color: white; padding: 14px 28px;
+            border-radius: 14px; font-family: 'Segoe UI', system-ui, sans-serif;
+            font-size: 0.9rem; z-index: 999; backdrop-filter: blur(12px);
+            border: 1px solid rgba(0,163,224,0.3); text-align: center; max-width: 90vw;
+        }
+        #hud-2d b { color: #00A3E0; }
+        #back-btn {
+            position: fixed; top: 20px; left: 20px; z-index: 1000;
+            background: rgba(0,20,60,0.9); color: #fff; border: 1px solid rgba(0,163,224,0.3);
+            padding: 12px 20px; border-radius: 12px; font-size: 0.9rem; font-weight: 600;
+            cursor: pointer; backdrop-filter: blur(12px); text-decoration: none;
+            font-family: 'Segoe UI', system-ui, sans-serif; transition: background 0.2s;
+        }
+        #back-btn:hover { background: rgba(0,61,165,0.9); }
+    </style>
+
+    <script>
+        /* =============================================
+           IMMERSIVE 360° SPHERICAL PANORAMA + 2.5D DEPTH
+           8K equirectangular + MiDaS depth map
+           Displacement mapping for parallax effect
+           ============================================= */
+
+        function hideLoadingScreen() {
+            const s = document.getElementById('loading-screen');
+            if (s) { s.classList.add('hidden'); setTimeout(() => s.remove(), 900); }
+        }
+
+        /* ------------------------------------------
+           COMPONENT: depth-panorama
+           Creates a subdivided sphere with displacement
+           mapping from a depth map for 2.5D parallax.
+           ------------------------------------------ */
+        AFRAME.registerComponent('depth-panorama', {
+            schema: {
+                src: { type: 'string', default: 'img/equirectangular_8k.jpg' },
+                srcFallback: { type: 'string', default: 'img/equirectangular_360.jpg' },
+                depthSrc: { type: 'string', default: 'img/depth_map_4k.jpg' },
+                radius: { type: 'number', default: 50 },
+                segments: { type: 'number', default: 128 },
+                displacementScale: { type: 'number', default: -2.0 }
+            },
+
+            init: function () {
+                const data = this.data;
+                const loader = new THREE.TextureLoader();
+                this._loadCount = 0;
+                this._totalLoads = 2;
+
+                // Check GPU max texture size for fallback
+                const renderer = this.el.sceneEl.renderer;
+                const maxSize = renderer.capabilities.maxTextureSize;
+                const colorSrc = (maxSize >= 8192) ? data.src : data.srcFallback;
+                console.log('GPU max texture: ' + maxSize + ', using: ' + colorSrc);
+
+                // Create subdivided sphere (128x128 = 32K triangles)
+                const geometry = new THREE.SphereGeometry(
+                    data.radius, data.segments, data.segments
+                );
+
+                // MeshStandardMaterial with displacement mapping
+                const material = new THREE.MeshStandardMaterial({
+                    side: THREE.BackSide,
+                    displacementScale: data.displacementScale,
+                    displacementBias: 0,
+                    roughness: 1.0,
+                    metalness: 0.0
+                });
+
+                // Load color texture (8K or 4K fallback)
+                loader.load(colorSrc, (texture) => {
+                    texture.colorSpace = THREE.SRGBColorSpace;
+                    texture.minFilter = THREE.LinearFilter;
+                    texture.generateMipmaps = false;
+                    material.map = texture;
+                    material.needsUpdate = true;
+                    this._onTextureLoad('color');
+                });
+
+                // Load depth map
+                loader.load(data.depthSrc, (depth) => {
+                    depth.minFilter = THREE.LinearFilter;
+                    depth.generateMipmaps = false;
+                    material.displacementMap = depth;
+                    material.needsUpdate = true;
+                    this._onTextureLoad('depth');
+                });
+
+                const mesh = new THREE.Mesh(geometry, material);
+                this.el.setObject3D('mesh', mesh);
+            },
+
+            _onTextureLoad: function (which) {
+                this._loadCount++;
+                const bar = document.getElementById('loading-bar');
+                if (bar) bar.style.width = (this._loadCount / this._totalLoads * 100) + '%';
+
+                if (this._loadCount >= this._totalLoads) {
+                    const text = document.getElementById('loading-text');
+                    if (text) text.textContent = 'Panorama carregat!';
+                    this.el.emit('panorama-loaded');
+                }
+            },
+
+            remove: function () {
+                const mesh = this.el.getObject3D('mesh');
+                if (mesh) {
+                    mesh.geometry.dispose();
+                    if (mesh.material.map) mesh.material.map.dispose();
+                    if (mesh.material.displacementMap) mesh.material.displacementMap.dispose();
+                    mesh.material.dispose();
+                    this.el.removeObject3D('mesh');
+                }
+            }
+        });
+
+        /* ------------------------------------------
+           COMPONENT: narration-audio
+           Audio narration with play/pause toggle
+           ------------------------------------------ */
+        AFRAME.registerComponent('narration-audio', {
+            schema: {
+                src: { type: 'string', default: 'ElevenLabs_narration.mp3' }
+            },
+
+            init: function () {
+                this.isPlaying = false;
+                this.audioEl = document.createElement('audio');
+                this.audioEl.src = this.data.src;
+                this.audioEl.loop = true;
+                this.audioEl.preload = 'auto';
+                this.audioEl.volume = 0.8;
+                document.body.appendChild(this.audioEl);
+            },
+
+            _togglePlay: function () {
+                if (this.isPlaying) {
+                    this.audioEl.pause();
+                    this.isPlaying = false;
+                    this._update2dBtn('▶ Reproduir');
+                } else {
+                    const p = this.audioEl.play();
+                    if (p) p.catch(() => {});
+                    this.isPlaying = true;
+                    this._update2dBtn('⏸ Pausar');
+                }
+            },
+
+            _update2dBtn: function (text) {
+                const btn = document.getElementById('play-btn');
+                if (btn) btn.textContent = text;
+            },
+
+            remove: function () {
+                if (this.audioEl) { this.audioEl.pause(); this.audioEl.remove(); }
+            }
+        });
+
+        /* ------------------------------------------
+           COMPONENT: Movement controls (joystick + keyboard)
+           Left stick: move forward/back/left/right
+           Right stick: snap turn
+           Mouse wheel: FOV zoom (desktop only)
+           ------------------------------------------ */
+        AFRAME.registerComponent('panorama-controls', {
+            init: function () {
+                this.leftStick = { x: 0, y: 0 };
+                this.rightStick = { x: 0, y: 0 };
+                this.rig = document.querySelector('#player-rig');
+                this.cam = document.querySelector('#main-camera');
+                this.turning = false;
+                this.currentFov = 80;
+                this.maxDist = 35; // Max distance from center (sphere radius=50)
+
+                const leftHand = document.querySelector('#leftHand');
+                const rightHand = document.querySelector('#rightHand');
+
+                if (leftHand) {
+                    leftHand.addEventListener('thumbstickmoved', (evt) => {
+                        this.leftStick.x = evt.detail.x;
+                        this.leftStick.y = evt.detail.y;
+                    });
+                }
+                if (rightHand) {
+                    rightHand.addEventListener('thumbstickmoved', (evt) => {
+                        this.rightStick.x = evt.detail.x;
+                    });
+                }
+
+                this.keys = {};
+                document.addEventListener('keydown', (e) => { this.keys[e.key] = true; });
+                document.addEventListener('keyup', (e) => { this.keys[e.key] = false; });
+
+                // Mouse wheel zoom (desktop only - FOV)
+                document.addEventListener('wheel', (e) => {
+                    this.currentFov += e.deltaY * 0.05;
+                    this.currentFov = THREE.MathUtils.clamp(this.currentFov, 40, 110);
+                    this.cam.setAttribute('camera', 'fov', this.currentFov);
+                });
+            },
+
+            _clampPosition: function (pos) {
+                const dist = Math.sqrt(pos.x * pos.x + pos.z * pos.z);
+                if (dist > this.maxDist) {
+                    const scale = this.maxDist / dist;
+                    pos.x *= scale;
+                    pos.z *= scale;
+                }
+            },
+
+            tick: function (t, dt) {
+                if (!dt || dt > 100) return;
+                const dtS = dt / 1000;
+                const speed = 5.0;
+                const pos = this.rig.object3D.position;
+
+                // --- Left stick: move forward/back + strafe ---
+                let moveZ = 0, moveX = 0;
+                if (Math.abs(this.leftStick.y) > 0.15) moveZ = -this.leftStick.y;
+                if (Math.abs(this.leftStick.x) > 0.15) moveX = this.leftStick.x;
+
+                // Keyboard movement
+                if (this.keys['w'] || this.keys['W'] || this.keys['ArrowUp']) moveZ = 1;
+                if (this.keys['s'] || this.keys['S'] || this.keys['ArrowDown']) moveZ = -1;
+                if (this.keys['a'] || this.keys['A'] || this.keys['ArrowLeft']) moveX = -1;
+                if (this.keys['d'] || this.keys['D'] || this.keys['ArrowRight']) moveX = 1;
+
+                if (moveZ !== 0 || moveX !== 0) {
+                    // Get camera Y rotation for direction
+                    const camRot = this.cam.object3D.rotation.y + this.rig.object3D.rotation.y;
+                    // Forward/back along camera direction
+                    pos.x += (Math.sin(camRot) * -moveZ + Math.cos(camRot) * moveX) * speed * dtS;
+                    pos.z += (Math.cos(camRot) * -moveZ + Math.sin(camRot) * -moveX) * speed * dtS;
+                    this._clampPosition(pos);
+                }
+
+                // Snap turn (right stick)
+                if (Math.abs(this.rightStick.x) > 0.7 && !this.turning) {
+                    const angle = this.rightStick.x > 0 ? -Math.PI / 6 : Math.PI / 6;
+                    this.rig.object3D.rotation.y += angle;
+                    this.turning = true;
+                    setTimeout(() => { this.turning = false; }, 300);
+                }
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <!-- Loading -->
+    <div id="loading-screen">
+        <div id="loading-logo">PROJECTE FENIX</div>
+        <div id="loading-bar-container"><div id="loading-bar"></div></div>
+        <div id="loading-text">Carregant panorama immersiu...</div>
+    </div>
+
+    <!-- 2D HUD -->
+    <div id="hud-2d">
+        <b>PROJECTE FENIX</b> — Gira el cap per veure totes les zones. Scroll per apropar-te.
+        <br><button id="play-btn" style="margin-top:6px; padding:6px 18px; background:#003DA5; color:white; border:none; border-radius:8px; cursor:pointer; font-size:0.85rem; position:relative; z-index:10000; pointer-events:auto;">▶ Reproduir</button>
+    </div>
+
+    <a-scene
+        renderer="antialias: true; colorManagement: true; physicallyCorrectLights: false; foveationLevel: 2"
+        webxr="requiredFeatures: local-floor; optionalFeatures: hand-tracking, bounded-floor"
+        loading-screen="enabled: false"
+        vr-mode-ui="enabled: true"
+        background="color: #0a0a1a"
+    >
+        <!-- ============================================
+             8K SPHERICAL PANORAMA + 2.5D DEPTH
+             Subdivided sphere with displacement mapping.
+             MiDaS depth map creates parallax effect.
+             ============================================ -->
+        <a-entity id="panorama-sphere"
+            depth-panorama="
+                src: img/equirectangular_8k.jpg;
+                srcFallback: img/equirectangular_360.jpg;
+                depthSrc: img/depth_map_4k.jpg;
+                radius: 50;
+                segments: 128;
+                displacementScale: -2.0
+            "
+        ></a-entity>
+
+        <!-- Narration audio -->
+        <a-entity id="narration" narration-audio="src: ElevenLabs_narration.mp3"></a-entity>
+
+        <!-- Title panel (below eye level, subtle) -->
+        <a-entity position="0 0.5 -3" rotation="0 0 0">
+            <a-plane width="2.5" height="0.4"
+                material="color: #003DA5; shader: flat; opacity: 0.7"></a-plane>
+            <a-text value="PROJECTE FENIX" position="0 0.05 0.01" align="center"
+                width="3.5" color="white" font="mozillavr"></a-text>
+            <a-text value="La Pausa de Benestar" position="0 -0.1 0.01" align="center"
+                width="2.2" color="#7eb8f0" font="mozillavr"></a-text>
+        </a-entity>
+
+        <!-- ============================================
+             VR HUD (attached to camera via script)
+             ============================================ -->
+        <a-entity id="vr-hud">
+            <a-plane width="0.55" height="0.08"
+                material="color: #003DA5; shader: flat; opacity: 0.7"></a-plane>
+            <a-text value="Joystick: apropar-te / allunyar-te"
+                position="0 0 0.001" align="center"
+                width="0.5" color="#aaccff" font="mozillavr"></a-text>
+        </a-entity>
+
+        <!-- ============================================
+             PLAYER RIG
+             ============================================ -->
+        <a-entity id="player-rig" position="0 0 0" panorama-controls>
+            <a-entity id="main-camera" camera
+                look-controls="pointerLockEnabled: false"
+                wasd-controls="enabled: false"
+                position="0 1.6 0">
+            </a-entity>
+
+            <!-- Quest 3 controllers -->
+            <a-entity id="leftHand"
+                hand-tracking-controls="hand: left; modelColor: #003DA5"
+                oculus-touch-controls="hand: left; model: true"
+            ></a-entity>
+            <a-entity id="rightHand"
+                hand-tracking-controls="hand: right; modelColor: #003DA5"
+                oculus-touch-controls="hand: right; model: true"
+            ></a-entity>
+        </a-entity>
+
+        <!-- Lighting (higher intensity for MeshStandardMaterial) -->
+        <a-light type="ambient" color="#FFF" intensity="2.5"></a-light>
+    </a-scene>
+
+    <script>
+        const scene = document.querySelector('a-scene');
+
+        scene.addEventListener('loaded', function () {
+            // Attach VR HUD to camera
+            const cam = document.querySelector('#main-camera');
+            const hud = document.querySelector('#vr-hud');
+            if (cam && hud) {
+                hud.setAttribute('position', '0 -0.32 -0.7');
+                cam.appendChild(hud);
+            }
+            hideLoadingScreen();
+        });
+
+        // Panorama loaded (both color + depth textures)
+        document.querySelector('#panorama-sphere')
+            .addEventListener('panorama-loaded', function () {
+                // Loading bar already updated by component
+            });
+
+        // 2D play button → media-panel toggle
+        document.getElementById('play-btn').addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            const panel = document.querySelector('#narration');
+            const comp = panel && panel.components['narration-audio'];
+            if (comp) {
+                comp._togglePlay();
+            } else {
+                console.warn('media-panel not ready');
+            }
+            return false;
+        });
+
+        // Hide 2D HUD in VR
+        scene.addEventListener('enter-vr', () => {
+            const h = document.getElementById('hud-2d');
+            if (h) h.style.display = 'none';
+        });
+        scene.addEventListener('exit-vr', () => {
+            const h = document.getElementById('hud-2d');
+            if (h) h.style.display = 'block';
+        });
+    </script>
+<a href="index.html" id="back-btn">← Tornar a l'inici</a>
+</body>
+
+</html>

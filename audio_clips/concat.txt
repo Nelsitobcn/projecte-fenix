@@ -1,0 +1,11 @@
+file '00_intro_padded.wav'
+file '01_problema_padded.wav'
+file '02_zonas_padded.wav'
+file '03_activa_padded.wav'
+file '04_calma_padded.wav'
+file '05_recuperacio_padded.wav'
+file '06_trucks_padded.wav'
+file '07_kpis_padded.wav'
+file '08_tools_padded.wav'
+file '09_cierre_padded.wav'
+

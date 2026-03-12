@@ -77,6 +77,16 @@ textarea::placeholder{color:var(--muted)}
 #qrCanvas{margin:0 auto;border-radius:12px;background:#fff;padding:12px}
 .qr-url{font-size:.7rem;color:var(--muted);word-break:break-all;margin-top:8px;padding:8px;background:var(--card);border-radius:8px}
 
+/* Floating QR */
+.qr-float{position:fixed;bottom:20px;right:20px;z-index:200;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff;border:none;font-size:1.5rem;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;transition:.2s}
+.qr-float:active{transform:scale(.9)}
+.qr-modal{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);align-items:center;justify-content:center}
+.qr-modal.show{display:flex}
+.qr-modal-inner{background:#fff;border-radius:20px;padding:28px;text-align:center;max-width:300px;width:90%}
+.qr-modal-inner h3{color:#0A1628;margin-bottom:4px;font-size:1rem}
+.qr-modal-inner p{color:#666;font-size:.78rem;margin-bottom:12px}
+.qr-modal-inner canvas{margin:0 auto;display:block}
+.qr-modal-inner .close-qr{margin-top:14px;padding:10px 24px;border-radius:10px;border:none;background:#0A1628;color:#fff;font-size:.85rem;cursor:pointer;font-family:inherit}
 /* Footer */
 .form-footer{text-align:center;padding:20px;font-size:.75rem;color:var(--muted)}
 </style>
@@ -84,6 +94,7 @@ textarea::placeholder{color:var(--muted)}
 <body>
 
 <div class="top-bar">
+  <a href="index.html" style="color:#fff;text-decoration:none;font-size:1rem;padding:4px 10px;border-radius:8px;border:1px solid var(--border);background:var(--card);" title="Tornar a l'inici">← 🏠</a>
   <div class="logo">🔥 <span>TMB</span>innova</div>
   <div style="font-size:.85rem">Formulari de Validació</div>
   <div class="badge">TMB DAY</div>
@@ -91,17 +102,36 @@ textarea::placeholder{color:var(--muted)}
 
 <div class="hero-form">
   <h1>🦅 Projecte Fènix</h1>
-  <p>Ajuda'ns a validar la Sala de Benestar.<br>10 preguntes · 3 minuts · Anònim</p>
+  <p>Ajuda'ns a validar la Sala de Benestar.<br>Per a tot el personal TMB · 13 preguntes · 3 minuts · Anònim</p>
 </div>
 
 <div class="conductor-id">
-  <label>Identificador (opcional — es pot deixar en blanc)</label>
-  <input type="text" id="conductorId" placeholder="Ex: C-01, C-02...">
+  <label>Edat</label>
+  <div class="radio-group" style="margin-bottom:12px">
+    <div class="radio-opt" onclick="pickR(this,'edat','18-30')">18–30</div>
+    <div class="radio-opt" onclick="pickR(this,'edat','31-45')">31–45</div>
+    <div class="radio-opt" onclick="pickR(this,'edat','46-55')">46–55</div>
+    <div class="radio-opt" onclick="pickR(this,'edat','56+')">56+</div>
+  </div>
+  <label>Sexe</label>
+  <div class="radio-group" style="margin-bottom:12px">
+    <div class="radio-opt" onclick="pickR(this,'sexe','Home')">Home</div>
+    <div class="radio-opt" onclick="pickR(this,'sexe','Dona')">Dona</div>
+    <div class="radio-opt" onclick="pickR(this,'sexe','Altre / Prefereixo no dir-ho')">Altre / No dir</div>
+  </div>
+  <label>Perfil professional</label>
+  <div class="radio-group">
+    <div class="radio-opt" onclick="pickR(this,'rol','Conductor/a')">🚌 Conductor/a</div>
+    <div class="radio-opt" onclick="pickR(this,'rol','Mecànic/a')">🔧 Mecànic/a</div>
+    <div class="radio-opt" onclick="pickR(this,'rol','Administratiu/va')">💻 Administratiu/va</div>
+    <div class="radio-opt" onclick="pickR(this,'rol','Cap / Responsable')">👔 Cap / Responsable</div>
+    <div class="radio-opt" onclick="pickR(this,'rol','Altre')">📋 Altre</div>
+  </div>
 </div>
 
 <div class="progress-container">
-  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:20%"></div></div>
-  <div class="step-label" id="stepLabel">Pas 1 de 5 — Estat actual</div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:16%"></div></div>
+  <div class="step-label" id="stepLabel">Pas 1 de 6 — Estat actual</div>
 </div>
 
 <div class="form-container">
@@ -134,7 +164,7 @@ textarea::placeholder{color:var(--muted)}
   <!-- STEP 2: PERFIL -->
   <div class="step" id="step2">
     <div class="question">
-      <label>P3 — Quants anys portes conduint a TMB?</label>
+      <label>P3 — Quants anys portes treballant a TMB?</label>
       <div class="radio-group">
         <div class="radio-opt" onclick="pickR(this,'p3','< 2 anys')">🆕 Menys de 2 anys</div>
         <div class="radio-opt" onclick="pickR(this,'p3','2-10 anys')">📅 2 a 10 anys</div>
@@ -214,22 +244,48 @@ textarea::placeholder{color:var(--muted)}
     </div>
     <div class="nav-buttons">
       <button class="btn btn-back" onclick="goStep(3)">← Tornar</button>
-      <button class="btn btn-next" onclick="goStep(5)">Últim pas →</button>
+      <button class="btn btn-next" onclick="goStep(5)">Següent →</button>
     </div>
   </div>
 
-  <!-- STEP 5: TANCAMENT -->
+  <!-- STEP 5: FOOD TRUCK -->
   <div class="step" id="step5">
     <div class="question">
-      <label>P10 — Una paraula que defineixi el Projecte Fènix per a tu:</label>
-      <textarea id="p10" placeholder="Escriu una paraula o frase curta..."></textarea>
+      <label>P10 — Si a la teva cotxera hi hagués un food truck de benestar amb esmorzars calents i cafè (04:00–08:00), l'utilitzaries?</label>
+      <div class="radio-group">
+        <div class="radio-opt" onclick="pickR(this,'p10','Sí, segur')">✅ Sí, segur</div>
+        <div class="radio-opt" onclick="pickR(this,'p10','Probablement sí')">🤔 Probablement sí</div>
+        <div class="radio-opt" onclick="pickR(this,'p10','No ho sé')">😐 No ho sé</div>
+        <div class="radio-opt" onclick="pickR(this,'p10','No')">❌ No</div>
+      </div>
     </div>
     <div class="question">
-      <label>P11 — Vols afegir algun comentari o suggeriment? (opcional)</label>
-      <textarea id="p11" placeholder="Qualsevol idea és benvinguda..." style="min-height:90px"></textarea>
+      <label>P11 — Què t'agradaria trobar al food truck? (pots triar diverses)</label>
+      <div class="radio-group" style="flex-wrap:wrap">
+        <div class="radio-opt" onclick="pickMulti(this,'p11','Esmorzars calents')">🍳 Esmorzars calents</div>
+        <div class="radio-opt" onclick="pickMulti(this,'p11','Entrepans')">🥪 Entrepans acabats de fer</div>
+        <div class="radio-opt" onclick="pickMulti(this,'p11','Cafè especialitat')">☕ Cafè d'especialitat</div>
+        <div class="radio-opt" onclick="pickMulti(this,'p11','Àpats per emportar')">🥡 Àpats del dia per emportar</div>
+      </div>
     </div>
     <div class="nav-buttons">
       <button class="btn btn-back" onclick="goStep(4)">← Tornar</button>
+      <button class="btn btn-next" onclick="goStep(6)">Últim pas →</button>
+    </div>
+  </div>
+
+  <!-- STEP 6: TANCAMENT -->
+  <div class="step" id="step6">
+    <div class="question">
+      <label>P12 — Una paraula que defineixi el Projecte Fènix per a tu:</label>
+      <textarea id="p12" placeholder="Escriu una paraula o frase curta..."></textarea>
+    </div>
+    <div class="question">
+      <label>P13 — Vols afegir algun comentari o suggeriment? (opcional)</label>
+      <textarea id="p13" placeholder="Qualsevol idea és benvinguda..." style="min-height:90px"></textarea>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="goStep(5)">← Tornar</button>
       <button class="btn btn-submit" onclick="submitForm()">✅ Enviar valoració</button>
     </div>
   </div>
@@ -249,11 +305,23 @@ textarea::placeholder{color:var(--muted)}
 
   <!-- QR SECTION -->
   <div class="qr-section" id="qrSection">
-    <h3>📱 Codi QR per a conductors</h3>
-    <p>Escaneja per obrir el formulari al mòbil</p>
+    <h3>📱 Codi QR — Projecte Fènix</h3>
+    <p>Escaneja per veure el projecte complet i respondre l'enquesta</p>
     <canvas id="qrCanvas" width="200" height="200"></canvas>
     <div class="qr-url" id="qrUrl"></div>
     <p style="margin-top:8px;font-size:.7rem">Comparteix aquest enllaç o imprimeix el QR</p>
+  </div>
+</div>
+
+<!-- Floating QR Button -->
+<button class="qr-float" onclick="document.getElementById('qrModal').classList.add('show')" title="Veure QR">📱</button>
+<div class="qr-modal" id="qrModal" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="qr-modal-inner">
+    <h3>📱 Comparteix el Projecte Fènix</h3>
+    <p>Escaneja per veure el projecte complet</p>
+    <canvas id="qrFloat" width="200" height="200"></canvas>
+    <div style="font-size:.7rem;color:#888;margin-top:8px;word-break:break-all" id="qrFloatUrl"></div>
+    <button class="close-qr" onclick="document.getElementById('qrModal').classList.remove('show')">Tancar</button>
   </div>
 </div>
 
@@ -285,28 +353,76 @@ function pickS(el, field, val) {
   el.classList.add('active');
   D[field] = val;
 }
+function pickMulti(el, field, val) {
+  el.classList.toggle('active');
+  if (!D[field]) D[field] = [];
+  if (Array.isArray(D[field])) {
+    const idx = D[field].indexOf(val);
+    if (idx >= 0) D[field].splice(idx, 1);
+    else D[field].push(val);
+  }
+}
 
 function goStep(n) {
   document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
   document.getElementById('step' + n).classList.add('active');
   step = n;
-  const pct = {1:'20%',2:'40%',3:'60%',4:'80%',5:'95%'};
-  const lbl = {1:'Pas 1 de 5 — Estat actual',2:'Pas 2 de 5 — Perfil',3:'Pas 3 de 5 — Reacció',4:'Pas 4 de 5 — Barreres',5:'Pas 5 de 5 — Tancament'};
+  const pct = {1:'16%',2:'33%',3:'50%',4:'66%',5:'83%',6:'95%'};
+  const lbl = {1:'Pas 1 de 6 — Estat actual',2:'Pas 2 de 6 — Perfil',3:'Pas 3 de 6 — Reacció',4:'Pas 4 de 6 — Barreres',5:'Pas 5 de 6 — Food Truck',6:'Pas 6 de 6 — Tancament'};
   document.getElementById('progressFill').style.width = pct[n] || '100%';
   document.getElementById('stepLabel').textContent = lbl[n] || 'Completat!';
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  var target = document.querySelector('.progress-container');
+  var barH = document.querySelector('.top-bar').offsetHeight;
+  window.scrollTo({top: target.getBoundingClientRect().top + window.pageYOffset - barH, behavior: 'smooth'});
+}
+
+const FIRESTORE_URL = 'https://firestore.googleapis.com/v1/projects/projecte-fenix-tmb/databases/default/documents/surveys';
+
+function toFirestoreFields(obj) {
+  const fields = {};
+  for (const [k, v] of Object.entries(obj)) {
+    if (v === undefined || v === null) continue;
+    if (typeof v === 'number' && Number.isInteger(v)) fields[k] = { integerValue: String(v) };
+    else if (typeof v === 'number') fields[k] = { doubleValue: v };
+    else fields[k] = { stringValue: String(v) };
+  }
+  return fields;
+}
+
+function saveToFirestore(entry) {
+  const docId = 'survey_' + entry.id;
+  fetch(FIRESTORE_URL + '/' + docId, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fields: toFirestoreFields(entry) })
+  }).then(r => {
+    if (r.ok) {
+      // Mark as synced in localStorage
+      const all = JSON.parse(localStorage.getItem(STORAGE) || '[]');
+      const idx = all.findIndex(e => e.id === entry.id);
+      if (idx >= 0) { all[idx]._synced = true; localStorage.setItem(STORAGE, JSON.stringify(all)); }
+    }
+  }).catch(() => {});
+}
+
+function syncPendingToFirestore() {
+  const all = JSON.parse(localStorage.getItem(STORAGE) || '[]');
+  all.filter(e => !e._synced).forEach(entry => saveToFirestore(entry));
 }
 
 function submitForm() {
-  D.p10_paraula = document.getElementById('p10')?.value || '';
-  D.p11_comentari = document.getElementById('p11')?.value || '';
-  D.conductor_id = document.getElementById('conductorId')?.value || '';
+  D.p12_paraula = document.getElementById('p12')?.value || '';
+  D.p13_comentari = document.getElementById('p13')?.value || '';
+  if (Array.isArray(D.p11)) D.p11 = D.p11.join(', ');
   D.timestamp = new Date().toISOString();
   D.id = Date.now();
 
   const all = JSON.parse(localStorage.getItem(STORAGE) || '[]');
   all.push({...D});
   localStorage.setItem(STORAGE, JSON.stringify(all));
+
+  // Save to Firestore cloud
+  saveToFirestore({...D});
 
   document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
   document.getElementById('stepResult').classList.add('active');
@@ -318,16 +434,25 @@ function submitForm() {
 function resetForm() {
   Object.keys(D).forEach(k => delete D[k]);
   document.querySelectorAll('.emoji-btn,.radio-opt,.scale-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('p10').value = '';
-  document.getElementById('p11').value = '';
-  document.getElementById('conductorId').value = '';
+  document.getElementById('p12').value = '';
+  document.getElementById('p13').value = '';
   goStep(1);
 }
 
+function checkAdminAccess() {
+  const pw = prompt('🔒 Accés restringit. Introdueix la contrasenya d\'administrador:');
+  if (!pw) return false;
+  const valid = ['fenix2025', 'araceli', 'manolo'];
+  if (valid.includes(pw.toLowerCase().trim())) return true;
+  alert('❌ Contrasenya incorrecta.');
+  return false;
+}
+
 function exportCSV() {
+  if (!checkAdminAccess()) return;
   const all = JSON.parse(localStorage.getItem(STORAGE) || '[]');
   if (!all.length) { alert('No hi ha dades.'); return; }
-  const fields = ['id','conductor_id','timestamp','p1','p2','p3','p4','p5','p6','p7','p8','p9','p10_paraula','p11_comentari'];
+  const fields = ['id','edat','sexe','rol','timestamp','p1','p2','p3','p4','p5','p6','p7','p8','p9','p10','p11','p12_paraula','p13_comentari'];
   const header = fields.join(',');
   const rows = all.map(r => fields.map(f => '"' + String(r[f] || '').replace(/"/g, '""') + '"').join(','));
   const csv = '\ufeff' + header + '\n' + rows.join('\n');
@@ -340,37 +465,46 @@ function exportCSV() {
 
 // QR Code generation
 try {
-  const url = window.location.href;
+  const url = window.location.origin + window.location.pathname.replace('formulari.html', 'index.html');
   document.getElementById('qrUrl').textContent = url;
   if (typeof qrcode !== 'undefined') {
     const qr = qrcode(0, 'M');
     qr.addData(url);
     qr.make();
-    const canvas = document.getElementById('qrCanvas');
-    const ctx = canvas.getContext('2d');
-    const size = qr.getModuleCount();
-    const cellSize = Math.floor(176 / size);
-    canvas.width = cellSize * size + 24;
-    canvas.height = cellSize * size + 24;
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#0A1628';
-    for (let r = 0; r < size; r++) {
-      for (let c = 0; c < size; c++) {
-        if (qr.isDark(r, c)) {
-          ctx.fillRect(12 + c * cellSize, 12 + r * cellSize, cellSize, cellSize);
+    function drawQR(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const size = qr.getModuleCount();
+      const cellSize = Math.floor(176 / size);
+      canvas.width = cellSize * size + 24;
+      canvas.height = cellSize * size + 24;
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#0A1628';
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          if (qr.isDark(r, c)) {
+            ctx.fillRect(12 + c * cellSize, 12 + r * cellSize, cellSize, cellSize);
+          }
         }
       }
     }
+    drawQR('qrCanvas');
+    drawQR('qrFloat');
+    const floatUrl = document.getElementById('qrFloatUrl');
+    if (floatUrl) floatUrl.textContent = url;
   }
 } catch(e) { console.log('QR generation skipped'); }
 
-// Show count on load
+// Show count on load & sync pending responses to Firestore
 const existing = JSON.parse(localStorage.getItem(STORAGE) || '[]');
 if (existing.length > 0) {
   document.getElementById('qrSection').insertAdjacentHTML('beforebegin',
     '<div style="text-align:center;padding:12px;margin:0 16px;border-radius:12px;background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.2)"><span style="font-size:.85rem">📊 Ja tens <strong>' + existing.length + '</strong> respostes recollides</span></div>'
   );
+  // Auto-sync any unsynced responses to cloud
+  syncPendingToFirestore();
 }
 </script>
 </body>

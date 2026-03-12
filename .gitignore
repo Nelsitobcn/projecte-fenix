@@ -1,0 +1,14 @@
+# Videos (demasiado grandes para GitHub)
+*.mp4
+*.mp3
+
+# Firebase
+.firebase/
+.firebaserc
+
+# Archivos temporales
+.fuse_hidden*
+.DS_Store
+
+# Claude local
+.claude/settings.local.json

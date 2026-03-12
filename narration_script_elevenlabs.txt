@@ -1,0 +1,17 @@
+Projecte Fènix. La Pausa de Benestar.
+
+El problema. Los conductores de autobús comparten comedores ruidosos sin espacios de calma. Las zonas en desuso acumulan polvo y máquinas viejas.
+
+Nuestra solución: Las tres velocidades del descanso. Tres espacios diferenciados para socializar, descansar y recuperarse.
+
+Zona Activa. El comedor renovado con doble microondas, vending saludable y enchufes USB. Un espacio amplio y funcional.
+
+Zona de Calma. Silencio absoluto con butacas reclinables para micro siestas. Iluminación regulable y plantas relajantes.
+
+Zona de Recuperación Activa. Espalderas de madera y esterillas para estiramientos rápidos entre servicios.
+
+Escalabilidad. Food trucks de bienestar móviles para llegar a todas las cocheras de Barcelona.
+
+Herramientas de validación. Formulario móvil con código QR, entrevistas con grabación de audio, y dashboard de resultados en tiempo real.
+
+Projecte Fènix. Porque descansar bien no es un lujo, es una necesidad para conducir seguro. Gracias.
