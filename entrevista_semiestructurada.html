@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projecte Fènix — Guió Entrevista Semiestructurada</title>
+    <title>Projecte Fènix — Resultats de les Entrevistes</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -26,51 +26,36 @@
         /* ── NAV ── */
         nav {
             background: var(--fenix-dark);
-            padding: 14px 32px;
+            padding: 14px 24px;
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
             position: sticky;
             top: 0;
             z-index: 100;
+            flex-wrap: wrap;
         }
         nav .logo { color: #fff; font-weight: 800; font-size: 1.1rem; }
         nav .logo span { color: var(--fenix-green); }
-        nav .tabs { display: flex; gap: 8px; margin-left: auto; }
-        nav .tab {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
-            color: #94a3b8;
-            padding: 6px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
-        }
-        nav .tab:hover, nav .tab.active {
-            background: var(--fenix-green);
-            border-color: var(--fenix-green);
-            color: #fff;
-        }
-        nav .print-btn {
+        nav .nav-title { margin-left: auto; font-size: 1rem; font-weight: 700; color: #e2e8f0; }
+        nav .nav-actions { display: flex; gap: 8px; margin-left: 16px; flex-wrap: wrap; }
+        nav .nav-btn {
             background: var(--fenix-blue);
             color: #fff;
             border: none;
-            padding: 7px 18px;
+            padding: 7px 16px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 600;
             font-family: 'Inter', sans-serif;
-            margin-left: 12px;
             transition: opacity 0.2s;
+            text-decoration: none;
         }
-        nav .print-btn:hover { opacity: 0.85; }
+        nav .nav-btn:hover { opacity: 0.85; }
 
-        /* ── SECTIONS ── */
-        .section { display: none; max-width: 860px; margin: 40px auto; padding: 0 24px 80px; }
-        .section.active { display: block; }
+        /* ── PAGE WRAPPER ── */
+        .page-wrapper { max-width: 960px; margin: 40px auto; padding: 0 24px 80px; }
 
         /* ── HEADER CARD ── */
         .header-card {
@@ -94,801 +79,307 @@
             display: inline-block;
             background: var(--fenix-green);
             color: #fff;
-            font-size: 0.7rem;
+            font-size: 0.72rem;
             font-weight: 700;
             padding: 4px 12px;
             border-radius: 20px;
-            letter-spacing: 0.08em;
+            margin-bottom: 12px;
             text-transform: uppercase;
-            margin-bottom: 14px;
+            letter-spacing: 0.06em;
         }
-        .header-card h1 {
-            color: #fff;
-            font-size: 1.8rem;
-            font-weight: 800;
-            line-height: 1.25;
-            margin-bottom: 8px;
+        .header-card h1 { color: #fff; font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+        .header-card p { color: #94a3b8; font-size: 0.95rem; line-height: 1.5; }
+        .header-meta {
+            display: flex; gap: 24px; margin-top: 16px; flex-wrap: wrap;
         }
-        .header-card p { color: #94a3b8; font-size: 0.9rem; line-height: 1.6; }
-        .header-card .meta {
-            display: flex;
-            gap: 24px;
-            margin-top: 20px;
+        .header-meta .meta-item {
+            display: flex; flex-direction: column; gap: 2px;
         }
-        .header-card .meta-item {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        .header-card .meta-item .label {
-            color: #64748b;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            font-weight: 600;
-        }
-        .header-card .meta-item .value {
-            color: #e2e8f0;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
+        .header-meta .meta-label { font-size: 0.7rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+        .header-meta .meta-value { font-size: 1.1rem; color: #fff; font-weight: 700; }
 
-        /* ── INTRO BOX ── */
-        .intro-box {
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-left: 4px solid var(--fenix-blue);
-            border-radius: 12px;
-            padding: 20px 24px;
+        /* ── KPI GRID ── */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 16px;
             margin-bottom: 28px;
         }
-        .intro-box h3 { color: var(--fenix-blue); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; font-weight: 700; }
-        .intro-box p { color: #475569; font-size: 0.9rem; line-height: 1.7; font-style: italic; }
+        .kpi-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px 20px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .kpi-icon { font-size: 1.8rem; display: block; margin-bottom: 8px; }
+        .kpi-value { font-size: 2rem; font-weight: 800; line-height: 1.2; }
+        .kpi-label { font-size: 0.82rem; color: var(--fenix-gray); margin-top: 6px; font-weight: 500; }
 
         /* ── BLOC ── */
         .bloc {
             background: #fff;
-            border: 1px solid #e2e8f0;
             border-radius: 16px;
             padding: 28px 32px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            border: 1px solid #e2e8f0;
         }
         .bloc-header {
             display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 22px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .bloc-dot {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            flex-shrink: 0;
-        }
-        .dot-red    { background: #fef2f2; }
-        .dot-blue   { background: #eff6ff; }
-        .dot-yellow { background: #fffbeb; }
-        .dot-green  { background: #f0fdf4; }
-
-        .bloc-header h2 {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--fenix-dark);
-        }
-        .bloc-header .time-badge {
-            margin-left: auto;
-            background: #f1f5f9;
-            color: var(--fenix-gray);
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-
-        /* ── QUESTION ── */
-        .question {
-            margin-bottom: 22px;
-            padding: 16px 20px;
-            background: #fafafa;
-            border-radius: 10px;
-            border: 1px solid #f1f5f9;
-        }
-        .question:last-child { margin-bottom: 0; }
-        .question .q-number {
-            display: inline-block;
-            background: var(--fenix-dark);
-            color: #fff;
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 4px;
-            margin-bottom: 8px;
-        }
-        .question .q-text {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #1e293b;
-            line-height: 1.5;
-            margin-bottom: 10px;
-        }
-        .question .q-probe {
-            background: #eff6ff;
-            border-left: 3px solid var(--fenix-blue);
-            border-radius: 4px;
-            padding: 8px 12px;
-            font-size: 0.82rem;
-            color: #3730a3;
-            font-style: italic;
-        }
-        .question .q-probe strong { font-style: normal; font-weight: 600; }
-        .question .q-options {
-            margin-top: 10px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .q-option-pill {
-            background: #fff;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 20px;
-            padding: 4px 14px;
-            font-size: 0.8rem;
-            color: #475569;
-            font-weight: 500;
-        }
-        .pill-green  { border-color: var(--fenix-green);  color: #15803d; background: #f0fdf4; }
-        .pill-yellow { border-color: var(--fenix-yellow); color: #92400e; background: #fffbeb; }
-        .pill-blue   { border-color: var(--fenix-blue);   color: #1d4ed8; background: #eff6ff; }
-
-        /* ── NOTES AREA ── */
-        .notes-area {
-            margin-top: 12px;
-            background: #fff;
-            border: 1.5px dashed #cbd5e1;
-            border-radius: 8px;
-            padding: 10px 14px;
-            min-height: 60px;
-            font-size: 0.8rem;
-            color: #94a3b8;
-        }
-
-        /* ── TIP BOX ── */
-        .tip-box {
-            background: #fffbeb;
-            border: 1px solid #fde68a;
-            border-radius: 10px;
-            padding: 14px 18px;
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-            align-items: flex-start;
-        }
-        .tip-box .tip-icon { font-size: 1.1rem; flex-shrink: 0; }
-        .tip-box p { font-size: 0.82rem; color: #92400e; line-height: 1.6; }
-
-        /* ── TANAMENT ── */
-        .tancament-box {
-            background: linear-gradient(135deg, var(--fenix-green), #16a34a);
-            border-radius: 12px;
-            padding: 20px 24px;
-            color: #fff;
-            margin-top: 10px;
-        }
-        .tancament-box h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; opacity: 0.85; }
-        .tancament-box p { font-size: 0.85rem; font-style: italic; line-height: 1.6; }
-
-        /* ── CONSENT PAGE ── */
-        .consent-form {
-            background: #fff;
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 48px 52px;
-        }
-        .consent-form .consent-logo {
-            text-align: center;
-            margin-bottom: 32px;
-            padding-bottom: 24px;
-            border-bottom: 2px solid #f1f5f9;
-        }
-        .consent-form .consent-logo .emoji { font-size: 3rem; display: block; margin-bottom: 8px; }
-        .consent-form .consent-logo h2 { font-size: 1.4rem; font-weight: 800; color: var(--fenix-dark); }
-        .consent-form .consent-logo p { color: var(--fenix-gray); font-size: 0.85rem; margin-top: 4px; }
-        .consent-form h3 { font-size: 1rem; font-weight: 700; color: var(--fenix-dark); margin: 24px 0 12px; }
-        .consent-form ul { padding-left: 20px; color: #475569; font-size: 0.88rem; line-height: 2; }
-        .consent-form .consent-check {
-            display: flex;
             align-items: flex-start;
             gap: 12px;
-            background: #f8fafc;
-            border: 1.5px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+        .bloc-dot {
+            width: 36px; height: 36px;
             border-radius: 10px;
-            padding: 14px 18px;
-            margin: 8px 0;
-        }
-        .consent-check .checkbox {
-            width: 22px;
-            height: 22px;
-            border: 2px solid #cbd5e1;
-            border-radius: 5px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
             flex-shrink: 0;
-            margin-top: 1px;
         }
-        .consent-check p { font-size: 0.85rem; color: #374151; line-height: 1.5; }
-        .signature-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-top: 32px;
-        }
-        .signature-field label {
-            display: block;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: var(--fenix-gray);
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        .signature-line {
-            height: 42px;
-            border-bottom: 2px solid #cbd5e1;
-            width: 100%;
-        }
+        .dot-yellow { background: #fef3c7; }
+        .dot-blue { background: #dbeafe; }
+        .dot-green { background: #dcfce7; }
+        .bloc-header h2 { font-size: 1.1rem; font-weight: 700; }
 
-        /* ── GRAELLA ── */
+        /* ── GRAELLA TABLE ── */
         .graella-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.82rem;
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         }
         .graella-table th {
-            background: var(--fenix-dark);
-            color: #e2e8f0;
-            padding: 10px 14px;
+            background: #e2e8f0;
+            color: var(--fenix-dark);
             text-align: left;
-            font-weight: 600;
-            font-size: 0.75rem;
+            padding: 12px;
+            font-size: 0.72rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.04em;
         }
         .graella-table td {
-            padding: 10px 14px;
-            border-bottom: 1px solid #f1f5f9;
-            color: #374151;
+            padding: 10px 12px;
+            border-bottom: 1px solid #e2e8f0;
             vertical-align: top;
+            font-size: 0.8rem;
         }
         .graella-table tr:last-child td { border-bottom: none; }
         .graella-table tr:nth-child(even) td { background: #fafafa; }
-        .graella-table .write-line {
-            height: 28px;
-            border-bottom: 1px solid #e2e8f0;
+        .write-line {
             display: block;
-            width: 100%;
-        }
-        .fatigue-scale {
-            display: flex;
-            gap: 6px;
-        }
-        .fatigue-btn {
-            width: 32px;
-            height: 32px;
-            border: 2px solid #e2e8f0;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            cursor: pointer;
+            border-bottom: 1px dashed #cbd5e1;
+            min-height: 20px;
         }
 
-        /* ── KPI CARDS ── */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-top: 24px;
-        }
-        .kpi-card {
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 18px 20px;
-            text-align: center;
-        }
-        .kpi-card .kpi-icon { font-size: 1.8rem; margin-bottom: 8px; display: block; }
-        .kpi-card .kpi-label { font-size: 0.75rem; color: var(--fenix-gray); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
-        .kpi-card .kpi-formula { font-size: 0.78rem; color: var(--fenix-blue); font-weight: 600; margin-top: 6px; }
-
-        /* ── STICKY RECORDER BAR ── */
-        #guioRecorderBar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: #1e293b;
-            border-radius: 14px;
-            padding: 14px 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,.25);
-            color: #fff;
-        }
-        #guioRecorderBar .rec-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        #guioRecorderBar .rec-timer {
-            font-family: monospace;
-            font-size: 1.3rem;
-            font-weight: 800;
-            min-width: 60px;
-        }
-        #guioRecorderBar .rec-status {
-            font-size: .8rem;
-            color: #94a3b8;
-        }
-        #guioRecorderBar .rec-btn {
-            padding: 8px 20px;
-            border-radius: 10px;
-            border: none;
-            font-weight: 700;
-            font-size: .85rem;
-            cursor: pointer;
-            font-family: inherit;
-            transition: .2s;
-        }
-        #guioRecorderBar .rec-wave {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            height: 24px;
-        }
-        #guioRecorderBar select, #guioRecorderBar input[type="text"] {
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: 1px solid #475569;
-            background: #334155;
-            color: #fff;
-            font-size: .82rem;
-            font-family: inherit;
+        /* ── NOTES AREA ── */
+        .notes-area {
+            border-bottom: 1px solid #e2e8f0;
+            min-height: 40px;
+            padding: 10px 0;
+            font-size: 0.88rem;
+            line-height: 1.6;
         }
 
-        /* ── QUESTION TAGGER ── */
-        .qtag-btn {
-            padding: 6px 14px;
-            border-radius: 8px;
-            border: 1.5px solid #e2e8f0;
-            background: #fff;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .qtag-btn.active {
-            background: var(--fenix-green);
-            border-color: var(--fenix-green);
-            color: #fff;
-        }
-        .qtag-btn:hover:not(.active) { background: #f1f5f9; }
-
-        .transcript-segment {
-            padding: 6px 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
+        /* ── SEGMENT TAG ── */
         .segment-tag {
             display: inline-block;
-            background: var(--fenix-blue);
+            background: var(--fenix-green);
             color: #fff;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 700;
             padding: 2px 8px;
             border-radius: 6px;
-            margin-right: 8px;
             vertical-align: middle;
+            margin-right: 4px;
+        }
+
+        /* ── EXPORT SECTION ── */
+        .export-section {
+            text-align: center;
+            padding: 40px 32px;
+        }
+        .export-section h2 { margin-bottom: 8px; font-size: 1.2rem; }
+        .export-section p { color: var(--fenix-gray); font-size: 0.88rem; margin-bottom: 24px; }
+        .export-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .export-btn {
+            padding: 16px 32px;
+            border-radius: 14px;
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: opacity 0.2s;
+        }
+        .export-btn:hover { opacity: 0.85; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 640px) {
+            .kpi-grid { grid-template-columns: 1fr 1fr; }
+            nav { padding: 10px 16px; }
+            .page-wrapper { padding: 0 16px 60px; margin-top: 24px; }
+            .header-card { padding: 24px 20px; }
+            .header-card h1 { font-size: 1.2rem; }
+            .bloc { padding: 20px 16px; }
+            .graella-table { font-size: 0.72rem; }
+            .graella-table td, .graella-table th { padding: 6px 8px; }
         }
 
         /* ── PRINT ── */
         @media print {
-            nav, .tabs, .print-btn { display: none !important; }
-            body { background: #fff; }
-            .section { display: block !important; max-width: 100%; margin: 0; padding: 20px; }
-            .section:not(:first-child) { page-break-before: always; }
-            .header-card { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-            .bloc { break-inside: avoid; }
+            nav, .export-section, .nav-actions, #loginGate { display: none !important; }
+            body { background: #fff; font-size: 11pt; }
+            .page-wrapper { max-width: 100%; margin: 0; padding: 20px; }
+            .header-card {
+                print-color-adjust: exact; -webkit-print-color-adjust: exact;
+                padding: 20px 24px;
+            }
+            .kpi-grid { grid-template-columns: repeat(4, 1fr); }
+            .kpi-card { border: 1px solid #ccc; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+            .bloc { break-inside: avoid; page-break-inside: avoid; border: 1px solid #ccc; }
+            .graella-table { font-size: 8pt; }
+            .graella-table th { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+            #recordingsSection { display: none; }
         }
     </style>
 </head>
 <body>
 
+<!-- ── LOGIN GATE ── -->
+<div id="loginGate" style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:48px 40px;max-width:400px;width:90%;text-align:center;">
+    <div style="font-size:3rem;margin-bottom:12px;">🔒</div>
+    <h2 style="color:#fff;font-size:1.4rem;margin-bottom:8px;">Accés restringit</h2>
+    <p style="color:#94a3b8;font-size:0.95rem;margin-bottom:24px;">Aquesta pàgina requereix autenticació.<br>Introdueix la contrasenya per continuar.</p>
+    <input type="password" id="loginPassword" placeholder="Contrasenya" autocomplete="off"
+      style="width:100%;padding:14px 18px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:#fff;font-size:1.1rem;text-align:center;outline:none;margin-bottom:12px;"
+      onkeydown="if(event.key==='Enter')attemptLogin()">
+    <button onclick="attemptLogin()"
+      style="width:100%;padding:14px;border-radius:12px;border:none;background:#22c55e;color:#fff;font-size:1rem;font-weight:700;cursor:pointer;transition:opacity 0.2s;">
+      Accedir
+    </button>
+    <div id="loginError" style="color:#ef4444;font-size:0.9rem;margin-top:12px;display:none;">❌ Contrasenya incorrecta</div>
+    <a href="index.html" style="display:inline-block;margin-top:20px;color:#94a3b8;font-size:0.85rem;text-decoration:none;">← Tornar a l'inici</a>
+  </div>
+</div>
+<script>
+function attemptLogin(){
+  const pw = document.getElementById('loginPassword').value.toLowerCase().trim();
+  const valid = ['fenix2025', 'araceli', 'manolo'];
+  if(valid.includes(pw)){
+    sessionStorage.setItem('fenix_page_auth','true');
+    document.getElementById('loginGate').style.display='none';
+    document.getElementById('mainContent').style.display='block';
+  } else {
+    document.getElementById('loginError').style.display='block';
+    document.getElementById('loginPassword').value='';
+    document.getElementById('loginPassword').focus();
+  }
+}
+if(sessionStorage.getItem('fenix_page_auth')==='true'){
+  document.addEventListener('DOMContentLoaded',function(){
+    document.getElementById('loginGate').style.display='none';
+    document.getElementById('mainContent').style.display='block';
+  });
+}
+</script>
+
+<div id="mainContent" style="display:none;">
+
 <nav>
     <a href="index.html" style="color:#fff;text-decoration:none;font-size:.9rem;padding:6px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);margin-right:4px;" title="Tornar a l'inici">← 🏠</a>
     <div class="logo">🦅 Projecte <span>Fènix</span></div>
-    <div class="tabs">
-        <button class="tab active" onclick="showSection('guio')">📋 Guió</button>
-        <button class="tab" onclick="showSection('consentiment')">✍️ Consentiment</button>
-        <button class="tab" onclick="showSection('graella')">📊 Graella Anàlisi</button>
-        <button class="tab" onclick="showSection('gravacio')" style="background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.3);color:#f87171;">🎙️ Gravació</button>
+    <div class="nav-title">📊 Resultats Entrevistes</div>
+    <div class="nav-actions">
+        <button class="nav-btn" onclick="exportGraellaCSV()">📤 CSV</button>
+        <button class="nav-btn" onclick="exportTranscriptions()">📤 JSON</button>
+        <button class="nav-btn" onclick="window.print()" style="background:var(--fenix-green);">🖨️ PDF</button>
+        <a href="dashboard.html" class="nav-btn" style="background:var(--fenix-yellow);">📊 Dashboard</a>
     </div>
-    <button class="print-btn" onclick="window.print()">🖨️ Imprimir PDF</button>
-    <a href="formulari.html" class="print-btn" style="background:var(--fenix-green);text-decoration:none;margin-left:4px;">📝 Formulari</a>
-    <a href="dashboard.html" class="print-btn" style="background:#f59e0b;text-decoration:none;margin-left:4px;">📊 Dashboard</a>
 </nav>
 
-<!-- ════════════════════════════════════════
-     SECCIÓ 1: GUIÓ ENTREVISTA
-════════════════════════════════════════ -->
-<div class="section active" id="guio">
+<div class="page-wrapper">
 
+    <!-- HEADER -->
     <div class="header-card">
-        <div class="tag">Document Intern · Confidencial</div>
-        <h1>Guió d'Entrevista Semiestructurada</h1>
-        <p>Validació qualitativa del Projecte Fènix amb conductors reals de TMB.<br>
-           Destinat a l'entrevistador. No compartir amb participants.</p>
-        <div class="meta">
+        <div class="tag">Anàlisi Qualitativa · Projecte Fènix</div>
+        <h1>Resultats de les Entrevistes Semiestructurades</h1>
+        <p>Resum dels resultats obtinguts de les entrevistes amb conductors reals de TMB.</p>
+        <div class="header-meta" id="headerMeta">
             <div class="meta-item">
-                <span class="label">Durada estimada</span>
-                <span class="value">15–20 minuts</span>
-            </div>
-            <div class="meta-item">
-                <span class="label">Mostra objectiu</span>
-                <span class="value">16 conductors</span>
+                <span class="meta-label">Total entrevistes</span>
+                <span class="meta-value" id="metaTotal">—</span>
             </div>
             <div class="meta-item">
-                <span class="label">Format</span>
-                <span class="value">Presencial / Individual</span>
+                <span class="meta-label">Primera</span>
+                <span class="meta-value" id="metaFirst">—</span>
             </div>
             <div class="meta-item">
-                <span class="label">Enregistrament</span>
-                <span class="value">Audio (amb consentiment)</span>
+                <span class="meta-label">Última</span>
+                <span class="meta-value" id="metaLast">—</span>
             </div>
         </div>
     </div>
 
-    <!-- PRESENTACIÓ -->
-    <div class="intro-box">
-        <h3>🎙️ Text de presentació — llegir en veu alta</h3>
-        <p>"Hola, moltes gràcies per participar. Estem fent un projecte per millorar el benestar dels conductors de TMB. La teva opinió és completament anònima i molt valuosa. No hi ha respostes correctes ni incorrectes. L'entrevista durarà uns 15-20 minuts. Et sembla bé si la gravem per no perdre cap detall? La gravació és confidencial i s'esborrarà un cop processada."</p>
-    </div>
-
-    <!-- STICKY RECORDER BAR -->
-    <div id="guioRecorderBar">
-        <div class="rec-row">
-            <input type="text" id="guioConductorId" placeholder="Conductor: C-01" style="width:120px;">
-            <select id="guioLanguage">
-                <option value="es-ES">Castellano</option>
-                <option value="ca-ES">Català</option>
-            </select>
-            <button class="rec-btn" id="guioBtnRecord" onclick="toggleRecordingFromGuio()" style="background:#ef4444;color:#fff;">🎙️ Gravar</button>
-            <button class="rec-btn" id="guioBtnPause" onclick="pauseRecording()" style="background:#475569;color:#fff;display:none;">⏸️</button>
-            <span class="rec-timer" id="guioTimer">00:00</span>
-            <span class="rec-status" id="guioStatus">Preparat</span>
-            <div class="rec-wave" id="guioWave"></div>
-        </div>
-        <div id="guioQuestionTagger" style="display:none;margin-top:10px;">
-            <div style="display:flex;flex-wrap:wrap;gap:5px;align-items:center;">
-                <span style="font-size:.75rem;color:#94a3b8;margin-right:4px;">Pregunta:</span>
-                <button class="qtag-btn active" data-question="PRE" onclick="setActiveQuestion('PRE')">Pre</button>
-                <button class="qtag-btn" data-question="P1" onclick="setActiveQuestion('P1')">P1</button>
-                <button class="qtag-btn" data-question="P2" onclick="setActiveQuestion('P2')">P2</button>
-                <button class="qtag-btn" data-question="P3" onclick="setActiveQuestion('P3')">P3</button>
-                <button class="qtag-btn" data-question="P4" onclick="setActiveQuestion('P4')">P4</button>
-                <button class="qtag-btn" data-question="P5" onclick="setActiveQuestion('P5')">P5</button>
-                <button class="qtag-btn" data-question="P6" onclick="setActiveQuestion('P6')">P6</button>
-                <button class="qtag-btn" data-question="P7" onclick="setActiveQuestion('P7')">P7</button>
-                <button class="qtag-btn" data-question="P8" onclick="setActiveQuestion('P8')">P8</button>
-                <button class="qtag-btn" data-question="P9" onclick="setActiveQuestion('P9')">P9</button>
-                <button class="qtag-btn" data-question="P10" onclick="setActiveQuestion('P10')">P10</button>
-                <button class="qtag-btn" data-question="P11" onclick="setActiveQuestion('P11')">P11</button>
-                <button class="qtag-btn" data-question="P12" onclick="setActiveQuestion('P12')">P12</button>
-                <button class="qtag-btn" data-question="P13" onclick="setActiveQuestion('P13')">P13</button>
-                <button class="qtag-btn" data-question="POST" onclick="setActiveQuestion('POST')">Post</button>
-            </div>
-        </div>
-        <div id="guioTranscriptPreview" style="display:none;margin-top:8px;max-height:60px;overflow-y:auto;font-size:.78rem;color:#94a3b8;line-height:1.4;">
-            <span id="guioLiveText">Esperant veu...</span>
-        </div>
-    </div>
-
-    <!-- BLOC A -->
-    <div class="bloc">
-        <div class="bloc-header">
-            <div class="bloc-dot dot-red">🔴</div>
-            <div>
-                <h2>BLOC A — Experiència actual de fatiga</h2>
-                <div style="font-size:0.8rem;color:#94a3b8;margin-top:3px">Explorar el context real del conductor</div>
-            </div>
-            <span class="time-badge">⏱ ~5 min</span>
-        </div>
-
-        <div class="question">
-            <span class="q-number">P1</span>
-            <div class="q-text">Com descriuries el teu nivell de cansament habitual al final d'un torn?</div>
-            <div class="q-probe">
-                <strong>🔍 Sonda:</strong> Físic, mental o emocional? Hi ha diferència entre torn de matí, tarda o nit? Algun dia de la setmana pitjor?
-            </div>
-            <div class="notes-area">Notes: _______________________________________________</div>
-        </div>
-
-        <div class="question">
-            <span class="q-number">P2</span>
-            <div class="q-text">Hi ha moments concrets de la jornada on la fatiga és especialment intensa?</div>
-            <div class="q-probe">
-                <strong>🔍 Sonda:</strong> Hora del dia, tram de ruta, condicions de trànsit, densitat de passatgers?
-            </div>
-            <div class="notes-area">Notes: _______________________________________________</div>
-        </div>
-
-        <div class="question">
-            <span class="q-number">P3</span>
-            <div class="q-text">Ara mateix, quan necessites descansar o desconnectar, on vas i què fas?</div>
-            <div class="q-probe">
-                <strong>🔍 Sonda:</strong> Cabina, cafeteria, sortir al carrer? Et sents còmode en aquell espai? Tens temps real per fer-ho?
-            </div>
-            <div class="notes-area">Notes: _______________________________________________</div>
-        </div>
-    </div>
-
-    <!-- BLOC B -->
-    <div class="bloc">
-        <div class="bloc-header">
-            <div class="bloc-dot dot-blue">🔵</div>
-            <div>
-                <h2>BLOC B — Reacció al concepte Sala Fènix</h2>
-                <div style="font-size:0.8rem;color:#94a3b8;margin-top:3px">Validar l'acceptació i les barreres d'ús</div>
-            </div>
-            <span class="time-badge">⏱ ~7 min</span>
-        </div>
-
-        <div class="tip-box" style="margin-bottom:18px;">
-            <span class="tip-icon">💡</span>
-            <p><strong>Abans de P4:</strong> Descriure breument les 3 zones de la Sala Fènix. Pots mostrar una imatge o fer-ho verbalment: <em>"La Sala Fènix és un espai dins de TMB amb tres zones: una zona activa per moure el cos, una zona de calma per relaxar-se, i una zona de recuperació per micro-descansos en silenci."</em></p>
-        </div>
-
-        <div class="question">
-            <span class="q-number">P4</span>
-            <div class="q-text">Quin és el teu primer pensament quan t'explico la Sala Fènix?</div>
-            <div class="q-probe">
-                <strong>🔍 Sonda:</strong> Utilitat real, confiança, vergonya d'usar-la, sobretot la zona de calma, dubtes sobre el temps disponible?
-            </div>
-            <div class="notes-area">Notes: _______________________________________________</div>
-        </div>
-
-        <div class="question">
-            <span class="q-number">P5</span>
-            <div class="q-text">De les tres zones, quina creus que usaries més? Per quin motiu?</div>
-            <div class="q-options">
-                <span class="q-option-pill pill-green">🟢 Zona Activa (moviment, estiraments)</span>
-                <span class="q-option-pill pill-yellow">🟡 Zona de Calma (relaxació, respiració)</span>
-                <span class="q-option-pill pill-blue">🔵 Zona de Recuperació (silenci, micro-descans)</span>
-            </div>
-            <div class="notes-area" style="margin-top:10px">Zona escollida + motiu: _______________________________________________</div>
-        </div>
-
-        <div class="question">
-            <span class="q-number">P6</span>
-            <div class="q-text">Quin seria el motiu principal que et faria <u>NO</u> usar la sala, fins i tot si estigués disponible?</div>
-            <div class="q-probe">
-                <strong>🔍 Sonda:</strong> Falta de temps, distància, vergonya, no creure que funcioni, preferir comunicar-se amb companys, no saber on és?
-            </div>
-            <div class="notes-area">Barrera principal: _______________________________________________</div>
-        </div>
-
-        <div class="question">
-            <span class="q-number">P7</span>
-            <div class="q-text">Quines condicions necessitaries perquè la usessis de manera habitual?</div>
-            <div class="q-probe">
-                <strong>🔍 Sonda:</strong> Horari flexible, garantia de privacitat, reconeixement per part de l'empresa, que ho usessin també companys, durada mínima de pausa?
-            </div>
-            <div class="notes-area">Condicions: _______________________________________________</div>
-        </div>
-    </div>
-
-    <!-- BLOC C -->
-    <div class="bloc">
-        <div class="bloc-header">
-            <div class="bloc-dot dot-yellow">🟡</div>
-            <div>
-                <h2>BLOC C — Impacte esperat i extrapolabilitat</h2>
-                <div style="font-size:0.8rem;color:#94a3b8;margin-top:3px">Proxy de recuperació i visió de futur</div>
-            </div>
-            <span class="time-badge">⏱ ~4 min</span>
-        </div>
-
-        <div class="question">
-            <span class="q-number">P8</span>
-            <div class="q-text">Si tinguessis 10 minuts de pausa garantida per usar la sala, creus que notaries la diferència?</div>
-            <div class="q-probe">
-                <strong>🔍 Sonda (proxy de recuperació):</strong> En la conducció? En el teu estat d'ànim? En la seguretat vial? En com tractes als passatgers?
-            </div>
-            <div class="notes-area">Resposta: _______________________________________________</div>
-        </div>
-
-        <div class="question">
-            <span class="q-number">P9</span>
-            <div class="q-text">Coneixes algun perfil de company/a que creus que ho necessitaria especialment?</div>
-            <div class="q-probe">
-                <strong>🔍 Sonda:</strong> Sense noms. Perfil de conductor més vulnerable a la fatiga: edat, torn, anys d'experiència, tipus de ruta?
-            </div>
-            <div class="notes-area">Perfil vulnerable: _______________________________________________</div>
-        </div>
-
-        <div class="question">
-            <span class="q-number">P10</span>
-            <div class="q-text">Si portem el Projecte Fènix al Metro o a altres col·lectius de TMB, creus que tindria sentit?</div>
-            <div class="q-probe">
-                <strong>🔍 Sonda:</strong> Similituds i diferències amb la feina de conductor d'autobús. Seria necessari adaptar-ho? Com?
-            </div>
-            <div class="notes-area">Extrapolabilitat: _______________________________________________</div>
-        </div>
-
-        <div class="question">
-            <span class="q-number">P11</span>
-            <div class="q-text">Si a la teva cotxera hi hagués un food truck de benestar amb esmorzars calents, entrepans i cafè d'especialitat en horari de matinada (04:00–08:00), l'utilitzaries?</div>
-            <div class="q-probe">
-                <strong>🔍 Sonda:</strong> Quins productes? Quins horaris t'anirien millor? Pagaries o hauria de ser gratuït? Preferiries màquines vending o food truck amb persona? Creus que milloraria el teu benestar?
-            </div>
-            <div class="notes-area">Resposta food truck: _______________________________________________</div>
-        </div>
-    </div>
-
-    <!-- TANCAMENT -->
-    <div class="bloc">
-        <div class="bloc-header">
-            <div class="bloc-dot dot-green">🟢</div>
-            <div>
-                <h2>TANCAMENT</h2>
-            </div>
-            <span class="time-badge">⏱ ~2 min</span>
-        </div>
-
-        <div class="question">
-            <span class="q-number">P12</span>
-            <div class="q-text">Hi ha alguna cosa que no t'hem preguntat i creus que és important que sapiguem?</div>
-            <div class="notes-area">Comentari lliure: _______________________________________________</div>
-        </div>
-
-        <div class="question">
-            <span class="q-number">P13</span>
-            <div class="q-text">En una paraula, com definiríes el que necessiten els conductors de TMB per estar millor?</div>
-            <div class="notes-area" style="min-height:42px;">Paraula clau: ___________________</div>
-        </div>
-
-        <div class="tancament-box">
-            <h3>🙏 Text de tancament — llegir en veu alta</h3>
-            <p>"Moltes gràcies per la teva col·laboració. La teva opinió és molt valuosa per millorar les condicions de treball de tots els conductors de TMB. Recorda que la gravació s'esborrarà i tot és anònim. Si tens alguna pregunta sobre el projecte, pots contactar-nos en qualsevol moment."</p>
-        </div>
-    </div>
-
-</div>
-
-<!-- ════════════════════════════════════════
-     SECCIÓ 2: CONSENTIMENT INFORMAT
-════════════════════════════════════════ -->
-<div class="section" id="consentiment">
-    <div class="consent-form">
-        <div class="consent-logo">
-            <span class="emoji">🦅</span>
-            <h2>Projecte Fènix — TMBinnova</h2>
-            <p>Full de Consentiment Informat · RGPD Compliant</p>
-        </div>
-
-        <h3>Sobre l'estudi</h3>
-        <ul>
-            <li>Estàs participant en la validació del <strong>Projecte Fènix</strong>, una iniciativa de TMBinnova per millorar el benestar dels conductors.</li>
-            <li>L'entrevista tindrà una durada aproximada de <strong>15-20 minuts</strong>.</li>
-            <li>Les dades recollides seran processades de forma <strong>anònima i agregada</strong>.</li>
-            <li>La teva participació és <strong>voluntària</strong> i pots retirar-te en qualsevol moment.</li>
-        </ul>
-
-        <h3>Drets RGPD</h3>
-        <ul>
-            <li>Tens dret d'accés, rectificació, cancel·lació i oposició al tractament de les teves dades.</li>
-            <li>Les dades seran tractades conforme al <strong>Reglament General de Protecció de Dades (UE) 2016/679</strong>.</li>
-            <li>La gravació d'àudio, si autoritzada, s'esborrarà un cop transcrita i analitzada.</li>
-            <li>En cap cas les teves dades seran cedides a tercers ni usades per a fins comercials.</li>
-        </ul>
-
-        <h3>Dono el meu consentiment per a...</h3>
-
-        <div class="consent-check" style="cursor:pointer" onclick="this.querySelector('input').checked=!this.querySelector('input').checked">
-            <input type="checkbox" style="width:22px;height:22px;accent-color:var(--fenix-green);cursor:pointer;flex-shrink:0;" onclick="event.stopPropagation()">
-            <p>Participar en l'entrevista semiestructurada sobre el Projecte Fènix de TMBinnova.</p>
-        </div>
-        <div id="consent-recording-btn" style="border:2px solid #cbd5e1;border-radius:14px;padding:18px 22px;margin:8px 0;display:flex;align-items:center;gap:16px;cursor:pointer;transition:all 0.3s ease;background:#f8fafc;" onclick="toggleRecordingConsent(this)">
-            <div style="width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;background:#e2e8f0;transition:all 0.3s ease;" id="consent-rec-icon">🎙️</div>
-            <div style="flex:1;">
-                <p style="margin:0;font-weight:600;font-size:0.95rem;color:#1e293b;">Consento la gravació d'àudio</p>
-                <p style="margin:4px 0 0;font-size:0.82rem;color:#64748b;line-height:1.4;">Únicament per ser transcrita a text i facilitar la recollida i quantificació de la informació. La gravació serà destruïda un cop transcrita.</p>
-            </div>
-            <div style="font-size:1.3rem;flex-shrink:0;transition:all 0.3s ease;" id="consent-rec-check">☐</div>
-        </div>
-        <div class="consent-check" style="cursor:pointer" onclick="this.querySelector('input').checked=!this.querySelector('input').checked">
-            <input type="checkbox" style="width:22px;height:22px;accent-color:var(--fenix-green);cursor:pointer;flex-shrink:0;" onclick="event.stopPropagation()">
-            <p>L'ús anònim i agregat de les meves opinions en l'informe final del projecte, sense que es pugui identificar la meva persona.</p>
-        </div>
-
-        <div class="signature-row" style="grid-template-columns:1fr 1fr;">
-            <div class="signature-field">
-                <label>Nom del participant <span style="font-weight:400;color:#94a3b8;font-size:0.82rem;">(opcional)</span></label>
-                <input type="text" style="width:100%;border:none;border-bottom:2px solid #cbd5e1;height:42px;font-size:0.9rem;font-family:'Inter',sans-serif;outline:none;background:transparent;" placeholder="Escriu aquí...">
-            </div>
-            <div class="signature-field">
-                <label>Data i hora</label>
-                <div id="consent-datetime" style="width:100%;border:none;border-bottom:2px solid #cbd5e1;height:42px;font-size:0.9rem;font-family:'Inter',sans-serif;display:flex;align-items:center;color:#1e293b;"></div>
-            </div>
-        </div>
-
-        <div class="tip-box" style="margin-top:28px;">
-            <span class="tip-icon">📋</span>
-            <p><strong>Nota per a l'investigador/a:</strong> Emplenar el codi d'anonimat del participant (intern) a la graella d'anàlisi. No anotar ni nom ni número de conductor en cap document d'anàlisi. Conservar aquest document en carpeta tancada i separada de les dades.</p>
-        </div>
-    </div>
-</div>
-
-<!-- ════════════════════════════════════════
-     SECCIÓ 3: GRAELLA D'ANÀLISI
-════════════════════════════════════════ -->
-<div class="section" id="graella">
-
-    <div class="header-card">
-        <div class="tag">Eina d'Anàlisi Qualitativa</div>
-        <h1>Graella de Buidat d'Entrevistes</h1>
-        <p>Registre estructurat per comparar respostes entre participants.<br>Omplir un full per cada entrevista realitzada.</p>
-    </div>
-
+    <!-- KPI SUMMARY -->
     <div class="kpi-grid">
         <div class="kpi-card">
-            <span class="kpi-icon">📉</span>
-            <div class="kpi-label">KPI Principal</div>
-            <div class="kpi-formula">Δ Fatiga = P6 − P1<br>(pre/post)</div>
+            <span class="kpi-icon">📋</span>
+            <div class="kpi-value" id="kpiTotal" style="color:var(--fenix-dark);">0</div>
+            <div class="kpi-label">Entrevistes Realitzades</div>
         </div>
         <div class="kpi-card">
             <span class="kpi-icon">🎯</span>
-            <div class="kpi-label">Proxy Recuperació</div>
-            <div class="kpi-formula">P8: % que "nota<br>la diferència"</div>
+            <div class="kpi-value" id="kpiZona" style="color:var(--fenix-green);font-size:1.3rem;">—</div>
+            <div class="kpi-label">Zona Preferida Dominant</div>
+        </div>
+        <div class="kpi-card">
+            <span class="kpi-icon">📈</span>
+            <div class="kpi-value" id="kpiDiferencia" style="color:var(--fenix-blue);">0%</div>
+            <div class="kpi-label">Notarien la Diferència (P8)</div>
         </div>
         <div class="kpi-card">
             <span class="kpi-icon">🚧</span>
+            <div class="kpi-value" id="kpiBarrera" style="color:var(--fenix-yellow);font-size:1.3rem;">—</div>
             <div class="kpi-label">Barrera Principal</div>
-            <div class="kpi-formula">P6: top 3<br>barreres d'ús</div>
         </div>
     </div>
 
-    <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
-        <button onclick="exportGraellaCSV()" style="padding:8px 16px;border-radius:8px;border:1.5px solid #e2e8f0;background:#fff;font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit;">📤 Exportar CSV</button>
+    <!-- GRAELLA DE BUIDAT -->
+    <div class="bloc">
+        <div class="bloc-header">
+            <div class="bloc-dot dot-green">📊</div>
+            <div>
+                <h2>Graella de Buidat d'Entrevistes</h2>
+                <p style="color:var(--fenix-gray);font-size:.82rem;margin-top:4px;">Registre estructurat per comparar respostes entre participants</p>
+            </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+        <table class="graella-table">
+            <thead>
+                <tr>
+                    <th style="width:38px">#</th>
+                    <th style="width:100px">Codi Anon.</th>
+                    <th style="width:90px">Torn habitual</th>
+                    <th>A — Fatiga actual (P1-P3)</th>
+                    <th>B — Reacció Fènix (P4-P7)</th>
+                    <th>Zona preferida</th>
+                    <th>Barrera principal</th>
+                    <th>C — Impacte esperat (P8)</th>
+                    <th>Paraula clau (P13)</th>
+                </tr>
+            </thead>
+            <tbody id="graellaBody">
+            </tbody>
+        </table>
+        </div>
     </div>
 
-    <table class="graella-table">
-        <thead>
-            <tr>
-                <th style="width:38px">#</th>
-                <th style="width:100px">Codi Anon.</th>
-                <th style="width:90px">Torn habitual</th>
-                <th>A — Fatiga actual (P1-P3)</th>
-                <th>B — Reacció Fènix (P4-P7)</th>
-                <th>Zona preferida</th>
-                <th>Barrera principal</th>
-                <th>C — Impacte esperat (P8)</th>
-                <th>Paraula clau (P13)</th>
-            </tr>
-        </thead>
-        <tbody id="graellaBody">
-            <!-- Populated dynamically from IndexedDB -->
-        </tbody>
-    </table>
-
-    <div class="bloc" style="margin-top:24px;">
+    <!-- PATRONS EMERGENTS -->
+    <div class="bloc">
         <div class="bloc-header">
             <div class="bloc-dot dot-yellow">📊</div>
             <div><h2>Patrons emergents i conclusions</h2></div>
@@ -912,103 +403,32 @@
                 <div id="patronParaules" class="notes-area" style="min-height:80px">Sense dades encara...</div>
             </div>
         </div>
+    </div>
 
-        <div style="margin-top:16px;">
-            <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">CONCLUSIONS I RECOMANACIONS PER AL DISSENY</div>
-            <div class="notes-area" style="min-height:100px"></div>
+    <!-- GRAVACIONS REALITZADES -->
+    <div class="bloc" id="recordingsSection">
+        <div class="bloc-header">
+            <div class="bloc-dot dot-blue">🎙️</div>
+            <div><h2>Gravacions Realitzades</h2></div>
+        </div>
+        <div id="recordingsList" style="font-size:.85rem;color:#94a3b8;font-style:italic;">Carregant gravacions...</div>
+    </div>
+
+    <!-- EXPORT -->
+    <div class="bloc export-section">
+        <h2>Exportar Resultats</h2>
+        <p>Descarrega les dades en el format que necessitis</p>
+        <div class="export-buttons">
+            <button class="export-btn" style="background:var(--fenix-green);" onclick="exportGraellaCSV()">📤 Graella CSV</button>
+            <button class="export-btn" style="background:var(--fenix-blue);" onclick="window.print()">🖨️ Informe PDF</button>
+            <button class="export-btn" style="background:var(--fenix-dark);" onclick="exportTranscriptions()">📤 Transcripcions JSON</button>
         </div>
     </div>
 
-</div>
-
-<!-- SECCIÓ 4: GRAVACIÓ D'ÀUDIO -->
-<div class="section" id="gravacio">
-    <div class="header-card" style="background:linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);">
-        <div class="tag" style="background:#ef4444;">Eina de Camp</div>
-        <h1>🎙️ Gravació d'Entrevistes</h1>
-        <p>Grava cada entrevista semiestructurada directament des del navegador.<br>
-           Els àudios es guarden localment al dispositiu.</p>
-    </div>
-
-    <div style="background:#fff;border-radius:16px;padding:28px;box-shadow:0 2px 16px rgba(0,0,0,.06);margin-bottom:20px;">
-        <div id="speechWarning" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:14px;margin-bottom:16px;font-size:.85rem;color:#991b1b;">
-            ⚠️ El teu navegador no suporta transcripció automàtica. Utilitza <strong>Google Chrome</strong> per a aquesta funcionalitat. La gravació d'àudio funcionarà igualment.
-        </div>
-        <div style="display:flex;gap:12px;margin-bottom:20px;align-items:center;flex-wrap:wrap;">
-            <label style="font-weight:600;font-size:.9rem;">Conductor:</label>
-            <input type="text" id="recConductorId" placeholder="Ex: C-01" style="padding:10px 16px;border-radius:10px;border:1.5px solid #e2e8f0;font-size:.95rem;flex:1;min-width:120px;font-family:inherit;">
-            <label style="font-weight:600;font-size:.9rem;">Idioma:</label>
-            <select id="recLanguage" style="padding:10px 16px;border-radius:10px;border:1.5px solid #e2e8f0;font-size:.95rem;font-family:inherit;">
-                <option value="es-ES">Castellano</option>
-                <option value="ca-ES">Català</option>
-            </select>
-        </div>
-
-        <div id="recorderUI" style="text-align:center;padding:30px 0;">
-            <div id="recStatus" style="font-size:1rem;font-weight:600;margin-bottom:16px;color:#64748b;">Preparat per gravar</div>
-            <div id="recTimer" style="font-size:2.5rem;font-weight:800;font-family:monospace;margin-bottom:20px;color:#0f172a;">00:00</div>
-            <div id="recWave" style="height:40px;display:flex;align-items:center;justify-content:center;gap:3px;margin-bottom:20px;">
-            </div>
-            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-                <button id="btnRecord" onclick="toggleRecording()" style="padding:14px 32px;border-radius:14px;border:none;background:#ef4444;color:#fff;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;transition:.2s;">
-                    🎙️ Iniciar Gravació
-                </button>
-                <button id="btnPause" onclick="pauseRecording()" style="padding:14px 24px;border-radius:14px;border:1.5px solid #e2e8f0;background:#fff;color:#0f172a;font-weight:600;font-size:.9rem;cursor:pointer;font-family:inherit;display:none;">
-                    ⏸️ Pausa
-                </button>
-            </div>
-
-            <!-- Question tagger - visible during recording -->
-            <div id="questionTagger" style="display:none;margin-top:20px;padding-top:16px;border-top:1px solid #e2e8f0;">
-                <div style="font-size:.8rem;font-weight:600;color:#64748b;margin-bottom:10px;">📌 Marca la pregunta actual:</div>
-                <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;">
-                    <button class="qtag-btn active" data-question="PRE" onclick="setActiveQuestion('PRE')">Pre</button>
-                    <button class="qtag-btn" data-question="P1" onclick="setActiveQuestion('P1')">P1</button>
-                    <button class="qtag-btn" data-question="P2" onclick="setActiveQuestion('P2')">P2</button>
-                    <button class="qtag-btn" data-question="P3" onclick="setActiveQuestion('P3')">P3</button>
-                    <button class="qtag-btn" data-question="P4" onclick="setActiveQuestion('P4')">P4</button>
-                    <button class="qtag-btn" data-question="P5" onclick="setActiveQuestion('P5')">P5</button>
-                    <button class="qtag-btn" data-question="P6" onclick="setActiveQuestion('P6')">P6</button>
-                    <button class="qtag-btn" data-question="P7" onclick="setActiveQuestion('P7')">P7</button>
-                    <button class="qtag-btn" data-question="P8" onclick="setActiveQuestion('P8')">P8</button>
-                    <button class="qtag-btn" data-question="P9" onclick="setActiveQuestion('P9')">P9</button>
-                    <button class="qtag-btn" data-question="P10" onclick="setActiveQuestion('P10')">P10</button>
-                    <button class="qtag-btn" data-question="P11" onclick="setActiveQuestion('P11')">P11</button>
-                    <button class="qtag-btn" data-question="P12" onclick="setActiveQuestion('P12')">P12</button>
-                    <button class="qtag-btn" data-question="P13" onclick="setActiveQuestion('P13')">P13</button>
-                    <button class="qtag-btn" data-question="POST" onclick="setActiveQuestion('POST')">Post</button>
-                </div>
-                <div id="currentQuestionLabel" style="margin-top:8px;font-size:.82rem;color:#64748b;">Pregunta activa: <strong>PRE</strong></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Live transcription panel -->
-    <div id="transcriptionPanel" style="display:none;background:#fff;border-radius:16px;padding:28px;box-shadow:0 2px 16px rgba(0,0,0,.06);margin-bottom:20px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-            <h3 style="font-size:1rem;margin:0;">📝 Transcripció en directe</h3>
-            <span id="transcriptionStatus" style="font-size:.8rem;color:#64748b;">Esperant veu...</span>
-        </div>
-        <div id="transcriptionContent" style="max-height:300px;overflow-y:auto;font-size:.85rem;line-height:1.7;color:#374151;">
-            <div style="color:#94a3b8;font-style:italic;">La transcripció apareixerà aquí quan comencis a parlar...</div>
-        </div>
-    </div>
-
-    <div style="background:#fff;border-radius:16px;padding:28px;box-shadow:0 2px 16px rgba(0,0,0,.06);">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-            <h3 style="font-size:1rem;margin:0;">📁 Gravacions realitzades</h3>
-            <button onclick="exportTranscriptions()" style="padding:8px 16px;border-radius:8px;border:1.5px solid #e2e8f0;background:#fff;font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit;">📤 Exportar JSON</button>
-        </div>
-        <div id="recordingsList" style="font-size:.85rem;color:#64748b;">Cap gravació encara.</div>
-    </div>
-
-    <div style="margin-top:16px;text-align:center;">
-        <a href="formulari.html" style="display:inline-block;padding:14px 28px;background:var(--fenix-green);color:#fff;border-radius:12px;text-decoration:none;font-weight:700;font-size:.95rem;">📝 Passar al Formulari →</a>
-    </div>
-</div>
+</div><!-- /page-wrapper -->
 
 <script>
-    // ===== FIRESTORE REST API SYNC =====
+    // ===== FIRESTORE REST API =====
     const FIRESTORE_BASE = 'https://firestore.googleapis.com/v1/projects/projecte-fenix-tmb/databases/default/documents';
 
     function toFirestoreValue(val) {
@@ -1037,7 +457,6 @@
 
     async function firestoreSave(data) {
         const docId = sanitizeDocId(data.id);
-        console.log('[Fenix] Firestore saving:', docId);
         try {
             const body = {
                 fields: {
@@ -1050,93 +469,29 @@
                     savedAt: toFirestoreValue(new Date().toISOString())
                 }
             };
-            const resp = await fetch(FIRESTORE_BASE + '/interviews/' + encodeURIComponent(docId), {
+            await fetch(FIRESTORE_BASE + '/interviews/' + encodeURIComponent(docId), {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
             });
-            if (!resp.ok) {
-                const err = await resp.text();
-                throw new Error('HTTP ' + resp.status + ': ' + err);
-            }
-            console.log('[Fenix] ✅ Firestore saved:', docId);
         } catch(e) {
             console.error('[Fenix] Firestore save error:', e.message || e);
-        }
-    }
-
-    async function firestoreDelete(dataId) {
-        const docId = sanitizeDocId(dataId);
-        try {
-            const resp = await fetch(FIRESTORE_BASE + '/interviews/' + encodeURIComponent(docId), {
-                method: 'DELETE'
-            });
-            if (!resp.ok) {
-                const err = await resp.text();
-                throw new Error('HTTP ' + resp.status + ': ' + err);
-            }
-            console.log('[Fenix] ✅ Firestore deleted:', docId);
-        } catch(e) {
-            console.error('[Fenix] Firestore delete error:', e.message || e);
         }
     }
 
     async function firestoreLoadAll() {
         try {
             const resp = await fetch(FIRESTORE_BASE + '/interviews');
-            if (!resp.ok) {
-                const err = await resp.text();
-                throw new Error('HTTP ' + resp.status + ': ' + err);
-            }
+            if (!resp.ok) throw new Error('HTTP ' + resp.status);
             const data = await resp.json();
-            const docs = data.documents || [];
-            const results = docs.map(fromFirestoreDoc);
-            console.log('[Fenix] ✅ Firestore loaded:', results.length, 'interviews');
-            return results;
+            return (data.documents || []).map(fromFirestoreDoc);
         } catch(e) {
             console.error('[Fenix] Firestore load error:', e.message || e);
             return [];
         }
     }
 
-    // ===== NAVIGATION =====
-    function showSection(id) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        event.target.classList.add('active');
-    }
-
-    // ===== CONSENT RECORDING BUTTON =====
-    function toggleRecordingConsent(btn) {
-        const isActive = btn.dataset.consented === 'true';
-        btn.dataset.consented = isActive ? 'false' : 'true';
-        const icon = document.getElementById('consent-rec-icon');
-        const check = document.getElementById('consent-rec-check');
-        if (!isActive) {
-            btn.style.borderColor = '#16a34a'; btn.style.background = '#f0fdf4';
-            icon.style.background = '#16a34a'; icon.style.color = '#fff';
-            check.textContent = '\u2705';
-        } else {
-            btn.style.borderColor = '#cbd5e1'; btn.style.background = '#f8fafc';
-            icon.style.background = '#e2e8f0'; icon.style.color = '';
-            check.textContent = '\u2610';
-        }
-    }
-
-    // ===== AUTO DATE/TIME =====
-    function updateConsentDatetime() {
-        const el = document.getElementById('consent-datetime');
-        if (el) {
-            const now = new Date();
-            const pad = n => String(n).padStart(2, '0');
-            el.textContent = pad(now.getDate()) + '/' + pad(now.getMonth()+1) + '/' + now.getFullYear() + ' \u2014 ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
-        }
-    }
-    updateConsentDatetime();
-    setInterval(updateConsentDatetime, 60000);
-
-    // ===== INDEXEDDB PERSISTENCE =====
+    // ===== INDEXEDDB =====
     const DB_NAME = 'fenix_interviews_db';
     const DB_VERSION = 1;
 
@@ -1178,590 +533,18 @@
         return new Promise((resolve, reject) => {
             const tx = db.transaction(store, 'readonly');
             const s = tx.objectStore(store);
-            const keys = []; const values = [];
+            const values = [];
             const cursorReq = s.openCursor();
             cursorReq.onsuccess = (e) => {
                 const cursor = e.target.result;
-                if (cursor) { keys.push(cursor.key); values.push(cursor.value); cursor.continue(); }
+                if (cursor) { values.push(cursor.value); cursor.continue(); }
                 else resolve(values);
             };
             cursorReq.onerror = () => reject(cursorReq.error);
         });
     }
 
-    async function dbDelete(store, key) {
-        const db = await openDB();
-        return new Promise((resolve, reject) => {
-            const tx = db.transaction(store, 'readwrite');
-            tx.objectStore(store).delete(key);
-            tx.oncomplete = () => resolve();
-            tx.onerror = () => reject(tx.error);
-        });
-    }
-
-    // ===== SPEECH RECOGNITION =====
-    const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const speechSupported = !!SpeechRecognitionAPI;
-
-    let recognition = null;
-    let currentQuestion = 'PRE';
-    let transcriptSegments = [];
-    let currentSegmentText = '';
-    let segmentStartTime = 0;
-    let speechErrorCount = 0;
-    let lastSpeechStart = 0;
-    let hasReceivedResult = false;
-
-    function setActiveQuestion(qId) {
-        // Save current segment if it has text
-        if (currentSegmentText.trim()) {
-            transcriptSegments.push({
-                question: currentQuestion,
-                text: currentSegmentText.trim(),
-                startTime: segmentStartTime,
-                endTime: seconds
-            });
-            console.log('[Fenix] Segment saved:', currentQuestion, '→', currentSegmentText.trim().slice(0, 50));
-        }
-        currentQuestion = qId;
-        currentSegmentText = '';
-        segmentStartTime = seconds;
-        console.log('[Fenix] Active question:', qId);
-        // Update UI
-        document.querySelectorAll('.qtag-btn').forEach(b => b.classList.remove('active'));
-        const activeBtn = document.querySelector('.qtag-btn[data-question="' + qId + '"]');
-        if (activeBtn) activeBtn.classList.add('active');
-        document.getElementById('currentQuestionLabel').innerHTML = 'Pregunta activa: <strong>' + qId + '</strong>';
-        // Add visual separator in transcription panel AND update currentSegmentEl
-        currentSegmentEl = addTranscriptSegmentUI(qId);
-    }
-
-    function addTranscriptSegmentUI(qId) {
-        const content = document.getElementById('transcriptionContent');
-        // Remove placeholder
-        if (content.querySelector('[style*="font-style:italic"]')) content.innerHTML = '';
-        const div = document.createElement('div');
-        div.className = 'transcript-segment';
-        div.dataset.question = qId;
-        div.innerHTML = '<span class="segment-tag">' + qId + '</span><span class="segment-text" id="seg-text-' + qId + '-' + Date.now() + '"></span>';
-        content.appendChild(div);
-        content.scrollTop = content.scrollHeight;
-        return div.querySelector('.segment-text');
-    }
-
-    let currentSegmentEl = null;
-
-    function startSpeechRecognition() {
-        if (!speechSupported) {
-            updateSpeechStatus('⚠️ Navegador no suportat. Usa Chrome.');
-            return;
-        }
-        speechErrorCount = 0;
-        hasReceivedResult = false;
-        const lang = getLanguage();
-
-        if (recognition) {
-            try { recognition.abort(); } catch(e) {}
-            recognition = null;
-        }
-
-        recognition = new SpeechRecognitionAPI();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = lang;
-        recognition.maxAlternatives = 1;
-
-        currentSegmentEl = addTranscriptSegmentUI(currentQuestion);
-        updateSpeechStatus('🎤 Iniciant reconeixement (' + lang + ')...');
-
-        recognition.onstart = () => {
-            lastSpeechStart = Date.now();
-            updateSpeechStatus('🎤 Escoltant... (' + lang + ')');
-        };
-
-        recognition.onresult = (event) => {
-            hasReceivedResult = true;
-            speechErrorCount = 0;
-            let interim = '';
-            let finalText = '';
-            for (let i = event.resultIndex; i < event.results.length; i++) {
-                const transcript = event.results[i][0].transcript;
-                if (event.results[i].isFinal) {
-                    finalText += transcript + ' ';
-                } else {
-                    interim = transcript;
-                }
-            }
-            if (finalText) {
-                currentSegmentText += finalText;
-                if (currentSegmentEl) currentSegmentEl.textContent = currentSegmentText.trim();
-            }
-            // Update Gravació panel
-            const ts = document.getElementById('transcriptionStatus');
-            if (ts) ts.textContent = interim ? '🎤 ...' + interim.slice(-40) : '🎤 Escoltant...';
-            const content = document.getElementById('transcriptionContent');
-            if (content) content.scrollTop = content.scrollHeight;
-            // Update Guió live preview
-            const guioLive = document.getElementById('guioLiveText');
-            if (guioLive) {
-                const preview = currentSegmentText.trim() || interim;
-                guioLive.textContent = '[' + currentQuestion + '] ' + (preview ? preview.slice(-80) : 'Esperant veu...');
-            }
-        };
-
-        recognition.onend = () => {
-            if (!isRecording || isPaused) return;
-            const elapsed = Date.now() - lastSpeechStart;
-            // If it ended too fast (<500ms) without results, likely a language or permission error
-            if (elapsed < 500 && !hasReceivedResult) {
-                speechErrorCount++;
-                if (speechErrorCount >= 3) {
-                    const currentLang = getLanguage();
-                    if (currentLang === 'ca-ES') {
-                        updateSpeechStatus('⚠️ Català no disponible. Canviant a Castellano...');
-                        document.getElementById('guioLanguage').value = 'es-ES';
-                        document.getElementById('recLanguage').value = 'es-ES';
-                        speechErrorCount = 0;
-                        setTimeout(() => startSpeechRecognition(), 500);
-                    } else {
-                        updateSpeechStatus('❌ Error de reconeixement. Comprova el micròfon.');
-                    }
-                    return;
-                }
-            }
-            // Auto-restart with delay to avoid rapid-fire
-            setTimeout(() => {
-                if (isRecording && !isPaused && recognition) {
-                    try {
-                        recognition.start();
-                        console.log('[Fenix] Speech recognition restarted');
-                    } catch(e) {
-                        console.warn('[Fenix] Restart failed, retrying in 1s:', e.message);
-                        setTimeout(() => {
-                            if (isRecording && !isPaused) {
-                                try { recognition.start(); } catch(e2) {
-                                    console.error('[Fenix] Second restart failed:', e2.message);
-                                }
-                            }
-                        }, 1000);
-                    }
-                }
-            }, 300);
-        };
-
-        recognition.onerror = (event) => {
-            console.warn('[Fenix] Speech error:', event.error);
-            if (event.error === 'aborted') {
-                // Aborted is normal during stop/restart — ignore
-                return;
-            }
-            if (event.error === 'no-speech') {
-                updateSpeechStatus('🎤 Sense veu detectada... segueix parlant');
-                return;
-            }
-            if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-                updateSpeechStatus('❌ Permís de micròfon denegat. Activa el micròfon al navegador.');
-                return;
-            }
-            if (event.error === 'network') {
-                updateSpeechStatus('⚠️ Error de xarxa. Cal connexió a internet per la transcripció.');
-                return;
-            }
-            if (event.error === 'language-not-supported') {
-                const currentLang = getLanguage();
-                if (currentLang === 'ca-ES') {
-                    updateSpeechStatus('⚠️ Català no suportat. Canviant a Castellano...');
-                    document.getElementById('guioLanguage').value = 'es-ES';
-                    document.getElementById('recLanguage').value = 'es-ES';
-                    setTimeout(() => startSpeechRecognition(), 500);
-                } else {
-                    updateSpeechStatus('❌ Idioma no suportat.');
-                }
-                return;
-            }
-            speechErrorCount++;
-            updateSpeechStatus('⚠️ Error: ' + event.error + ' (reintentant...)');
-        };
-
-        try {
-            recognition.start();
-        } catch(e) {
-            console.error('Failed to start recognition:', e);
-            updateSpeechStatus('❌ No s\'ha pogut iniciar. Recarrega la pàgina.');
-        }
-    }
-
-    function updateSpeechStatus(msg) {
-        const ts = document.getElementById('transcriptionStatus');
-        if (ts) ts.textContent = msg;
-        const guioLive = document.getElementById('guioLiveText');
-        if (guioLive && !currentSegmentText.trim()) guioLive.textContent = msg;
-    }
-
-    function stopSpeechRecognition() {
-        // Save final segment
-        if (currentSegmentText.trim()) {
-            transcriptSegments.push({
-                question: currentQuestion,
-                text: currentSegmentText.trim(),
-                startTime: segmentStartTime,
-                endTime: seconds
-            });
-        }
-        if (recognition) {
-            try { recognition.stop(); } catch(e) {}
-            recognition = null;
-        }
-    }
-
-    // ===== AUDIO RECORDER =====
-    let mediaRecorder = null;
-    let audioChunks = [];
-    let isRecording = false;
-    let isPaused = false;
-    let timerInterval = null;
-    let seconds = 0;
-    let recordings = JSON.parse(localStorage.getItem('fenix_recordings_meta') || '[]');
-    let recordingSource = 'guio'; // 'guio' or 'gravacio'
-
-    function updateTimer() {
-        seconds++;
-        const m = String(Math.floor(seconds / 60)).padStart(2, '0');
-        const s = String(seconds % 60).padStart(2, '0');
-        const timeStr = m + ':' + s;
-        // Update both UIs
-        const rt = document.getElementById('recTimer');
-        if (rt) rt.textContent = timeStr;
-        const gt = document.getElementById('guioTimer');
-        if (gt) gt.textContent = timeStr;
-    }
-
-    function showWave() {
-        ['recWave', 'guioWave'].forEach(id => {
-            const wave = document.getElementById(id);
-            if (!wave) return;
-            wave.innerHTML = '';
-            const count = id === 'guioWave' ? 12 : 20;
-            const maxH = id === 'guioWave' ? 20 : 30;
-            for (let i = 0; i < count; i++) {
-                const bar = document.createElement('div');
-                bar.style.cssText = 'width:3px;border-radius:2px;background:#ef4444;transition:height .15s;height:' + (Math.random() * maxH + 4) + 'px;';
-                wave.appendChild(bar);
-            }
-        });
-    }
-
-    function getConductorId() {
-        return document.getElementById('guioConductorId').value || document.getElementById('recConductorId').value || 'Anònim';
-    }
-
-    function getLanguage() {
-        return document.getElementById('guioLanguage').value || document.getElementById('recLanguage').value || 'ca-ES';
-    }
-
-    // Main recording function - called from either Guió or Gravació
-    async function startRecording() {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            mediaRecorder = new MediaRecorder(stream);
-            audioChunks = [];
-            transcriptSegments = [];
-            currentSegmentText = '';
-            currentQuestion = 'PRE';
-            segmentStartTime = 0;
-            seconds = 0;
-
-            // Reset question tagger UI (both locations)
-            document.querySelectorAll('.qtag-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.qtag-btn[data-question="PRE"]').forEach(b => b.classList.add('active'));
-            const cql = document.getElementById('currentQuestionLabel');
-            if (cql) cql.innerHTML = 'Pregunta activa: <strong>PRE</strong>';
-            const tc = document.getElementById('transcriptionContent');
-            if (tc) tc.innerHTML = '<div style="color:#94a3b8;font-style:italic;">La transcripció apareixerà aquí quan comencis a parlar...</div>';
-
-            mediaRecorder.ondataavailable = (e) => {
-                if (e.data.size > 0) audioChunks.push(e.data);
-            };
-
-            mediaRecorder.onstop = async () => {
-                const blob = new Blob(audioChunks, { type: 'audio/webm' });
-                const url = URL.createObjectURL(blob);
-                console.log('[Fenix] mediaRecorder.onstop — blob size:', blob.size, 'bytes');
-
-                // Save audio blob to IndexedDB (transcription already saved by stopRecording)
-                if (_lastInterviewId) {
-                    try {
-                        await dbPut('audio_blobs', _lastInterviewId, blob);
-                        console.log('[Fenix] ✅ Audio blob saved:', _lastInterviewId);
-                    } catch(e) {
-                        console.error('[Fenix] Audio blob save error:', e);
-                    }
-                }
-
-                // Update UI with the saved data
-                if (_lastInterviewData) {
-                    addRecordingToList(_lastInterviewData, url, recordings.length);
-                }
-                renderGraella();
-                updatePatterns();
-
-                seconds = 0;
-                ['recTimer', 'guioTimer'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = '00:00'; });
-                ['recWave', 'guioWave'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
-            };
-
-            mediaRecorder.start(1000);
-            isRecording = true;
-            console.log('[Fenix] ✅ MediaRecorder started. State:', mediaRecorder.state);
-
-            // Update Guió bar UI
-            const gb = document.getElementById('guioBtnRecord');
-            gb.innerHTML = '⏹️ Aturar';
-            gb.style.background = '#1e293b';
-            document.getElementById('guioBtnPause').style.display = 'inline-block';
-            document.getElementById('guioQuestionTagger').style.display = 'block';
-            document.getElementById('guioTranscriptPreview').style.display = 'block';
-            document.getElementById('guioStatus').textContent = '🔴 Gravant...';
-            document.getElementById('guioStatus').style.color = '#ef4444';
-
-            // Update Gravació tab UI
-            const btn = document.getElementById('btnRecord');
-            const btnPause = document.getElementById('btnPause');
-            const status = document.getElementById('recStatus');
-            if (btn) { btn.innerHTML = '⏹️ Aturar i Guardar'; btn.style.background = '#1e293b'; }
-            if (btnPause) btnPause.style.display = 'inline-flex';
-            if (status) { status.textContent = '🔴 Gravant...'; status.style.color = '#ef4444'; }
-            const qt = document.getElementById('questionTagger');
-            if (qt) qt.style.display = 'block';
-            const tp = document.getElementById('transcriptionPanel');
-            if (tp) tp.style.display = 'block';
-
-            startSpeechRecognition();
-            timerInterval = setInterval(() => { updateTimer(); showWave(); }, 1000);
-
-        } catch (err) {
-            alert('Error accedint al micròfon. Comprova els permisos del navegador.\n\n' + err.message);
-        }
-    }
-
-    // Shared data between stopRecording and onstop handler
-    let _lastInterviewId = null;
-    let _lastInterviewData = null;
-
-    function stopRecording() {
-        // IMPORTANT: stop speech first to capture final segment text
-        stopSpeechRecognition();
-
-        const conductorId = getConductorId();
-        const timestamp = new Date().toISOString();
-        _lastInterviewId = conductorId + '_' + timestamp;
-        const finalSegments = transcriptSegments.slice();
-        const finalDuration = seconds;
-
-        console.log('[Fenix] Stopping recording. ID:', _lastInterviewId, 'Segments:', finalSegments.length);
-        if (finalSegments.length > 0) {
-            finalSegments.forEach((s, i) => console.log('[Fenix]   seg', i, s.question, ':', s.text.slice(0, 60)));
-        }
-
-        // === SYNCHRONOUS localStorage save FIRST — ensures persistence even if async fails ===
-        _lastInterviewData = {
-            id: _lastInterviewId,
-            conductor: conductorId,
-            timestamp: timestamp,
-            duration: finalDuration,
-            language: getLanguage(),
-            segments: finalSegments
-        };
-        try {
-            recordings.push({
-                conductor: conductorId,
-                timestamp: timestamp,
-                duration: finalDuration,
-                filename: 'entrevista_' + conductorId + '_' + timestamp.slice(0,10) + '.webm',
-                hasTranscription: finalSegments.length > 0,
-                segmentsJson: JSON.stringify(finalSegments)
-            });
-            localStorage.setItem('fenix_recordings_meta', JSON.stringify(recordings));
-            console.log('[Fenix] ✅ SYNC localStorage saved. Total recordings:', recordings.length);
-        } catch(e) {
-            console.error('[Fenix] localStorage save failed:', e);
-        }
-
-        // === ASYNC IndexedDB save (data already safe in localStorage) ===
-        dbPut('transcriptions', _lastInterviewId, _lastInterviewData).then(() => {
-            console.log('[Fenix] ✅ IndexedDB transcription saved:', _lastInterviewId);
-        }).catch(e => console.error('[Fenix] IndexedDB transcription save error:', e));
-
-        // === ASYNC Firestore cloud save (cross-device sync) ===
-        firestoreSave(_lastInterviewData);
-
-        mediaRecorder.stop();
-        mediaRecorder.stream.getTracks().forEach(t => t.stop());
-        clearInterval(timerInterval);
-        isRecording = false;
-        isPaused = false;
-
-        // Reset Guió bar
-        const gb = document.getElementById('guioBtnRecord');
-        gb.innerHTML = '🎙️ Gravar';
-        gb.style.background = '#ef4444';
-        document.getElementById('guioBtnPause').style.display = 'none';
-        document.getElementById('guioQuestionTagger').style.display = 'none';
-        document.getElementById('guioStatus').textContent = '✅ Guardat!';
-        document.getElementById('guioStatus').style.color = '#22c55e';
-        setTimeout(() => {
-            document.getElementById('guioStatus').textContent = 'Preparat';
-            document.getElementById('guioStatus').style.color = '#94a3b8';
-            document.getElementById('guioTranscriptPreview').style.display = 'none';
-        }, 3000);
-
-        // Reset Gravació tab
-        const btn = document.getElementById('btnRecord');
-        const btnPause = document.getElementById('btnPause');
-        const status = document.getElementById('recStatus');
-        if (btn) { btn.innerHTML = '🎙️ Iniciar Gravació'; btn.style.background = '#ef4444'; }
-        if (btnPause) btnPause.style.display = 'none';
-        const qt = document.getElementById('questionTagger');
-        if (qt) qt.style.display = 'none';
-        if (status) { status.textContent = '✅ Gravació guardada!'; status.style.color = 'var(--fenix-green)'; }
-        const ts = document.getElementById('transcriptionStatus');
-        if (ts) ts.textContent = 'Completada';
-        setTimeout(() => { if (status) { status.textContent = 'Preparat per gravar'; status.style.color = '#64748b'; } }, 3000);
-    }
-
-    // Entry points from either UI
-    function toggleRecordingFromGuio() {
-        if (!isRecording) { recordingSource = 'guio'; startRecording(); }
-        else stopRecording();
-    }
-
-    async function toggleRecording() {
-        if (!isRecording) { recordingSource = 'gravacio'; startRecording(); }
-        else stopRecording();
-    }
-
-    function pauseRecording() {
-        if (!isPaused) {
-            mediaRecorder.pause();
-            clearInterval(timerInterval);
-            if (recognition) try { recognition.stop(); } catch(e) {}
-            isPaused = true;
-            // Update both UIs
-            document.getElementById('guioBtnPause').innerHTML = '▶️';
-            document.getElementById('guioStatus').textContent = '⏸️ Pausa';
-            document.getElementById('guioStatus').style.color = '#f59e0b';
-            const bp = document.getElementById('btnPause');
-            if (bp) bp.innerHTML = '▶️ Reprendre';
-            const st = document.getElementById('recStatus');
-            if (st) { st.textContent = '⏸️ En pausa'; st.style.color = '#f59e0b'; }
-        } else {
-            mediaRecorder.resume();
-            timerInterval = setInterval(() => { updateTimer(); showWave(); }, 1000);
-            if (speechSupported) {
-                speechErrorCount = 0;
-                if (recognition) {
-                    try { recognition.start(); } catch(e) { startSpeechRecognition(); }
-                } else {
-                    startSpeechRecognition();
-                }
-            }
-            isPaused = false;
-            document.getElementById('guioBtnPause').innerHTML = '⏸️';
-            document.getElementById('guioStatus').textContent = '🔴 Gravant...';
-            document.getElementById('guioStatus').style.color = '#ef4444';
-            const bp = document.getElementById('btnPause');
-            if (bp) bp.innerHTML = '⏸️ Pausa';
-            const st = document.getElementById('recStatus');
-            if (st) { st.textContent = '🔴 Gravant...'; st.style.color = '#ef4444'; }
-        }
-    }
-
-    // ===== RECORDINGS LIST =====
-    function addRecordingToList(data, audioUrl, num) {
-        const list = document.getElementById('recordingsList');
-        if (list.textContent.includes('Cap gravaci') || list.textContent.includes('gravacions realitzades') || list.textContent.includes('No hay grabaciones')) list.innerHTML = '';
-        const dur = data.duration || 0;
-        const m = String(Math.floor(dur / 60)).padStart(2, '0');
-        const s = String(dur % 60).padStart(2, '0');
-        const conductor = data.conductor || 'Anònim';
-        const hasSegs = data.segments && data.segments.length > 0;
-        const entryId = 'rec-' + num;
-        const dataId = data.id || '';
-
-        const div = document.createElement('div');
-        div.id = 'rec-entry-' + num;
-        div.style.cssText = 'border-radius:10px;background:#f8fafc;margin-bottom:8px;border:1px solid #e2e8f0;overflow:hidden;';
-        div.innerHTML =
-            '<div style="display:flex;align-items:center;gap:8px;padding:12px;">' +
-                '<span style="font-size:1.2rem">🎙️</span>' +
-                '<div style="flex:1"><strong>#' + num + ' — ' + conductor + '</strong><br>' +
-                '<span style="font-size:.78rem;color:#94a3b8;">' + m + ':' + s + ' · ' + new Date(data.timestamp).toLocaleString('ca') + (hasSegs ? ' · 📝 Transcrit' : '') + '</span></div>' +
-                (audioUrl ? '<audio controls src="' + audioUrl + '" style="height:32px;"></audio>' : '') +
-                (audioUrl ? '<a href="' + audioUrl + '" download="entrevista_' + conductor + '.webm" style="padding:6px 12px;background:var(--fenix-blue);color:#fff;border-radius:8px;text-decoration:none;font-size:.75rem;font-weight:600;">💾</a>' : '') +
-                (hasSegs ? '<button onclick="toggleTranscriptDetail(\'' + entryId + '\')" style="padding:6px 12px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;font-size:.75rem;font-weight:600;cursor:pointer;font-family:inherit;">📝</button>' : '') +
-                '<button onclick="deleteRecording(\'' + dataId.replace(/'/g, "\\'") + '\',' + num + ')" style="padding:6px 10px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;font-size:.75rem;font-weight:600;cursor:pointer;font-family:inherit;color:#dc2626;" title="Eliminar grabación">🗑️</button>' +
-            '</div>' +
-            (hasSegs ? '<div id="' + entryId + '" style="display:none;padding:12px 16px;border-top:1px solid #e2e8f0;font-size:.82rem;line-height:1.6;max-height:200px;overflow-y:auto;">' +
-                data.segments.map(seg => '<div style="margin-bottom:6px;"><span class="segment-tag">' + seg.question + '</span> ' + seg.text + '</div>').join('') +
-            '</div>' : '');
-        list.appendChild(div);
-    }
-
-    async function deleteRecording(dataId, num) {
-        if (!confirm('¿Seguro que quieres eliminar la grabación #' + num + '?\nEsta acción no se puede deshacer.')) return;
-
-        console.log('[Fenix] Deleting recording:', dataId);
-
-        // Delete from IndexedDB
-        try { await dbDelete('transcriptions', dataId); } catch(e) { console.error('[Fenix] Error deleting transcription:', e); }
-        try { await dbDelete('audio_blobs', dataId); } catch(e) { console.error('[Fenix] Error deleting audio:', e); }
-
-        // Delete from Firestore (cloud)
-        await firestoreDelete(dataId);
-
-        // Delete from localStorage
-        recordings = recordings.filter(r => {
-            const rId = (r.conductor || '') + '_' + (r.timestamp || '');
-            return rId !== dataId;
-        });
-        localStorage.setItem('fenix_recordings_meta', JSON.stringify(recordings));
-        console.log('[Fenix] Recording deleted. Remaining:', recordings.length);
-
-        // Re-render everything
-        await reloadRecordingsList();
-        await renderGraella();
-        await updatePatterns();
-    }
-
-    async function reloadRecordingsList() {
-        const list = document.getElementById('recordingsList');
-        list.innerHTML = '';
-
-        let allData = [];
-        try { allData = await dbGetAll('transcriptions'); } catch(e) {}
-
-        if (allData.length === 0) {
-            list.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:20px;font-style:italic;">No hay grabaciones todavía</div>';
-            return;
-        }
-
-        for (let i = 0; i < allData.length; i++) {
-            const data = allData[i];
-            let audioUrl = null;
-            try {
-                const blob = await dbGet('audio_blobs', data.id);
-                if (blob) audioUrl = URL.createObjectURL(blob);
-            } catch(e) {}
-            addRecordingToList(data, audioUrl, i + 1);
-        }
-    }
-
-    function toggleTranscriptDetail(id) {
-        const el = document.getElementById(id);
-        if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
-    }
-
-    // ===== GRAELLA DYNAMIC POPULATION =====
+    // ===== UTILITIES =====
     function getSegmentText(segments, questions) {
         return segments.filter(s => questions.includes(s.question)).map(s => s.text).join(' ');
     }
@@ -1770,34 +553,78 @@
         const t = text.toLowerCase();
         if (t.includes('activa') || t.includes('moviment') || t.includes('estirament')) return 'Activa';
         if (t.includes('calma') || t.includes('relaxa') || t.includes('respiraci')) return 'Calma';
-        if (t.includes('recuperaci') || t.includes('silenci') || t.includes('descans')) return 'Recuperaci\u00f3';
-        return '\u2014';
+        if (t.includes('recuperaci') || t.includes('silenci') || t.includes('descans')) return 'Recuperació';
+        return '—';
     }
 
     function extractTorn(text) {
         const t = text.toLowerCase();
-        if (t.includes('mat\u00ed') || t.includes('mati') || t.includes('ma\u00f1ana')) return 'Mat\u00ed';
+        if (t.includes('matí') || t.includes('mati') || t.includes('mañana')) return 'Matí';
         if (t.includes('tarda') || t.includes('tarde')) return 'Tarda';
         if (t.includes('nit') || t.includes('noche') || t.includes('nocturn')) return 'Nit';
         if (t.includes('partit') || t.includes('partido') || t.includes('split')) return 'Partit';
-        return '\u2014';
+        return '—';
     }
 
     function truncate(text, max) {
-        if (!text) return '\u2014';
+        if (!text) return '—';
         return text.length > max ? text.slice(0, max) + '...' : text;
     }
 
+    // ===== HEADER METADATA =====
+    function updateHeaderMeta(allData) {
+        const n = allData.length;
+        document.getElementById('metaTotal').textContent = n;
+        if (n > 0) {
+            const dates = allData.map(d => d.timestamp).filter(Boolean).sort();
+            document.getElementById('metaFirst').textContent = dates[0] ? new Date(dates[0]).toLocaleDateString('ca') : '—';
+            document.getElementById('metaLast').textContent = dates[dates.length-1] ? new Date(dates[dates.length-1]).toLocaleDateString('ca') : '—';
+        }
+    }
+
+    // ===== RECORDINGS LIST =====
+    function addRecordingToList(data, audioUrl, num) {
+        const list = document.getElementById('recordingsList');
+        if (list.textContent.includes('Carregant') || list.textContent.includes('Cap gravaci') || list.textContent.includes('No hay')) list.innerHTML = '';
+        const dur = data.duration || 0;
+        const m = String(Math.floor(dur / 60)).padStart(2, '0');
+        const s = String(dur % 60).padStart(2, '0');
+        const conductor = data.conductor || 'Anònim';
+        const hasSegs = data.segments && data.segments.length > 0;
+        const entryId = 'rec-' + num;
+
+        const div = document.createElement('div');
+        div.style.cssText = 'border-radius:10px;background:#f8fafc;margin-bottom:8px;border:1px solid #e2e8f0;overflow:hidden;';
+        div.innerHTML =
+            '<div style="display:flex;align-items:center;gap:8px;padding:12px;flex-wrap:wrap;">' +
+                '<span style="font-size:1.2rem">🎙️</span>' +
+                '<div style="flex:1;min-width:160px;"><strong>#' + num + ' — ' + conductor + '</strong><br>' +
+                '<span style="font-size:.78rem;color:#94a3b8;">' + m + ':' + s + ' · ' + new Date(data.timestamp).toLocaleString('ca') + (hasSegs ? ' · 📝 Transcrit' : '') + '</span></div>' +
+                (audioUrl ? '<audio controls src="' + audioUrl + '" style="height:32px;"></audio>' : '') +
+                (audioUrl ? '<a href="' + audioUrl + '" download="entrevista_' + conductor + '.webm" style="padding:6px 12px;background:var(--fenix-blue);color:#fff;border-radius:8px;text-decoration:none;font-size:.75rem;font-weight:600;">💾</a>' : '') +
+                (hasSegs ? '<button onclick="toggleTranscriptDetail(\'' + entryId + '\')" style="padding:6px 12px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;font-size:.75rem;font-weight:600;cursor:pointer;font-family:inherit;">📝 Transcripció</button>' : '') +
+            '</div>' +
+            (hasSegs ? '<div id="' + entryId + '" style="display:none;padding:12px 16px;border-top:1px solid #e2e8f0;font-size:.82rem;line-height:1.6;max-height:300px;overflow-y:auto;">' +
+                data.segments.map(seg => '<div style="margin-bottom:6px;"><span class="segment-tag">' + seg.question + '</span> ' + seg.text + '</div>').join('') +
+            '</div>' : '');
+        list.appendChild(div);
+    }
+
+    function toggleTranscriptDetail(id) {
+        const el = document.getElementById(id);
+        if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // ===== GRAELLA =====
     async function renderGraella() {
         const tbody = document.getElementById('graellaBody');
         if (!tbody) return;
         tbody.innerHTML = '';
 
         let allData = [];
-        try { allData = await dbGetAll('transcriptions'); } catch(e) { console.error('Error loading transcriptions:', e); }
+        try { allData = await dbGetAll('transcriptions'); } catch(e) { return; }
 
         if (allData.length === 0) {
-            // Show empty rows for print
             for (let i = 1; i <= 16; i++) {
                 const tr = document.createElement('tr');
                 tr.innerHTML = '<td>' + i + '</td>' + '<td><span class="write-line"></span></td>'.repeat(8);
@@ -1819,18 +646,17 @@
 
             tr.innerHTML =
                 '<td>' + (idx + 1) + '</td>' +
-                '<td>' + (data.conductor || '\u2014') + '</td>' +
+                '<td>' + (data.conductor || '—') + '</td>' +
                 '<td>' + extractTorn(p2Text) + '</td>' +
-                '<td contenteditable="true" style="font-size:.75rem;max-width:180px;overflow:hidden;">' + truncate(fatigaText, 100) + '</td>' +
-                '<td contenteditable="true" style="font-size:.75rem;max-width:180px;overflow:hidden;">' + truncate(reaccioText, 100) + '</td>' +
-                '<td>' + (extractZona(p5Text) !== '\u2014' ? extractZona(p5Text) : extractZona(reaccioText)) + '</td>' +
-                '<td contenteditable="true" style="font-size:.75rem;max-width:140px;overflow:hidden;">' + truncate(p6Text, 80) + '</td>' +
-                '<td contenteditable="true" style="font-size:.75rem;max-width:140px;overflow:hidden;">' + truncate(p8Text, 80) + '</td>' +
-                '<td contenteditable="true" style="font-size:.75rem;">' + truncate(p12Text, 50) + '</td>';
+                '<td style="font-size:.75rem;max-width:180px;overflow:hidden;">' + truncate(fatigaText, 100) + '</td>' +
+                '<td style="font-size:.75rem;max-width:180px;overflow:hidden;">' + truncate(reaccioText, 100) + '</td>' +
+                '<td>' + (extractZona(p5Text) !== '—' ? extractZona(p5Text) : extractZona(reaccioText)) + '</td>' +
+                '<td style="font-size:.75rem;max-width:140px;overflow:hidden;">' + truncate(p6Text, 80) + '</td>' +
+                '<td style="font-size:.75rem;max-width:140px;overflow:hidden;">' + truncate(p8Text, 80) + '</td>' +
+                '<td style="font-size:.75rem;">' + truncate(p12Text, 50) + '</td>';
             tbody.appendChild(tr);
         });
 
-        // Fill remaining rows up to 16
         for (let i = allData.length + 1; i <= 16; i++) {
             const tr = document.createElement('tr');
             tr.innerHTML = '<td>' + i + '</td>' + '<td><span class="write-line"></span></td>'.repeat(8);
@@ -1846,23 +672,34 @@
 
         const n = allData.length;
 
+        // KPI: Total
+        const kpiTotal = document.getElementById('kpiTotal');
+        if (kpiTotal) kpiTotal.textContent = n;
+
         // Zones
-        let zones = { 'Activa': 0, 'Calma': 0, 'Recuperaci\u00f3': 0 };
+        let zones = { 'Activa': 0, 'Calma': 0, 'Recuperació': 0 };
         allData.forEach(d => {
             let z = extractZona(getSegmentText(d.segments || [], ['P5']));
-            if (z === '\u2014') z = extractZona(getSegmentText(d.segments || [], ['P4','P5','P6','P7']));
+            if (z === '—') z = extractZona(getSegmentText(d.segments || [], ['P4','P5','P6','P7']));
             if (zones[z] !== undefined) zones[z]++;
         });
         const patronZones = document.getElementById('patronZones');
-        if (patronZones) patronZones.innerHTML = '<strong>Activa</strong> ' + zones['Activa'] + ' / <strong>Calma</strong> ' + zones['Calma'] + ' / <strong>Recuperaci\u00f3</strong> ' + zones['Recuperaci\u00f3'];
+        if (patronZones) patronZones.innerHTML = '<strong>Activa</strong> ' + zones['Activa'] + ' / <strong>Calma</strong> ' + zones['Calma'] + ' / <strong>Recuperació</strong> ' + zones['Recuperació'];
 
-        // Barreres - extract keywords from P6
+        // KPI: Zona dominant
+        const kpiZona = document.getElementById('kpiZona');
+        if (kpiZona) {
+            const topZona = Object.entries(zones).sort((a,b) => b[1] - a[1])[0];
+            kpiZona.textContent = topZona ? topZona[0] + ' (' + topZona[1] + ')' : '—';
+        }
+
+        // Barreres
         const barreresWords = {};
         const stopWords = ['el','la','els','les','de','del','a','al','que','no','un','una','per','amb','en','es','hi','i','o','jo','em','et','s','l','m','t','n','d','com','si','molt','mes','pot','fa','ser','fer','dir','han','has','he','ha','som','son','van','va','molt','poc','massa','ja','ara','pero','sino','com','quan','on','qui','que'];
         allData.forEach(d => {
             const text = getSegmentText(d.segments || [], ['P6']).toLowerCase();
             text.split(/\s+/).forEach(w => {
-                w = w.replace(/[^a-z\u00e0-\u00fc]/g, '');
+                w = w.replace(/[^a-zà-ü]/g, '');
                 if (w.length > 3 && !stopWords.includes(w)) barreresWords[w] = (barreresWords[w] || 0) + 1;
             });
         });
@@ -1870,9 +707,13 @@
         const patronBarreres = document.getElementById('patronBarreres');
         if (patronBarreres) patronBarreres.innerHTML = topBarreres.length > 0 ? topBarreres.map((b, i) => (i+1) + '. ' + b[0] + ' (' + b[1] + ')').join('<br>') : 'Sense dades suficients';
 
-        // % diferencia from P8
+        // KPI: Barrera principal
+        const kpiBarrera = document.getElementById('kpiBarrera');
+        if (kpiBarrera) kpiBarrera.textContent = topBarreres.length > 0 ? topBarreres[0][0] : '—';
+
+        // % diferencia P8
         let positives = 0;
-        const positiveWords = ['si','s\u00ed','segur','notaria','notar\u00eda','diferencia','difer\u00e8ncia','millor','milloraria','milloraria','ajudaria','positiu','positiva'];
+        const positiveWords = ['si','sí','segur','notaria','notaría','diferencia','diferència','millor','milloraria','ajudaria','positiu','positiva'];
         allData.forEach(d => {
             const text = getSegmentText(d.segments || [], ['P8']).toLowerCase();
             if (positiveWords.some(w => text.includes(w))) positives++;
@@ -1880,12 +721,16 @@
         const patronDif = document.getElementById('patronDiferencia');
         if (patronDif) patronDif.innerHTML = '<strong>' + positives + '</strong> / ' + n + ' = <strong>' + Math.round(positives/n*100) + '%</strong>';
 
+        // KPI: Diferencia
+        const kpiDif = document.getElementById('kpiDiferencia');
+        if (kpiDif) kpiDif.textContent = Math.round(positives/n*100) + '%';
+
         // Paraules clau P13
         const keywords = {};
         allData.forEach(d => {
             const text = getSegmentText(d.segments || [], ['P13']).toLowerCase();
             text.split(/\s+/).forEach(w => {
-                w = w.replace(/[^a-z\u00e0-\u00fc]/g, '');
+                w = w.replace(/[^a-zà-ü]/g, '');
                 if (w.length > 2 && !stopWords.includes(w)) keywords[w] = (keywords[w] || 0) + 1;
             });
         });
@@ -1894,19 +739,8 @@
         if (patronParaules) patronParaules.innerHTML = topKeywords.map(k => '<span style="display:inline-block;background:#e0f2fe;padding:2px 10px;border-radius:10px;margin:2px;font-size:.8rem;">' + k[0] + ' (' + k[1] + ')</span>').join(' ') || 'Sense dades suficients';
     }
 
-    // ===== ADMIN ACCESS =====
-    function checkAdminAccess() {
-        const pw = prompt('🔒 Accés restringit. Introdueix la contrasenya d\'administrador:');
-        if (!pw) return false;
-        const valid = ['fenix2025', 'araceli', 'manolo'];
-        if (valid.includes(pw.toLowerCase().trim())) return true;
-        alert('❌ Contrasenya incorrecta.');
-        return false;
-    }
-
     // ===== EXPORT =====
     async function exportTranscriptions() {
-        if (!checkAdminAccess()) return;
         let allData = [];
         try { allData = await dbGetAll('transcriptions'); } catch(e) { alert('Error carregant dades'); return; }
         const json = JSON.stringify(allData, null, 2);
@@ -1918,7 +752,6 @@
     }
 
     function exportGraellaCSV() {
-        if (!checkAdminAccess()) return;
         const table = document.querySelector('.graella-table');
         if (!table) return;
         let csv = '';
@@ -1936,40 +769,23 @@
         a.click();
     }
 
-    // ===== BEFOREUNLOAD WARNING =====
-    window.addEventListener('beforeunload', (e) => {
-        if (isRecording) {
-            e.preventDefault();
-            e.returnValue = 'Hi ha una gravació en curs. Segur que vols sortir?';
-            return e.returnValue;
-        }
-    });
-
-    // ===== INIT ON PAGE LOAD =====
+    // ===== INIT =====
     async function initApp() {
         console.log('[Fenix] initApp starting...');
 
-        // Check speech support
-        if (!speechSupported) {
-            const warn = document.getElementById('speechWarning');
-            if (warn) warn.style.display = 'block';
-            console.warn('[Fenix] Speech API not supported in this browser');
-        }
-
-        // Load saved recordings from IndexedDB
+        // Load from IndexedDB
         let localData = [];
         try {
             localData = await dbGetAll('transcriptions');
-            console.log('[Fenix] Loaded', localData.length, 'recordings from IndexedDB');
+            console.log('[Fenix] Loaded', localData.length, 'from IndexedDB');
         } catch(e) {
-            console.error('[Fenix] IndexedDB load error:', e);
+            console.error('[Fenix] IndexedDB error:', e);
         }
 
-        // Fallback: if IndexedDB empty but localStorage has data, recover segments
+        // Fallback: recover from localStorage if IndexedDB empty
         if (localData.length === 0) {
             const meta = JSON.parse(localStorage.getItem('fenix_recordings_meta') || '[]');
             if (meta.length > 0) {
-                console.log('[Fenix] IndexedDB empty, recovering', meta.length, 'entries from localStorage');
                 for (const m of meta) {
                     const recovered = {
                         id: m.conductor + '_' + m.timestamp,
@@ -1985,47 +801,31 @@
             }
         }
 
-        // Load from Firestore (cloud) and merge with local data
+        // Load from Firestore and merge
         let cloudData = [];
-        try {
-            cloudData = await firestoreLoadAll();
-        } catch(e) {
-            console.warn('[Fenix] Firestore load failed, using local only:', e);
-        }
+        try { cloudData = await firestoreLoadAll(); } catch(e) {}
 
-        // Merge: use a Map keyed by id, cloud fills in missing local entries
         const merged = new Map();
         localData.forEach(d => merged.set(d.id, d));
-        let newFromCloud = 0;
         for (const cd of cloudData) {
             if (!merged.has(cd.id)) {
                 merged.set(cd.id, cd);
-                // Save cloud data to local IndexedDB for offline access
                 try { await dbPut('transcriptions', cd.id, cd); } catch(e) {}
-                newFromCloud++;
             }
         }
-        if (newFromCloud > 0) console.log('[Fenix] ✅ Merged', newFromCloud, 'new recordings from cloud');
 
-        // Also push local-only data to Firestore (bidirectional sync)
+        // Push local-only to Firestore
         const cloudIds = new Set(cloudData.map(d => d.id));
-        let pushedToCloud = 0;
         for (const ld of localData) {
             if (!cloudIds.has(ld.id)) {
-                try {
-                    await firestoreSave(ld);
-                    pushedToCloud++;
-                } catch(e) {
-                    console.error('[Fenix] Failed to push to cloud:', ld.id, e);
-                }
+                try { await firestoreSave(ld); } catch(e) {}
             }
         }
-        if (pushedToCloud > 0) console.log('[Fenix] ☁️ Pushed', pushedToCloud, 'local recordings to cloud');
 
         const allData = Array.from(merged.values()).sort((a, b) => (a.timestamp || '').localeCompare(b.timestamp || ''));
 
-        // Update localStorage meta to match merged data
-        recordings = allData.map(d => ({
+        // Update localStorage meta
+        const recordings = allData.map(d => ({
             conductor: d.conductor,
             timestamp: d.timestamp,
             duration: d.duration || 0,
@@ -2035,6 +835,10 @@
         }));
         localStorage.setItem('fenix_recordings_meta', JSON.stringify(recordings));
 
+        // Update header metadata
+        updateHeaderMeta(allData);
+
+        // Render recordings list
         const list = document.getElementById('recordingsList');
         if (allData.length > 0) {
             list.innerHTML = '';
@@ -2047,9 +851,8 @@
                 } catch(e) {}
                 addRecordingToList(data, audioUrl, i + 1);
             }
-            console.log('[Fenix] Rendered', allData.length, 'recordings in list');
         } else {
-            console.log('[Fenix] No recordings found');
+            list.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:20px;font-style:italic;">No hi ha gravacions encara</div>';
         }
 
         // Render graella and patterns
@@ -2061,5 +864,6 @@
     initApp();
 </script>
 
+</div><!-- /mainContent -->
 </body>
 </html>

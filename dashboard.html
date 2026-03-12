@@ -55,6 +55,46 @@ td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04)}
 </head>
 <body>
 
+<!-- ── LOGIN GATE ── -->
+<div id="loginGate" style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(160deg,#0A1628,#0D1F3C,#0A1628);z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:48px 40px;max-width:400px;width:90%;text-align:center;">
+    <div style="font-size:3rem;margin-bottom:12px;">🔒</div>
+    <h2 style="color:#fff;font-size:1.4rem;margin-bottom:8px;">Accés restringit</h2>
+    <p style="color:rgba(255,255,255,.55);font-size:0.95rem;margin-bottom:24px;">Aquesta pàgina requereix autenticació.<br>Introdueix la contrasenya per continuar.</p>
+    <input type="password" id="loginPassword" placeholder="Contrasenya" autocomplete="off"
+      style="width:100%;padding:14px 18px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:#fff;font-size:1.1rem;text-align:center;outline:none;margin-bottom:12px;font-family:inherit;"
+      onkeydown="if(event.key==='Enter')attemptLogin()">
+    <button onclick="attemptLogin()"
+      style="width:100%;padding:14px;border-radius:12px;border:none;background:var(--green);color:#fff;font-size:1rem;font-weight:700;cursor:pointer;transition:opacity 0.2s;font-family:inherit;">
+      Accedir
+    </button>
+    <div id="loginError" style="color:var(--red);font-size:0.9rem;margin-top:12px;display:none;">❌ Contrasenya incorrecta</div>
+    <a href="index.html" style="display:inline-block;margin-top:20px;color:rgba(255,255,255,.55);font-size:0.85rem;text-decoration:none;">← Tornar a l'inici</a>
+  </div>
+</div>
+<script>
+function attemptLogin(){
+  const pw = document.getElementById('loginPassword').value.toLowerCase().trim();
+  const valid = ['fenix2025', 'araceli', 'manolo'];
+  if(valid.includes(pw)){
+    sessionStorage.setItem('fenix_page_auth','true');
+    document.getElementById('loginGate').style.display='none';
+    document.getElementById('mainContent').style.display='block';
+  } else {
+    document.getElementById('loginError').style.display='block';
+    document.getElementById('loginPassword').value='';
+    document.getElementById('loginPassword').focus();
+  }
+}
+if(sessionStorage.getItem('fenix_page_auth')==='true'){
+  document.addEventListener('DOMContentLoaded',function(){
+    document.getElementById('loginGate').style.display='none';
+    document.getElementById('mainContent').style.display='block';
+  });
+}
+</script>
+
+<div id="mainContent" style="display:none;">
 <div class="top-bar">
   <a href="index.html" style="color:#fff;text-decoration:none;font-size:1.1rem;padding:4px 10px;border-radius:8px;border:1px solid var(--border);background:var(--card);" title="Tornar a l'inici">← 🏠</a>
   <div class="logo">🔥 <span>TMB</span>innova</div>
@@ -156,7 +196,7 @@ td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04)}
   <div class="nav-links">
     <a href="index.html">🔥 Prototip</a>
     <a href="formulari.html">📝 Formulari</a>
-    <a href="entrevista_semiestructurada.html">📋 Entrevista</a>
+    <a href="entrevista_semiestructurada.html">📊 Resultats</a>
   </div>
 </div>
 
@@ -289,5 +329,6 @@ function exportCSV() {
 loadData();
 setInterval(loadData, 10000);
 </script>
+</div><!-- /mainContent -->
 </body>
 </html>
