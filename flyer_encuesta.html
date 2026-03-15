@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=430, initial-scale=1.0">
+<title>Projecte Fènix — Enquesta de Validació</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #E30613;
+    --red-glow: rgba(227,6,19,0.35);
+    --navy: #0A1628;
+    --navy-mid: #0f1f3d;
+    --navy-light: #132B4F;
+    --green: #2ECC71;
+    --green-dark: #27ae60;
+    --white: #ffffff;
+    --muted: rgba(255,255,255,0.55);
+    --border: rgba(255,255,255,0.1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #06101f;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .flyer {
+    width: 430px;
+    min-height: 760px;
+    background: var(--navy);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* === NOISE TEXTURE OVERLAY === */
+  .flyer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.6;
+  }
+
+  /* === BACKGROUND GLOW === */
+  .glow-top {
+    position: absolute;
+    top: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 340px;
+    height: 340px;
+    background: radial-gradient(circle, rgba(227,6,19,0.18) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-bottom {
+    position: absolute;
+    bottom: -60px;
+    right: -60px;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, rgba(46,204,113,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* === DIAGONAL STRIPE === */
+  .stripe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--red) 0%, #ff6b35 50%, var(--red) 100%);
+    z-index: 10;
+  }
+
+  /* === HEADER === */
+  .header {
+    position: relative;
+    z-index: 5;
+    padding: 28px 28px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .tmb-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .tmb-badge {
+    background: var(--red);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.08em;
+    padding: 5px 12px 3px;
+    clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
+  }
+
+  .tmb-innova {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .year-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.1em;
+  }
+
+  /* === HERO === */
+  .hero {
+    position: relative;
+    z-index: 5;
+    padding: 32px 28px 0;
+  }
+
+  .project-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .project-name::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 1.5px;
+    background: var(--red);
+  }
+
+  .headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    line-height: 0.92;
+    color: var(--white);
+    letter-spacing: 0.02em;
+    margin-bottom: 4px;
+  }
+
+  .headline .accent {
+    color: var(--red);
+    display: block;
+  }
+
+  .phoenix-icon {
+    font-size: 2.2rem;
+    display: inline-block;
+    margin-left: 8px;
+    vertical-align: middle;
+    filter: drop-shadow(0 0 12px rgba(227,6,19,0.6));
+    animation: flicker 3s ease-in-out infinite;
+  }
+
+  @keyframes flicker {
+    0%, 100% { filter: drop-shadow(0 0 12px rgba(227,6,19,0.6)); transform: scale(1); }
+    50% { filter: drop-shadow(0 0 20px rgba(255,120,0,0.8)); transform: scale(1.05); }
+  }
+
+  .subtext {
+    font-size: 0.88rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.75);
+    margin-top: 16px;
+    max-width: 340px;
+  }
+
+  /* === TIME BADGE === */
+  .time-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(46,204,113,0.15);
+    border: 1px solid rgba(46,204,113,0.4);
+    color: var(--green);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 30px;
+    margin-top: 18px;
+    letter-spacing: 0.05em;
+  }
+
+  /* === DIVIDER === */
+  .divider {
+    position: relative;
+    z-index: 5;
+    margin: 28px 28px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+
+  .divider-text {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* === QR SECTION === */
+  .qr-section {
+    position: relative;
+    z-index: 5;
+    margin: 24px 28px 0;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    backdrop-filter: blur(10px);
+  }
+
+  .qr-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  .qr-wrapper {
+    background: white;
+    padding: 14px;
+    border-radius: 12px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(227,6,19,0.12);
+  }
+
+  #qrcode {
+    display: block;
+    line-height: 0;
+  }
+
+  #qrcode canvas, #qrcode img {
+    display: block;
+    border-radius: 4px;
+  }
+
+  .qr-instruction {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 14px;
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* === URL CHIP === */
+  .url-chip {
+    margin-top: 16px;
+    background: rgba(227,6,19,0.1);
+    border: 1px solid rgba(227,6,19,0.3);
+    border-radius: 8px;
+    padding: 10px 16px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .url-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .url-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 0.01em;
+    word-break: break-all;
+  }
+
+  .url-text .url-highlight {
+    color: var(--red);
+  }
+
+  /* === CTA === */
+  .cta-section {
+    position: relative;
+    z-index: 5;
+    padding: 0 28px;
+    margin-top: 20px;
+  }
+
+  .cta-or {
+    text-align: center;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* === ANON NOTE === */
+  .anon-note {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+    font-size: 0.68rem;
+    color: var(--muted);
+    padding: 0 28px;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .anon-note::before {
+    content: '🔒';
+    font-size: 0.75rem;
+  }
+
+  /* === FOOTER === */
+  .footer {
+    position: relative;
+    z-index: 5;
+    margin-top: auto;
+    padding: 20px 28px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--border);
+    margin-top: 24px;
+  }
+
+  .footer-text {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .footer-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--red);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--red);
+  }
+
+  /* === CORNER DECORATIONS === */
+  .corner-tl {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    width: 60px;
+    height: 60px;
+    border-left: 1.5px solid rgba(227,6,19,0.3);
+    border-bottom: 1.5px solid rgba(227,6,19,0.3);
+    z-index: 2;
+    border-radius: 0 0 0 8px;
+    pointer-events: none;
+  }
+
+  .corner-br {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 60px;
+    height: 60px;
+    border-right: 1.5px solid rgba(46,204,113,0.2);
+    border-top: 1.5px solid rgba(46,204,113,0.2);
+    z-index: 2;
+    border-radius: 0 0 0 0;
+    pointer-events: none;
+  }
+
+  /* === PRINT STYLES === */
+  @media print {
+    body { background: white; padding: 0; margin: 0; }
+    .flyer {
+      width: 100%;
+      min-height: 100vh;
+      background: white !important;
+      color: black !important;
+    }
+    .glow-top, .glow-bottom { display: none; }
+    .flyer::before { display: none; }
+    .headline, .project-name, .url-text, .footer-text, .divider-text,
+    .qr-label, .url-label, .qr-instruction, .anon-note, .cta-or, .subtext { color: black !important; }
+    .time-badge { background: #e8f8ef !important; color: #27ae60 !important; border-color: #27ae60 !important; }
+    .qr-wrapper { box-shadow: none !important; border: 1px solid #ddd; }
+    .qr-section { background: #f8f8f8 !important; border-color: #ddd !important; }
+    .url-chip { background: #fff3f3 !important; border-color: #fcc !important; }
+    .stripe { display: block !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .footer { border-top-color: #ddd !important; }
+    .corner-tl, .corner-br { display: none; }
+    @keyframes flicker { 0%,100% { filter: none; } }
+  }
+</style>
+</head>
+<body>
+
+<div class="flyer">
+  <!-- Decorations -->
+  <div class="stripe"></div>
+  <div class="glow-top"></div>
+  <div class="glow-bottom"></div>
+  <div class="corner-tl"></div>
+  <div class="corner-br"></div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="tmb-logo">
+      <div class="tmb-badge">TMB</div>
+      <div class="tmb-innova">Innova</div>
+    </div>
+    <div class="year-badge">2025</div>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="project-name">Projecte Fènix</div>
+    <h1 class="headline">
+      La teva<br>
+      <span class="accent">opinió</span><br>
+      compta!<span class="phoenix-icon">🔥</span>
+    </h1>
+    <p class="subtext">
+      Estem redissenyant els espais del cotxera. Necessitem la teva experiència per millorar les zones de descans, menjador i recuperació.
+    </p>
+    <div class="time-badge">
+      ⏱ Menys de 5 minuts
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="divider">
+    <span class="divider-text">Escaneja o accedeix</span>
+  </div>
+
+  <!-- QR Section -->
+  <div class="qr-section">
+    <div class="qr-label">Enquesta de validació</div>
+    <div class="qr-wrapper">
+      <div id="qrcode"></div>
+    </div>
+    <p class="qr-instruction">Apunta la càmera del mòbil al codi QR</p>
+
+    <div class="url-chip">
+      <span class="url-label">Accés directe</span>
+      <span class="url-text">
+        <span class="url-highlight">projecte-fenix-tmb</span>.web.app/<span class="url-highlight">formulari.html</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Anon note -->
+  <div class="anon-note">Les teves respostes són anònimes i confidencials</div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span class="footer-text">TMBinnova</span>
+    <div class="footer-dot"></div>
+    <span class="footer-text">Repte d'innovació urbana</span>
+    <div class="footer-dot"></div>
+    <span class="footer-text">2025</span>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  new QRCode(document.getElementById("qrcode"), {
+    text: "https://projecte-fenix-tmb.web.app/formulari.html",
+    width: 200,
+    height: 200,
+    colorDark: "#0A1628",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+</script>
+</body>
+</html>

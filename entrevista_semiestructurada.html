@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projecte Fènix — Resultats de les Entrevistes</title>
+    <title>Projecte Fènix — Resultats de les Enquestes</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -241,7 +241,7 @@
             .bloc { break-inside: avoid; page-break-inside: avoid; border: 1px solid #ccc; }
             .graella-table { font-size: 8pt; }
             .graella-table th { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-            #recordingsSection { display: none; }
+            .export-section { display: none; }
         }
     </style>
 </head>
@@ -291,10 +291,10 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
 <nav>
     <a href="index.html" style="color:#fff;text-decoration:none;font-size:.9rem;padding:6px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);margin-right:4px;" title="Tornar a l'inici">← 🏠</a>
     <div class="logo">🦅 Projecte <span>Fènix</span></div>
-    <div class="nav-title">📊 Resultats Entrevistes</div>
+    <div class="nav-title">📊 Resultats Enquestes</div>
     <div class="nav-actions">
         <button class="nav-btn" onclick="exportGraellaCSV()">📤 CSV</button>
-        <button class="nav-btn" onclick="exportTranscriptions()">📤 JSON</button>
+        <button class="nav-btn" onclick="exportJSON()">📤 JSON</button>
         <button class="nav-btn" onclick="window.print()" style="background:var(--fenix-green);">🖨️ PDF</button>
         <a href="dashboard.html" class="nav-btn" style="background:var(--fenix-yellow);">📊 Dashboard</a>
     </div>
@@ -304,12 +304,12 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
 
     <!-- HEADER -->
     <div class="header-card">
-        <div class="tag">Anàlisi Qualitativa · Projecte Fènix</div>
-        <h1>Resultats de les Entrevistes Semiestructurades</h1>
-        <p>Resum dels resultats obtinguts de les entrevistes amb conductors reals de TMB.</p>
+        <div class="tag">Anàlisi Quantitativa · Projecte Fènix</div>
+        <h1>Resultats de les Enquestes de Validació</h1>
+        <p>Resum dels resultats obtinguts de les enquestes al personal real de TMB.</p>
         <div class="header-meta" id="headerMeta">
             <div class="meta-item">
-                <span class="meta-label">Total entrevistes</span>
+                <span class="meta-label">Total respostes</span>
                 <span class="meta-value" id="metaTotal">—</span>
             </div>
             <div class="meta-item">
@@ -328,7 +328,7 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
         <div class="kpi-card">
             <span class="kpi-icon">📋</span>
             <div class="kpi-value" id="kpiTotal" style="color:var(--fenix-dark);">0</div>
-            <div class="kpi-label">Entrevistes Realitzades</div>
+            <div class="kpi-label">Enquestes Realitzades</div>
         </div>
         <div class="kpi-card">
             <span class="kpi-icon">🎯</span>
@@ -337,8 +337,8 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
         </div>
         <div class="kpi-card">
             <span class="kpi-icon">📈</span>
-            <div class="kpi-value" id="kpiDiferencia" style="color:var(--fenix-blue);">0%</div>
-            <div class="kpi-label">Notarien la Diferència (P8)</div>
+            <div class="kpi-value" id="kpiReaccio" style="color:var(--fenix-blue);">0%</div>
+            <div class="kpi-label">Reacció Molt Positiva (P5)</div>
         </div>
         <div class="kpi-card">
             <span class="kpi-icon">🚧</span>
@@ -352,8 +352,8 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
         <div class="bloc-header">
             <div class="bloc-dot dot-green">📊</div>
             <div>
-                <h2>Graella de Buidat d'Entrevistes</h2>
-                <p style="color:var(--fenix-gray);font-size:.82rem;margin-top:4px;">Registre estructurat per comparar respostes entre participants</p>
+                <h2>Graella de Buidat d'Enquestes</h2>
+                <p style="color:var(--fenix-gray);font-size:.82rem;margin-top:4px;">Registre estructurat de les <span id="graellaCount">0</span> respostes reals del personal TMB</p>
             </div>
         </div>
 
@@ -362,14 +362,14 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
             <thead>
                 <tr>
                     <th style="width:38px">#</th>
-                    <th style="width:100px">Codi Anon.</th>
-                    <th style="width:90px">Torn habitual</th>
-                    <th>A — Fatiga actual (P1-P3)</th>
-                    <th>B — Reacció Fènix (P4-P7)</th>
-                    <th>Zona preferida</th>
-                    <th>Barrera principal</th>
-                    <th>C — Impacte esperat (P8)</th>
-                    <th>Paraula clau (P13)</th>
+                    <th>Rol</th>
+                    <th>Torn</th>
+                    <th>Fatiga (P1)</th>
+                    <th>Reacció Fènix (P5)</th>
+                    <th>Zona preferida (P6)</th>
+                    <th>Barrera (P7)</th>
+                    <th>Repetiria (P9)</th>
+                    <th>Paraula clau</th>
                 </tr>
             </thead>
             <tbody id="graellaBody">
@@ -387,31 +387,22 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
             <div>
-                <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">TOP BARRERES D'ÚS</div>
-                <div id="patronBarreres" class="notes-area" style="min-height:80px">Sense dades encara...</div>
+                <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">DISTRIBUCIÓ BARRERES (P7)</div>
+                <div id="patronBarreres" class="notes-area" style="min-height:80px">Carregant...</div>
             </div>
             <div>
-                <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">ZONA MÉS DEMANDADA</div>
-                <div id="patronZones" class="notes-area" style="min-height:80px">Sense dades encara...</div>
+                <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">DISTRIBUCIÓ ZONES (P6)</div>
+                <div id="patronZones" class="notes-area" style="min-height:80px">Carregant...</div>
             </div>
             <div>
-                <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">% QUE CREURIEN NOTAR LA DIFERÈNCIA</div>
-                <div id="patronDiferencia" class="notes-area" style="min-height:80px">Sense dades encara...</div>
+                <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">REPETIRIEN L'ÚS (P9)</div>
+                <div id="patronRepetir" class="notes-area" style="min-height:80px">Carregant...</div>
             </div>
             <div>
-                <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">PARAULES CLAU (P13) — núvol de paraules</div>
-                <div id="patronParaules" class="notes-area" style="min-height:80px">Sense dades encara...</div>
+                <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">PARAULES CLAU (P12) — núvol de paraules</div>
+                <div id="patronParaules" class="notes-area" style="min-height:80px">Carregant...</div>
             </div>
         </div>
-    </div>
-
-    <!-- GRAVACIONS REALITZADES -->
-    <div class="bloc" id="recordingsSection">
-        <div class="bloc-header">
-            <div class="bloc-dot dot-blue">🎙️</div>
-            <div><h2>Gravacions Realitzades</h2></div>
-        </div>
-        <div id="recordingsList" style="font-size:.85rem;color:#94a3b8;font-style:italic;">Carregant gravacions...</div>
     </div>
 
     <!-- EXPORT -->
@@ -421,333 +412,178 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
         <div class="export-buttons">
             <button class="export-btn" style="background:var(--fenix-green);" onclick="exportGraellaCSV()">📤 Graella CSV</button>
             <button class="export-btn" style="background:var(--fenix-blue);" onclick="window.print()">🖨️ Informe PDF</button>
-            <button class="export-btn" style="background:var(--fenix-dark);" onclick="exportTranscriptions()">📤 Transcripcions JSON</button>
+            <button class="export-btn" style="background:var(--fenix-dark);" onclick="exportJSON()">📤 Dades JSON</button>
         </div>
     </div>
 
 </div><!-- /page-wrapper -->
 
 <script>
-    // ===== FIRESTORE REST API =====
+    // ===== FIRESTORE REST API — SURVEYS =====
     const FIRESTORE_BASE = 'https://firestore.googleapis.com/v1/projects/projecte-fenix-tmb/databases/default/documents';
 
-    function toFirestoreValue(val) {
-        if (typeof val === 'string') return { stringValue: val };
-        if (typeof val === 'number') return Number.isInteger(val) ? { integerValue: String(val) } : { doubleValue: val };
-        if (typeof val === 'boolean') return { booleanValue: val };
-        return { stringValue: String(val) };
+    let allSurveys = [];
+
+    function getField(fields, key) {
+        if (!fields || !fields[key]) return '';
+        const v = fields[key];
+        if (v.stringValue !== undefined) return v.stringValue;
+        if (v.integerValue !== undefined) return String(v.integerValue);
+        if (v.doubleValue !== undefined) return String(v.doubleValue);
+        return '';
     }
 
-    function fromFirestoreDoc(doc) {
+    function fromSurveyDoc(doc) {
         const f = doc.fields || {};
-        const segsRaw = (f.segments && f.segments.stringValue) || '[]';
         return {
-            id: (f.id && f.id.stringValue) || '',
-            conductor: (f.conductor && f.conductor.stringValue) || '',
-            timestamp: (f.timestamp && f.timestamp.stringValue) || '',
-            duration: (f.duration && (f.duration.integerValue || f.duration.doubleValue)) ? Number(f.duration.integerValue || f.duration.doubleValue) : 0,
-            language: (f.language && f.language.stringValue) || 'es-ES',
-            segments: JSON.parse(segsRaw)
+            id: getField(f, 'id'),
+            timestamp: getField(f, 'timestamp'),
+            p1: getField(f, 'p1'),
+            p2: getField(f, 'p2'),
+            p3: getField(f, 'p3'),
+            p4: getField(f, 'p4'),
+            p5: getField(f, 'p5'),
+            p6: getField(f, 'p6'),
+            p7: getField(f, 'p7'),
+            p8: getField(f, 'p8'),
+            p9: getField(f, 'p9'),
+            p10: getField(f, 'p10'),
+            p11: getField(f, 'p11'),
+            p12_paraula: getField(f, 'p12_paraula'),
+            p13_comentari: getField(f, 'p13_comentari'),
+            rol: getField(f, 'rol'),
+            edat: getField(f, 'edat'),
+            sexe: getField(f, 'sexe')
         };
     }
 
-    function sanitizeDocId(id) {
-        return id.replace(/[\/\.#\[\]:]/g, '_');
-    }
-
-    async function firestoreSave(data) {
-        const docId = sanitizeDocId(data.id);
-        try {
-            const body = {
-                fields: {
-                    id: toFirestoreValue(data.id),
-                    conductor: toFirestoreValue(data.conductor || ''),
-                    timestamp: toFirestoreValue(data.timestamp || ''),
-                    duration: toFirestoreValue(data.duration || 0),
-                    language: toFirestoreValue(data.language || 'es-ES'),
-                    segments: toFirestoreValue(JSON.stringify(data.segments || [])),
-                    savedAt: toFirestoreValue(new Date().toISOString())
+    async function loadAllSurveys() {
+        const all = [];
+        let url = FIRESTORE_BASE + '/surveys?pageSize=300';
+        while (url) {
+            try {
+                const resp = await fetch(url);
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                const data = await resp.json();
+                const docs = data.documents || [];
+                docs.forEach(d => all.push(fromSurveyDoc(d)));
+                if (data.nextPageToken) {
+                    url = FIRESTORE_BASE + '/surveys?pageSize=300&pageToken=' + data.nextPageToken;
+                } else {
+                    url = null;
                 }
-            };
-            await fetch(FIRESTORE_BASE + '/interviews/' + encodeURIComponent(docId), {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            });
-        } catch(e) {
-            console.error('[Fenix] Firestore save error:', e.message || e);
+            } catch(e) {
+                console.error('[Fenix] Firestore load error:', e.message || e);
+                url = null;
+            }
         }
-    }
-
-    async function firestoreLoadAll() {
-        try {
-            const resp = await fetch(FIRESTORE_BASE + '/interviews');
-            if (!resp.ok) throw new Error('HTTP ' + resp.status);
-            const data = await resp.json();
-            return (data.documents || []).map(fromFirestoreDoc);
-        } catch(e) {
-            console.error('[Fenix] Firestore load error:', e.message || e);
-            return [];
-        }
-    }
-
-    // ===== INDEXEDDB =====
-    const DB_NAME = 'fenix_interviews_db';
-    const DB_VERSION = 1;
-
-    function openDB() {
-        return new Promise((resolve, reject) => {
-            const req = indexedDB.open(DB_NAME, DB_VERSION);
-            req.onupgradeneeded = (e) => {
-                const db = e.target.result;
-                if (!db.objectStoreNames.contains('audio_blobs')) db.createObjectStore('audio_blobs');
-                if (!db.objectStoreNames.contains('transcriptions')) db.createObjectStore('transcriptions');
-            };
-            req.onsuccess = () => resolve(req.result);
-            req.onerror = () => reject(req.error);
-        });
-    }
-
-    async function dbPut(store, key, value) {
-        const db = await openDB();
-        return new Promise((resolve, reject) => {
-            const tx = db.transaction(store, 'readwrite');
-            tx.objectStore(store).put(value, key);
-            tx.oncomplete = () => resolve();
-            tx.onerror = () => reject(tx.error);
-        });
-    }
-
-    async function dbGet(store, key) {
-        const db = await openDB();
-        return new Promise((resolve, reject) => {
-            const tx = db.transaction(store, 'readonly');
-            const req = tx.objectStore(store).get(key);
-            req.onsuccess = () => resolve(req.result);
-            req.onerror = () => reject(req.error);
-        });
-    }
-
-    async function dbGetAll(store) {
-        const db = await openDB();
-        return new Promise((resolve, reject) => {
-            const tx = db.transaction(store, 'readonly');
-            const s = tx.objectStore(store);
-            const values = [];
-            const cursorReq = s.openCursor();
-            cursorReq.onsuccess = (e) => {
-                const cursor = e.target.result;
-                if (cursor) { values.push(cursor.value); cursor.continue(); }
-                else resolve(values);
-            };
-            cursorReq.onerror = () => reject(cursorReq.error);
-        });
-    }
-
-    // ===== UTILITIES =====
-    function getSegmentText(segments, questions) {
-        return segments.filter(s => questions.includes(s.question)).map(s => s.text).join(' ');
-    }
-
-    function extractZona(text) {
-        const t = text.toLowerCase();
-        if (t.includes('activa') || t.includes('moviment') || t.includes('estirament')) return 'Activa';
-        if (t.includes('calma') || t.includes('relaxa') || t.includes('respiraci')) return 'Calma';
-        if (t.includes('recuperaci') || t.includes('silenci') || t.includes('descans')) return 'Recuperació';
-        return '—';
-    }
-
-    function extractTorn(text) {
-        const t = text.toLowerCase();
-        if (t.includes('matí') || t.includes('mati') || t.includes('mañana')) return 'Matí';
-        if (t.includes('tarda') || t.includes('tarde')) return 'Tarda';
-        if (t.includes('nit') || t.includes('noche') || t.includes('nocturn')) return 'Nit';
-        if (t.includes('partit') || t.includes('partido') || t.includes('split')) return 'Partit';
-        return '—';
-    }
-
-    function truncate(text, max) {
-        if (!text) return '—';
-        return text.length > max ? text.slice(0, max) + '...' : text;
+        return all.sort((a, b) => (a.timestamp || '').localeCompare(b.timestamp || ''));
     }
 
     // ===== HEADER METADATA =====
-    function updateHeaderMeta(allData) {
-        const n = allData.length;
-        document.getElementById('metaTotal').textContent = n;
-        if (n > 0) {
-            const dates = allData.map(d => d.timestamp).filter(Boolean).sort();
+    function updateHeaderMeta(data) {
+        document.getElementById('metaTotal').textContent = data.length;
+        if (data.length > 0) {
+            const dates = data.map(d => d.timestamp).filter(Boolean).sort();
             document.getElementById('metaFirst').textContent = dates[0] ? new Date(dates[0]).toLocaleDateString('ca') : '—';
-            document.getElementById('metaLast').textContent = dates[dates.length-1] ? new Date(dates[dates.length-1]).toLocaleDateString('ca') : '—';
+            document.getElementById('metaLast').textContent = dates[dates.length - 1] ? new Date(dates[dates.length - 1]).toLocaleDateString('ca') : '—';
         }
-    }
-
-    // ===== RECORDINGS LIST =====
-    function addRecordingToList(data, audioUrl, num) {
-        const list = document.getElementById('recordingsList');
-        if (list.textContent.includes('Carregant') || list.textContent.includes('Cap gravaci') || list.textContent.includes('No hay')) list.innerHTML = '';
-        const dur = data.duration || 0;
-        const m = String(Math.floor(dur / 60)).padStart(2, '0');
-        const s = String(dur % 60).padStart(2, '0');
-        const conductor = data.conductor || 'Anònim';
-        const hasSegs = data.segments && data.segments.length > 0;
-        const entryId = 'rec-' + num;
-
-        const div = document.createElement('div');
-        div.style.cssText = 'border-radius:10px;background:#f8fafc;margin-bottom:8px;border:1px solid #e2e8f0;overflow:hidden;';
-        div.innerHTML =
-            '<div style="display:flex;align-items:center;gap:8px;padding:12px;flex-wrap:wrap;">' +
-                '<span style="font-size:1.2rem">🎙️</span>' +
-                '<div style="flex:1;min-width:160px;"><strong>#' + num + ' — ' + conductor + '</strong><br>' +
-                '<span style="font-size:.78rem;color:#94a3b8;">' + m + ':' + s + ' · ' + new Date(data.timestamp).toLocaleString('ca') + (hasSegs ? ' · 📝 Transcrit' : '') + '</span></div>' +
-                (audioUrl ? '<audio controls src="' + audioUrl + '" style="height:32px;"></audio>' : '') +
-                (audioUrl ? '<a href="' + audioUrl + '" download="entrevista_' + conductor + '.webm" style="padding:6px 12px;background:var(--fenix-blue);color:#fff;border-radius:8px;text-decoration:none;font-size:.75rem;font-weight:600;">💾</a>' : '') +
-                (hasSegs ? '<button onclick="toggleTranscriptDetail(\'' + entryId + '\')" style="padding:6px 12px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;font-size:.75rem;font-weight:600;cursor:pointer;font-family:inherit;">📝 Transcripció</button>' : '') +
-            '</div>' +
-            (hasSegs ? '<div id="' + entryId + '" style="display:none;padding:12px 16px;border-top:1px solid #e2e8f0;font-size:.82rem;line-height:1.6;max-height:300px;overflow-y:auto;">' +
-                data.segments.map(seg => '<div style="margin-bottom:6px;"><span class="segment-tag">' + seg.question + '</span> ' + seg.text + '</div>').join('') +
-            '</div>' : '');
-        list.appendChild(div);
-    }
-
-    function toggleTranscriptDetail(id) {
-        const el = document.getElementById(id);
-        if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
     }
 
     // ===== GRAELLA =====
-    async function renderGraella() {
+    function renderGraella(data) {
         const tbody = document.getElementById('graellaBody');
         if (!tbody) return;
         tbody.innerHTML = '';
+        const countEl = document.getElementById('graellaCount');
+        if (countEl) countEl.textContent = data.length;
 
-        let allData = [];
-        try { allData = await dbGetAll('transcriptions'); } catch(e) { return; }
-
-        if (allData.length === 0) {
-            for (let i = 1; i <= 16; i++) {
-                const tr = document.createElement('tr');
-                tr.innerHTML = '<td>' + i + '</td>' + '<td><span class="write-line"></span></td>'.repeat(8);
-                tbody.appendChild(tr);
-            }
-            return;
-        }
-
-        allData.forEach((data, idx) => {
-            const segs = data.segments || [];
+        data.forEach((d, idx) => {
             const tr = document.createElement('tr');
-            const fatigaText = getSegmentText(segs, ['P1','P2','P3']);
-            const reaccioText = getSegmentText(segs, ['P4','P5','P6','P7']);
-            const p5Text = getSegmentText(segs, ['P5']);
-            const p6Text = getSegmentText(segs, ['P6']);
-            const p8Text = getSegmentText(segs, ['P8']);
-            const p12Text = getSegmentText(segs, ['P13']);
-            const p2Text = getSegmentText(segs, ['P1','P2','P3']);
-
             tr.innerHTML =
                 '<td>' + (idx + 1) + '</td>' +
-                '<td>' + (data.conductor || '—') + '</td>' +
-                '<td>' + extractTorn(p2Text) + '</td>' +
-                '<td style="font-size:.75rem;max-width:180px;overflow:hidden;">' + truncate(fatigaText, 100) + '</td>' +
-                '<td style="font-size:.75rem;max-width:180px;overflow:hidden;">' + truncate(reaccioText, 100) + '</td>' +
-                '<td>' + (extractZona(p5Text) !== '—' ? extractZona(p5Text) : extractZona(reaccioText)) + '</td>' +
-                '<td style="font-size:.75rem;max-width:140px;overflow:hidden;">' + truncate(p6Text, 80) + '</td>' +
-                '<td style="font-size:.75rem;max-width:140px;overflow:hidden;">' + truncate(p8Text, 80) + '</td>' +
-                '<td style="font-size:.75rem;">' + truncate(p12Text, 50) + '</td>';
+                '<td style="font-size:.75rem;">' + (d.rol || '—') + '</td>' +
+                '<td>' + (d.p2 || '—') + '</td>' +
+                '<td style="font-size:.75rem;">' + (d.p1 || '—') + '</td>' +
+                '<td style="font-size:.75rem;">' + (d.p5 || '—') + '</td>' +
+                '<td style="font-size:.75rem;">' + (d.p6 || '—') + '</td>' +
+                '<td style="font-size:.75rem;">' + (d.p7 || '—') + '</td>' +
+                '<td style="font-size:.75rem;">' + (d.p9 || '—') + '</td>' +
+                '<td style="font-size:.75rem;">' + (d.p12_paraula || '—') + '</td>';
             tbody.appendChild(tr);
         });
-
-        for (let i = allData.length + 1; i <= 16; i++) {
-            const tr = document.createElement('tr');
-            tr.innerHTML = '<td>' + i + '</td>' + '<td><span class="write-line"></span></td>'.repeat(8);
-            tbody.appendChild(tr);
-        }
     }
 
     // ===== PATRONS EMERGENTS =====
-    async function updatePatterns() {
-        let allData = [];
-        try { allData = await dbGetAll('transcriptions'); } catch(e) { return; }
-        if (allData.length === 0) return;
-
-        const n = allData.length;
+    function updatePatterns(data) {
+        const n = data.length;
+        if (n === 0) return;
 
         // KPI: Total
         const kpiTotal = document.getElementById('kpiTotal');
         if (kpiTotal) kpiTotal.textContent = n;
 
-        // Zones
-        let zones = { 'Activa': 0, 'Calma': 0, 'Recuperació': 0 };
-        allData.forEach(d => {
-            let z = extractZona(getSegmentText(d.segments || [], ['P5']));
-            if (z === '—') z = extractZona(getSegmentText(d.segments || [], ['P4','P5','P6','P7']));
-            if (zones[z] !== undefined) zones[z]++;
+        // Zones (P6)
+        const zones = {};
+        data.forEach(d => {
+            if (d.p6) zones[d.p6] = (zones[d.p6] || 0) + 1;
         });
+        const sortedZones = Object.entries(zones).sort((a, b) => b[1] - a[1]);
         const patronZones = document.getElementById('patronZones');
-        if (patronZones) patronZones.innerHTML = '<strong>Activa</strong> ' + zones['Activa'] + ' / <strong>Calma</strong> ' + zones['Calma'] + ' / <strong>Recuperació</strong> ' + zones['Recuperació'];
+        if (patronZones) patronZones.innerHTML = sortedZones.map(z => '<strong>' + z[0] + '</strong>: ' + z[1] + ' (' + Math.round(z[1] / n * 100) + '%)').join('<br>');
 
         // KPI: Zona dominant
         const kpiZona = document.getElementById('kpiZona');
-        if (kpiZona) {
-            const topZona = Object.entries(zones).sort((a,b) => b[1] - a[1])[0];
-            kpiZona.textContent = topZona ? topZona[0] + ' (' + topZona[1] + ')' : '—';
+        if (kpiZona && sortedZones.length > 0) {
+            const name = sortedZones[0][0].replace('Zona ', '').replace('de ', '');
+            kpiZona.textContent = name + ' (' + sortedZones[0][1] + ')';
         }
 
-        // Barreres
-        const barreresWords = {};
-        const stopWords = ['el','la','els','les','de','del','a','al','que','no','un','una','per','amb','en','es','hi','i','o','jo','em','et','s','l','m','t','n','d','com','si','molt','mes','pot','fa','ser','fer','dir','han','has','he','ha','som','son','van','va','molt','poc','massa','ja','ara','pero','sino','com','quan','on','qui','que'];
-        allData.forEach(d => {
-            const text = getSegmentText(d.segments || [], ['P6']).toLowerCase();
-            text.split(/\s+/).forEach(w => {
-                w = w.replace(/[^a-zà-ü]/g, '');
-                if (w.length > 3 && !stopWords.includes(w)) barreresWords[w] = (barreresWords[w] || 0) + 1;
-            });
+        // Barreres (P7)
+        const barreres = {};
+        data.forEach(d => {
+            if (d.p7) barreres[d.p7] = (barreres[d.p7] || 0) + 1;
         });
-        const topBarreres = Object.entries(barreresWords).sort((a,b) => b[1] - a[1]).slice(0, 3);
+        const sortedBarreres = Object.entries(barreres).sort((a, b) => b[1] - a[1]);
         const patronBarreres = document.getElementById('patronBarreres');
-        if (patronBarreres) patronBarreres.innerHTML = topBarreres.length > 0 ? topBarreres.map((b, i) => (i+1) + '. ' + b[0] + ' (' + b[1] + ')').join('<br>') : 'Sense dades suficients';
+        if (patronBarreres) patronBarreres.innerHTML = sortedBarreres.map((b, i) => (i + 1) + '. <strong>' + b[0] + '</strong>: ' + b[1] + ' (' + Math.round(b[1] / n * 100) + '%)').join('<br>');
 
         // KPI: Barrera principal
         const kpiBarrera = document.getElementById('kpiBarrera');
-        if (kpiBarrera) kpiBarrera.textContent = topBarreres.length > 0 ? topBarreres[0][0] : '—';
+        if (kpiBarrera && sortedBarreres.length > 0) kpiBarrera.textContent = sortedBarreres[0][0];
 
-        // % diferencia P8
-        let positives = 0;
-        const positiveWords = ['si','sí','segur','notaria','notaría','diferencia','diferència','millor','milloraria','ajudaria','positiu','positiva'];
-        allData.forEach(d => {
-            const text = getSegmentText(d.segments || [], ['P8']).toLowerCase();
-            if (positiveWords.some(w => text.includes(w))) positives++;
+        // Reacció molt positiva (P5)
+        const moltPositiva = data.filter(d => d.p5 === 'Molt positiva').length;
+        const kpiReaccio = document.getElementById('kpiReaccio');
+        if (kpiReaccio) kpiReaccio.textContent = Math.round(moltPositiva / n * 100) + '%';
+
+        // Repetirien (P9)
+        const repetir = {};
+        data.forEach(d => {
+            if (d.p9) repetir[d.p9] = (repetir[d.p9] || 0) + 1;
         });
-        const patronDif = document.getElementById('patronDiferencia');
-        if (patronDif) patronDif.innerHTML = '<strong>' + positives + '</strong> / ' + n + ' = <strong>' + Math.round(positives/n*100) + '%</strong>';
+        const sortedRepetir = Object.entries(repetir).sort((a, b) => b[1] - a[1]);
+        const patronRepetir = document.getElementById('patronRepetir');
+        if (patronRepetir) patronRepetir.innerHTML = sortedRepetir.map(r => '<strong>' + r[0] + '</strong>: ' + r[1] + ' (' + Math.round(r[1] / n * 100) + '%)').join('<br>');
 
-        // KPI: Diferencia
-        const kpiDif = document.getElementById('kpiDiferencia');
-        if (kpiDif) kpiDif.textContent = Math.round(positives/n*100) + '%';
-
-        // Paraules clau P13
+        // Paraules clau (P12)
         const keywords = {};
-        allData.forEach(d => {
-            const text = getSegmentText(d.segments || [], ['P13']).toLowerCase();
-            text.split(/\s+/).forEach(w => {
-                w = w.replace(/[^a-zà-ü]/g, '');
-                if (w.length > 2 && !stopWords.includes(w)) keywords[w] = (keywords[w] || 0) + 1;
-            });
+        data.forEach(d => {
+            const w = (d.p12_paraula || '').trim();
+            if (w.length > 0) keywords[w] = (keywords[w] || 0) + 1;
         });
-        const topKeywords = Object.entries(keywords).sort((a,b) => b[1] - a[1]).slice(0, 10);
+        const topKeywords = Object.entries(keywords).sort((a, b) => b[1] - a[1]).slice(0, 15);
         const patronParaules = document.getElementById('patronParaules');
         if (patronParaules) patronParaules.innerHTML = topKeywords.map(k => '<span style="display:inline-block;background:#e0f2fe;padding:2px 10px;border-radius:10px;margin:2px;font-size:.8rem;">' + k[0] + ' (' + k[1] + ')</span>').join(' ') || 'Sense dades suficients';
     }
 
     // ===== EXPORT =====
-    async function exportTranscriptions() {
-        let allData = [];
-        try { allData = await dbGetAll('transcriptions'); } catch(e) { alert('Error carregant dades'); return; }
-        const json = JSON.stringify(allData, null, 2);
+    function exportJSON() {
+        const json = JSON.stringify(allSurveys, null, 2);
         const blob = new Blob([json], { type: 'application/json' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'fenix_transcripcions_' + new Date().toISOString().slice(0,10) + '.json';
+        a.download = 'fenix_enquestes_' + new Date().toISOString().slice(0, 10) + '.json';
         a.click();
     }
 
@@ -765,99 +601,19 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
         const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'fenix_graella_' + new Date().toISOString().slice(0,10) + '.csv';
+        a.download = 'fenix_graella_' + new Date().toISOString().slice(0, 10) + '.csv';
         a.click();
     }
 
     // ===== INIT =====
     async function initApp() {
-        console.log('[Fenix] initApp starting...');
+        console.log('[Fenix] Carregant enquestes des de Firestore...');
+        allSurveys = await loadAllSurveys();
+        console.log('[Fenix] Carregades', allSurveys.length, 'enquestes');
 
-        // Load from IndexedDB
-        let localData = [];
-        try {
-            localData = await dbGetAll('transcriptions');
-            console.log('[Fenix] Loaded', localData.length, 'from IndexedDB');
-        } catch(e) {
-            console.error('[Fenix] IndexedDB error:', e);
-        }
-
-        // Fallback: recover from localStorage if IndexedDB empty
-        if (localData.length === 0) {
-            const meta = JSON.parse(localStorage.getItem('fenix_recordings_meta') || '[]');
-            if (meta.length > 0) {
-                for (const m of meta) {
-                    const recovered = {
-                        id: m.conductor + '_' + m.timestamp,
-                        conductor: m.conductor || 'Anònim',
-                        timestamp: m.timestamp,
-                        duration: m.duration || 0,
-                        language: 'es-ES',
-                        segments: m.segmentsJson ? JSON.parse(m.segmentsJson) : []
-                    };
-                    localData.push(recovered);
-                    try { await dbPut('transcriptions', recovered.id, recovered); } catch(e) {}
-                }
-            }
-        }
-
-        // Load from Firestore and merge
-        let cloudData = [];
-        try { cloudData = await firestoreLoadAll(); } catch(e) {}
-
-        const merged = new Map();
-        localData.forEach(d => merged.set(d.id, d));
-        for (const cd of cloudData) {
-            if (!merged.has(cd.id)) {
-                merged.set(cd.id, cd);
-                try { await dbPut('transcriptions', cd.id, cd); } catch(e) {}
-            }
-        }
-
-        // Push local-only to Firestore
-        const cloudIds = new Set(cloudData.map(d => d.id));
-        for (const ld of localData) {
-            if (!cloudIds.has(ld.id)) {
-                try { await firestoreSave(ld); } catch(e) {}
-            }
-        }
-
-        const allData = Array.from(merged.values()).sort((a, b) => (a.timestamp || '').localeCompare(b.timestamp || ''));
-
-        // Update localStorage meta
-        const recordings = allData.map(d => ({
-            conductor: d.conductor,
-            timestamp: d.timestamp,
-            duration: d.duration || 0,
-            filename: 'entrevista_' + (d.conductor || 'anon') + '_' + (d.timestamp || '').slice(0,10) + '.webm',
-            hasTranscription: d.segments && d.segments.length > 0,
-            segmentsJson: JSON.stringify(d.segments || [])
-        }));
-        localStorage.setItem('fenix_recordings_meta', JSON.stringify(recordings));
-
-        // Update header metadata
-        updateHeaderMeta(allData);
-
-        // Render recordings list
-        const list = document.getElementById('recordingsList');
-        if (allData.length > 0) {
-            list.innerHTML = '';
-            for (let i = 0; i < allData.length; i++) {
-                const data = allData[i];
-                let audioUrl = null;
-                try {
-                    const blob = await dbGet('audio_blobs', data.id);
-                    if (blob) audioUrl = URL.createObjectURL(blob);
-                } catch(e) {}
-                addRecordingToList(data, audioUrl, i + 1);
-            }
-        } else {
-            list.innerHTML = '<div style="text-align:center;color:#94a3b8;padding:20px;font-style:italic;">No hi ha gravacions encara</div>';
-        }
-
-        // Render graella and patterns
-        await renderGraella();
-        await updatePatterns();
+        updateHeaderMeta(allSurveys);
+        renderGraella(allSurveys);
+        updatePatterns(allSurveys);
         console.log('[Fenix] initApp complete');
     }
 

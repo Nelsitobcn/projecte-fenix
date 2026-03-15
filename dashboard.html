@@ -115,7 +115,7 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
     </div>
     <div class="stat-card">
       <div class="num" id="targetPct" style="color:var(--blue)">0%</div>
-      <div class="label">Objectiu (16 conductors)</div>
+      <div class="label">Objectiu assolit</div>
     </div>
     <div class="stat-card">
       <div class="num" id="avgCAD" style="color:var(--yellow)">—</div>
@@ -187,12 +187,6 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
     <div class="table-wrap" id="rawTable"></div>
   </div>
 
-  <!-- RECORDINGS INFO -->
-  <div class="chart-card" style="margin-top:20px;">
-    <h3>🎙️ Gravacions d'entrevistes</h3>
-    <div id="recordingsInfo" style="font-size:.85rem;color:var(--muted)">Carregant...</div>
-  </div>
-
   <div class="nav-links">
     <a href="index.html">🔥 Prototip</a>
     <a href="formulari.html">📝 Formulari</a>
@@ -201,17 +195,62 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
 </div>
 
 <script>
-const STORAGE = 'fenix_validacio_v2';
+const FIRESTORE_BASE = 'https://firestore.googleapis.com/v1/projects/projecte-fenix-tmb/databases/default/documents';
 const COLORS = {green:'#2ECC71',yellow:'#F39C12',blue:'#3498DB',red:'#E74C3C',purple:'#9B59B6',gray:'#95A5A6'};
 
-function loadData() {
-  const data = JSON.parse(localStorage.getItem(STORAGE) || '[]');
+let allSurveys = [];
+
+function getField(fields, key) {
+    if (!fields || !fields[key]) return '';
+    const v = fields[key];
+    if (v.stringValue !== undefined) return v.stringValue;
+    if (v.integerValue !== undefined) return String(v.integerValue);
+    if (v.doubleValue !== undefined) return String(v.doubleValue);
+    return '';
+}
+
+async function loadAllSurveys() {
+    const all = [];
+    let url = FIRESTORE_BASE + '/surveys?pageSize=300';
+    while (url) {
+        try {
+            const resp = await fetch(url);
+            if (!resp.ok) throw new Error('HTTP ' + resp.status);
+            const data = await resp.json();
+            (data.documents || []).forEach(doc => {
+                const f = doc.fields || {};
+                all.push({
+                    id: getField(f, 'id'),
+                    timestamp: getField(f, 'timestamp'),
+                    p1: getField(f, 'p1'), p2: getField(f, 'p2'), p3: getField(f, 'p3'),
+                    p4: getField(f, 'p4'), p5: getField(f, 'p5'), p6: getField(f, 'p6'),
+                    p7: getField(f, 'p7'), p8: getField(f, 'p8'), p9: getField(f, 'p9'),
+                    p10: getField(f, 'p10'), p11: getField(f, 'p11'),
+                    p12_paraula: getField(f, 'p12_paraula'),
+                    p13_comentari: getField(f, 'p13_comentari'),
+                    rol: getField(f, 'rol'), edat: getField(f, 'edat'), sexe: getField(f, 'sexe')
+                });
+            });
+            url = data.nextPageToken ? FIRESTORE_BASE + '/surveys?pageSize=300&pageToken=' + data.nextPageToken : null;
+        } catch(e) {
+            console.error('[Fenix] Firestore load error:', e);
+            url = null;
+        }
+    }
+    return all.sort((a, b) => (a.timestamp || '').localeCompare(b.timestamp || ''));
+}
+
+async function loadData() {
+  document.getElementById('liveBadge').textContent = 'CARREGANT...';
+  allSurveys = await loadAllSurveys();
+  const data = allSurveys;
   const n = data.length;
+  document.getElementById('liveBadge').textContent = 'EN VIU';
 
   // Stats
   document.getElementById('totalResponses').textContent = n;
-  document.getElementById('targetPct').textContent = Math.round(n / 16 * 100) + '%';
-  document.getElementById('lastUpdate').textContent = n > 0 ? 'Última resposta: ' + new Date(data[n-1].timestamp).toLocaleTimeString('ca') : '';
+  document.getElementById('targetPct').textContent = Math.round(n / 253 * 100) + '%';
+  document.getElementById('lastUpdate').textContent = n > 0 ? 'Última resposta: ' + new Date(data[n-1].timestamp).toLocaleString('ca') : '';
 
   if (n === 0) {
     document.querySelectorAll('.chart-card div[id^="chart"]').forEach(el => {
@@ -267,15 +306,6 @@ function loadData() {
   html += '</tbody></table>';
   document.getElementById('rawTable').innerHTML = html;
 
-  // Recordings
-  const recs = JSON.parse(localStorage.getItem('fenix_recordings_meta') || '[]');
-  const recInfo = document.getElementById('recordingsInfo');
-  if (recs.length > 0) {
-    recInfo.innerHTML = '<p>🎙️ <strong>' + recs.length + '</strong> entrevistes gravades</p>' +
-      recs.map((r, i) => '<div style="margin-top:8px;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:8px;border:1px solid var(--border);">#' + (i+1) + ' — <strong>' + r.conductor + '</strong> · ' + Math.floor(r.duration/60) + ':' + String(r.duration%60).padStart(2,'0') + ' min · ' + new Date(r.timestamp).toLocaleString('ca') + '</div>').join('');
-  } else {
-    recInfo.innerHTML = 'Cap gravació registrada.';
-  }
 }
 
 function countField(data, field) {
@@ -301,22 +331,11 @@ function renderBars(containerId, counts, colors) {
   }).join('');
 }
 
-function checkAdminAccess() {
-  const pw = prompt('🔒 Accés restringit. Introdueix la contrasenya d\'administrador:');
-  if (!pw) return false;
-  const valid = ['fenix2025', 'araceli', 'manolo'];
-  if (valid.includes(pw.toLowerCase().trim())) return true;
-  alert('❌ Contrasenya incorrecta.');
-  return false;
-}
-
 function exportCSV() {
-  if (!checkAdminAccess()) return;
-  const data = JSON.parse(localStorage.getItem(STORAGE) || '[]');
-  if (!data.length) { alert('No hi ha dades.'); return; }
+  if (!allSurveys.length) { alert('No hi ha dades.'); return; }
   const fields = ['id','edat','sexe','rol','timestamp','p1','p2','p3','p4','p5','p6','p7','p8','p9','p10','p11','p12_paraula','p13_comentari'];
   const header = fields.join(',');
-  const rows = data.map(r => fields.map(f => '"' + String(r[f] || '').replace(/"/g,'""') + '"').join(','));
+  const rows = allSurveys.map(r => fields.map(f => '"' + String(r[f] || '').replace(/"/g,'""') + '"').join(','));
   const csv = '\ufeff' + header + '\n' + rows.join('\n');
   const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
   const a = document.createElement('a');
@@ -325,9 +344,9 @@ function exportCSV() {
   a.click();
 }
 
-// Auto-refresh every 10 seconds
+// Load on start, refresh every 60 seconds
 loadData();
-setInterval(loadData, 10000);
+setInterval(loadData, 60000);
 </script>
 </div><!-- /mainContent -->
 </body>

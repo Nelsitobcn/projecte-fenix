@@ -1872,8 +1872,8 @@
         <li><a href="#escalabilitat">Escalabilitat</a></li>
         <li><a href="#prl">PRL</a></li>
         <li><a href="#evidencia">Evidència</a></li>
-        <li class="admin-only"><a href="#formulari">Participa</a></li>
-        <li class="admin-only"><a href="vr-presentation.html" style="color: #F7C948; font-weight: 800;">🕶️ VR MODE</a></li>
+        <li><a href="#formulari">Participa</a></li>
+        <li><a href="vr-presentation.html" style="color: #F7C948; font-weight: 800;">🕶️ VR MODE</a></li>
         <li><button class="nav-lang" id="langToggle">ES / CAT</button></li>
       </ul>
       <button class="nav-hamburger" id="hamburger">☰</button>
@@ -2251,19 +2251,7 @@
 
       <!-- CAD Satisfaction -->
       <div class="survey-widget glass animate" style="margin-top:30px">
-        <h3 class="survey-title">🎯 Sistema CAD de Satisfacció — Com valores l'espai?</h3>
-        <p style="font-size:.85rem;color:var(--text-secondary);margin-bottom:16px;text-align:center">Fes clic per
-          valorar la teva experiència:</p>
-        <div class="emoji-scale" id="cadScale">
-          <button class="emoji-btn" data-value="1" onclick="selectCAD(1)">😞</button>
-          <button class="emoji-btn" data-value="2" onclick="selectCAD(2)">😕</button>
-          <button class="emoji-btn" data-value="3" onclick="selectCAD(3)">😐</button>
-          <button class="emoji-btn" data-value="4" onclick="selectCAD(4)">🙂</button>
-          <button class="emoji-btn" data-value="5" onclick="selectCAD(5)">😊</button>
-        </div>
-        <div id="cadConfirm"
-          style="text-align:center;display:none;color:var(--zone-active);font-weight:600;margin:10px 0">✅ Gràcies per la
-          teva valoració!</div>
+        <h3 class="survey-title">🎯 Sistema CAD de Satisfacció</h3>
         <div class="survey-results" id="cadResults">
           <p style="font-size:.85rem;font-weight:600;margin-bottom:10px">Resultats acumulats:</p>
           <div id="cadBars"></div>
@@ -2272,29 +2260,7 @@
 
       <!-- Recovery Proxy -->
       <div class="survey-widget glass animate" style="margin-top:20px">
-        <h3 class="survey-title">🔄 Proxy de Recuperació — Com et sents després?</h3>
-        <p style="font-size:.85rem;color:var(--text-secondary);margin-bottom:16px;text-align:center">Selecciona com et
-          sents després d'utilitzar l'espai:</p>
-        <div class="emoji-scale" id="recoveryScale">
-          <button class="emoji-btn" data-value="1" onclick="selectRecovery(1)">😩</button>
-          <button class="emoji-btn" data-value="2" onclick="selectRecovery(2)">😔</button>
-          <button class="emoji-btn" data-value="3" onclick="selectRecovery(3)">😌</button>
-          <button class="emoji-btn" data-value="4" onclick="selectRecovery(4)">😄</button>
-          <button class="emoji-btn" data-value="5" onclick="selectRecovery(5)">🤩</button>
-        </div>
-        <div class="survey-tags" id="recoveryTags">
-          <button class="survey-tag" onclick="toggleTag(this)">Més relaxat/da</button>
-          <button class="survey-tag" onclick="toggleTag(this)">Més concentrat/da</button>
-          <button class="survey-tag" onclick="toggleTag(this)">Menys mal d'esquena</button>
-          <button class="survey-tag" onclick="toggleTag(this)">Millor humor</button>
-          <button class="survey-tag" onclick="toggleTag(this)">Més energia</button>
-          <button class="survey-tag" onclick="toggleTag(this)">Sense canvi</button>
-        </div>
-        <button class="btn btn-primary" style="margin:12px auto;display:block" onclick="submitRecovery()">Enviar
-          valoració</button>
-        <div id="recoveryConfirm"
-          style="text-align:center;display:none;color:var(--zone-active);font-weight:600;margin:10px 0">✅ Registrat!
-          Gràcies.</div>
+        <h3 class="survey-title">🔄 Proxy de Recuperació</h3>
         <div class="survey-results" id="recoveryResults">
           <p style="font-size:.85rem;font-weight:600;margin-bottom:10px">Distribució de beneficis percebuts:</p>
           <div id="recoveryBars"></div>
@@ -2961,7 +2927,7 @@
   <section id="formulari">
     <div class="container">
       <div class="form-wrapper">
-        <div class="form-info animate admin-only">
+        <div class="form-info animate">
           <span class="badge"
             style="background:rgba(46,204,113,.15);color:var(--zone-active);margin-bottom:16px">Participa ara</span>
           <h2>Ajuda'ns a validar<br>el Projecte Fènix</h2>
@@ -3298,25 +3264,27 @@
 
       // Fetch surveys from Firestore and compute KPIs
       function updateKPIs() {
-        fetch('https://firestore.googleapis.com/v1/projects/projecte-fenix-tmb/databases/default/documents/surveys?pageSize=200')
-          .then(r => r.json())
-          .then(data => {
-            const docs = data.documents || [];
-            const surveyData = docs.map(doc => {
-              const f = doc.fields || {};
-              const entry = {};
-              for (const [k, v] of Object.entries(f)) {
-                entry[k] = v.stringValue || v.integerValue || '';
-              }
-              return entry;
-            });
-            computeKPIs(surveyData);
-          })
-          .catch(() => {
-            // Fallback: use localStorage
-            const local = JSON.parse(localStorage.getItem('fenix_validacio_v2') || '[]');
-            if (local.length > 0) computeKPIs(local);
-          });
+        (async function() {
+          const all = [];
+          let url = 'https://firestore.googleapis.com/v1/projects/projecte-fenix-tmb/databases/default/documents/surveys?pageSize=300';
+          while (url) {
+            try {
+              const resp = await fetch(url);
+              const data = await resp.json();
+              const docs = data.documents || [];
+              docs.forEach(doc => {
+                const f = doc.fields || {};
+                const entry = {};
+                for (const [k, v] of Object.entries(f)) {
+                  entry[k] = v.stringValue || v.integerValue || '';
+                }
+                all.push(entry);
+              });
+              url = data.nextPageToken ? 'https://firestore.googleapis.com/v1/projects/projecte-fenix-tmb/databases/default/documents/surveys?pageSize=300&pageToken=' + data.nextPageToken : null;
+            } catch(e) { url = null; }
+          }
+          computeKPIs(all);
+        })();
       }
       updateKPIs();
 
