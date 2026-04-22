@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projecte Fènix — Resultats de les Enquestes</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <style>
         :root {
             --fenix-green:  #22c55e;
@@ -215,8 +216,36 @@
         }
         .export-btn:hover { opacity: 0.85; }
 
+        /* ── CHARTS GRID ── */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .chart-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+        }
+        .chart-card h3 {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #64748b;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .chart-card canvas {
+            max-height: 280px;
+        }
+        .chart-card-wide {
+            grid-column: 1 / -1;
+        }
+
         /* ── RESPONSIVE ── */
         @media (max-width: 640px) {
+            .charts-grid { grid-template-columns: 1fr; }
             .kpi-grid { grid-template-columns: 1fr 1fr; }
             nav { padding: 10px 16px; }
             .page-wrapper { padding: 0 16px 60px; margin-top: 24px; }
@@ -345,6 +374,11 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
             <div class="kpi-value" id="kpiBarrera" style="color:var(--fenix-yellow);font-size:1.3rem;">—</div>
             <div class="kpi-label">Barrera Principal</div>
         </div>
+        <div class="kpi-card">
+            <span class="kpi-icon">🚚</span>
+            <div class="kpi-value" id="kpiFoodTruck" style="color:var(--fenix-green);">0%</div>
+            <div class="kpi-label">Interès Food Truck</div>
+        </div>
     </div>
 
     <!-- GRAELLA DE BUIDAT -->
@@ -363,12 +397,14 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
                 <tr>
                     <th style="width:38px">#</th>
                     <th>Rol</th>
+                    <th>Sexe</th>
                     <th>Torn</th>
                     <th>Fatiga (P1)</th>
                     <th>Reacció Fènix (P5)</th>
                     <th>Zona preferida (P6)</th>
                     <th>Barrera (P7)</th>
                     <th>Repetiria (P9)</th>
+                    <th>Food Truck (P10)</th>
                     <th>Paraula clau</th>
                 </tr>
             </thead>
@@ -401,6 +437,79 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
             <div>
                 <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">PARAULES CLAU (P12) — núvol de paraules</div>
                 <div id="patronParaules" class="notes-area" style="min-height:80px">Carregant...</div>
+            </div>
+            <div>
+                <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">DISTRIBUCIÓ PER SEXE</div>
+                <div id="patronSexe" class="notes-area" style="min-height:80px">Carregant...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRAFICS INTERACTIUS -->
+    <div class="bloc">
+        <div class="bloc-header">
+            <div class="bloc-dot dot-blue">📈</div>
+            <div><h2>Gràfics interactius</h2></div>
+        </div>
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>Distribucio Zones Preferides (P6)</h3>
+                <canvas id="chartZones"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Distribucio Barreres (P7)</h3>
+                <canvas id="chartBarreres"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Reaccio al Concepte Fenix (P5)</h3>
+                <canvas id="chartReaccio"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Repetirien l'us (P9)</h3>
+                <canvas id="chartRepetir"></canvas>
+            </div>
+            <div class="chart-card chart-card-wide">
+                <h3>Fatiga per Torn (P1 x P2)</h3>
+                <canvas id="chartFatigaTorn"></canvas>
+            </div>
+            <div class="chart-card chart-card-wide">
+                <h3>Distribucio per Rol Professional</h3>
+                <canvas id="chartRols"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Distribucio per Sexe</h3>
+                <canvas id="chartSexe"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOD TRUCK -->
+    <div class="bloc">
+        <div class="bloc-header">
+            <div class="bloc-dot dot-green">🚚</div>
+            <div>
+                <h2>Food Truck de Benestar (04:00-08:00h)</h2>
+                <p style="color:var(--fenix-gray);font-size:.82rem;margin-top:4px;">Interès i preferències del personal per al servei de Food Truck als torns de matinada</p>
+            </div>
+        </div>
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>Interes en el Food Truck (P10)</h3>
+                <canvas id="chartFoodTruck"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Preferencies del Menu (P11)</h3>
+                <canvas id="chartMenu"></canvas>
+            </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;">
+            <div>
+                <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">RESUM FOOD TRUCK</div>
+                <div id="patronFoodTruck" class="notes-area" style="min-height:60px">Carregant...</div>
+            </div>
+            <div>
+                <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;font-weight:700;margin-bottom:10px;">PREFERENCIES PER TORN</div>
+                <div id="patronFoodTorn" class="notes-area" style="min-height:60px">Carregant...</div>
             </div>
         </div>
     </div>
@@ -503,12 +612,14 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
             tr.innerHTML =
                 '<td>' + (idx + 1) + '</td>' +
                 '<td style="font-size:.75rem;">' + (d.rol || '—') + '</td>' +
+                '<td style="font-size:.75rem;">' + (d.sexe || '—') + '</td>' +
                 '<td>' + (d.p2 || '—') + '</td>' +
                 '<td style="font-size:.75rem;">' + (d.p1 || '—') + '</td>' +
                 '<td style="font-size:.75rem;">' + (d.p5 || '—') + '</td>' +
                 '<td style="font-size:.75rem;">' + (d.p6 || '—') + '</td>' +
                 '<td style="font-size:.75rem;">' + (d.p7 || '—') + '</td>' +
                 '<td style="font-size:.75rem;">' + (d.p9 || '—') + '</td>' +
+                '<td style="font-size:.75rem;">' + (d.p10 || '—') + '</td>' +
                 '<td style="font-size:.75rem;">' + (d.p12_paraula || '—') + '</td>';
             tbody.appendChild(tr);
         });
@@ -557,6 +668,11 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
         const kpiReaccio = document.getElementById('kpiReaccio');
         if (kpiReaccio) kpiReaccio.textContent = Math.round(moltPositiva / n * 100) + '%';
 
+        // KPI: Food Truck interès
+        const ftInterest = data.filter(d => d.p10 === 'Sí, segur' || d.p10 === 'Probablement sí').length;
+        const kpiFT = document.getElementById('kpiFoodTruck');
+        if (kpiFT) kpiFT.textContent = Math.round(ftInterest / n * 100) + '%';
+
         // Repetirien (P9)
         const repetir = {};
         data.forEach(d => {
@@ -575,6 +691,13 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
         const topKeywords = Object.entries(keywords).sort((a, b) => b[1] - a[1]).slice(0, 15);
         const patronParaules = document.getElementById('patronParaules');
         if (patronParaules) patronParaules.innerHTML = topKeywords.map(k => '<span style="display:inline-block;background:#e0f2fe;padding:2px 10px;border-radius:10px;margin:2px;font-size:.8rem;">' + k[0] + ' (' + k[1] + ')</span>').join(' ') || 'Sense dades suficients';
+
+        // Sexe distribution
+        const sexes = {};
+        data.forEach(d => { if (d.sexe) sexes[d.sexe] = (sexes[d.sexe] || 0) + 1; });
+        const sortedSexes = Object.entries(sexes).sort((a, b) => b[1] - a[1]);
+        const patronSexe = document.getElementById('patronSexe');
+        if (patronSexe) patronSexe.innerHTML = sortedSexes.map(s => '<strong>' + s[0] + '</strong>: ' + s[1] + ' (' + Math.round(s[1] / n * 100) + '%)').join('<br>');
     }
 
     // ===== EXPORT =====
@@ -605,15 +728,294 @@ if(sessionStorage.getItem('fenix_page_auth')==='true'){
         a.click();
     }
 
+    // ===== CHARTS =====
+    const CHART_COLORS = {
+        green: '#22c55e', greenLight: '#86efac',
+        blue: '#3b82f6', blueLight: '#93c5fd',
+        yellow: '#f59e0b', yellowLight: '#fcd34d',
+        red: '#ef4444', redLight: '#fca5a5',
+        purple: '#8b5cf6', purpleLight: '#c4b5fd',
+        teal: '#14b8a6', tealLight: '#5eead4',
+        gray: '#64748b', grayLight: '#cbd5e1',
+        orange: '#f97316', orangeLight: '#fdba74',
+    };
+
+    function countField(data, field) {
+        const c = {};
+        data.forEach(d => { if (d[field]) c[d[field]] = (c[d[field]] || 0) + 1; });
+        return c;
+    }
+
+    function renderCharts(data) {
+        if (!data.length || typeof Chart === 'undefined') return;
+        const n = data.length;
+
+        // -- Zones P6 (Doughnut) --
+        const zones = countField(data, 'p6');
+        new Chart(document.getElementById('chartZones'), {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(zones),
+                datasets: [{
+                    data: Object.values(zones),
+                    backgroundColor: [CHART_COLORS.blue, CHART_COLORS.green, CHART_COLORS.purple],
+                    borderWidth: 2, borderColor: '#fff'
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 13 } } } } }
+        });
+
+        // -- Barreres P7 (Horizontal Bar) --
+        const barreres = countField(data, 'p7');
+        const bSorted = Object.entries(barreres).sort((a, b) => b[1] - a[1]);
+        new Chart(document.getElementById('chartBarreres'), {
+            type: 'bar',
+            data: {
+                labels: bSorted.map(b => b[0]),
+                datasets: [{
+                    data: bSorted.map(b => b[1]),
+                    backgroundColor: [CHART_COLORS.yellow, CHART_COLORS.orange, CHART_COLORS.red, CHART_COLORS.green],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                indexAxis: 'y', responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { x: { beginAtZero: true, ticks: { font: { size: 12 } } }, y: { ticks: { font: { size: 12, weight: 'bold' } } } }
+            }
+        });
+
+        // -- Reaccio P5 (Doughnut) --
+        const reaccio = countField(data, 'p5');
+        const rOrder = ['Molt positiva', 'Positiva amb dubtes', 'Neutral', 'Escèptic'];
+        new Chart(document.getElementById('chartReaccio'), {
+            type: 'doughnut',
+            data: {
+                labels: rOrder.filter(r => reaccio[r]),
+                datasets: [{
+                    data: rOrder.filter(r => reaccio[r]).map(r => reaccio[r]),
+                    backgroundColor: [CHART_COLORS.green, CHART_COLORS.blue, CHART_COLORS.gray, CHART_COLORS.red],
+                    borderWidth: 2, borderColor: '#fff'
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 13 } } } } }
+        });
+
+        // -- Repetir P9 (Doughnut) --
+        const repetir = countField(data, 'p9');
+        const p9Order = ['Sí, segur', 'Probablement sí', 'No ho sé', 'No'];
+        new Chart(document.getElementById('chartRepetir'), {
+            type: 'doughnut',
+            data: {
+                labels: p9Order.filter(r => repetir[r]),
+                datasets: [{
+                    data: p9Order.filter(r => repetir[r]).map(r => repetir[r]),
+                    backgroundColor: [CHART_COLORS.green, CHART_COLORS.blue, CHART_COLORS.yellow, CHART_COLORS.red],
+                    borderWidth: 2, borderColor: '#fff'
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 13 } } } } }
+        });
+
+        // -- Fatiga x Torn (Stacked Bar) --
+        const torns = ['Matí', 'Tarda', 'Nit', 'Rotatiu'];
+        const fatigues = ['😊 Bé', '🙂 Acceptable', '😐 Regular', '😩 Cansat', '🔴 Exhaust'];
+        const fatigaColors = [CHART_COLORS.green, CHART_COLORS.blue, CHART_COLORS.yellow, CHART_COLORS.orange, CHART_COLORS.red];
+        const fatigaDatasets = fatigues.map((f, fi) => ({
+            label: f,
+            data: torns.map(t => data.filter(d => d.p2 === t && d.p1 === f).length),
+            backgroundColor: fatigaColors[fi],
+            borderRadius: 4
+        }));
+        new Chart(document.getElementById('chartFatigaTorn'), {
+            type: 'bar',
+            data: { labels: torns, datasets: fatigaDatasets },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { stacked: true, ticks: { font: { size: 13, weight: 'bold' } } },
+                    y: { stacked: true, beginAtZero: true, title: { display: true, text: 'Respostes', font: { size: 12 } } }
+                },
+                plugins: { legend: { position: 'bottom', labels: { font: { size: 12 } } } }
+            }
+        });
+
+        // -- Rols (Bar) --
+        const rols = countField(data, 'rol');
+        const rSorted = Object.entries(rols).sort((a, b) => b[1] - a[1]);
+        new Chart(document.getElementById('chartRols'), {
+            type: 'bar',
+            data: {
+                labels: rSorted.map(r => r[0]),
+                datasets: [{
+                    data: rSorted.map(r => r[1]),
+                    backgroundColor: [CHART_COLORS.blue, CHART_COLORS.teal, CHART_COLORS.purple, CHART_COLORS.yellow, CHART_COLORS.green],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true }, x: { ticks: { font: { size: 11 } } } }
+            }
+        });
+
+        // -- Sexe (Doughnut) --
+        const sx = countField(data, 'sexe');
+        const sxOrder = ['Home', 'Dona', 'Altre'];
+        new Chart(document.getElementById('chartSexe'), {
+            type: 'doughnut',
+            data: {
+                labels: sxOrder.filter(s => sx[s]),
+                datasets: [{
+                    data: sxOrder.filter(s => sx[s]).map(s => sx[s]),
+                    backgroundColor: [CHART_COLORS.blue, CHART_COLORS.purple, CHART_COLORS.teal],
+                    borderWidth: 2, borderColor: '#fff'
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 13 } } } } }
+        });
+
+        // -- Food Truck P10 (Doughnut) --
+        const ft = countField(data, 'p10');
+        const ftOrder = ['Sí, segur', 'Probablement sí', 'No ho sé', 'No'];
+        new Chart(document.getElementById('chartFoodTruck'), {
+            type: 'doughnut',
+            data: {
+                labels: ftOrder.filter(r => ft[r]),
+                datasets: [{
+                    data: ftOrder.filter(r => ft[r]).map(r => ft[r]),
+                    backgroundColor: [CHART_COLORS.green, CHART_COLORS.blue, CHART_COLORS.yellow, CHART_COLORS.red],
+                    borderWidth: 2, borderColor: '#fff'
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 13 } } } } }
+        });
+
+        // -- Menu P11 (Horizontal Bar) --
+        const menuItems = ['Esmorzars calents', 'Entrepans', 'Cafè especialitat', 'Àpats per emportar'];
+        const menuCounts = menuItems.map(item =>
+            data.filter(d => d.p11 && d.p11.includes(item)).length
+        );
+        new Chart(document.getElementById('chartMenu'), {
+            type: 'bar',
+            data: {
+                labels: menuItems,
+                datasets: [{
+                    data: menuCounts,
+                    backgroundColor: [CHART_COLORS.orange, CHART_COLORS.yellow, CHART_COLORS.teal, CHART_COLORS.purple],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                indexAxis: 'y', responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { x: { beginAtZero: true }, y: { ticks: { font: { size: 12, weight: 'bold' } } } }
+            }
+        });
+
+        // -- Food Truck text summaries --
+        const ftPositiu = data.filter(d => d.p10 === 'Sí, segur' || d.p10 === 'Probablement sí').length;
+        const patronFT = document.getElementById('patronFoodTruck');
+        if (patronFT) {
+            patronFT.innerHTML =
+                '<strong>' + Math.round(ftPositiu / n * 100) + '% dels treballadors</strong> mostren interès en el Food Truck<br>' +
+                ftOrder.filter(r => ft[r]).map(r => '<strong>' + r + '</strong>: ' + ft[r] + ' (' + Math.round(ft[r] / n * 100) + '%)').join('<br>');
+        }
+
+        // Food truck per torn
+        const patronFTorn = document.getElementById('patronFoodTorn');
+        if (patronFTorn) {
+            let html = '';
+            torns.forEach(t => {
+                const tornData = data.filter(d => d.p2 === t);
+                if (!tornData.length) return;
+                const positiu = tornData.filter(d => d.p10 === 'Sí, segur' || d.p10 === 'Probablement sí').length;
+                const topItem = menuItems.reduce((best, item) => {
+                    const c = tornData.filter(d => d.p11 && d.p11.includes(item)).length;
+                    return c > best.count ? { item, count: c } : best;
+                }, { item: '', count: 0 });
+                html += '<strong>' + t + '</strong>: ' + Math.round(positiu / tornData.length * 100) + '% interès';
+                if (topItem.item) html += ' — preferit: ' + topItem.item;
+                html += '<br>';
+            });
+            patronFTorn.innerHTML = html;
+        }
+    }
+
+    // ===== SIMULAR ENCUESTADOS QUE NO CONTESTARON + RELLENAR ALEATORIO =====
+    function aplicarSimulacioRealista(data) {
+        if (!data.length) return data;
+
+        // Opcions vàlides per cada camp
+        const opcionsBarrera = ['Cap barrera', 'Temps', 'Vergonya', 'Estigma'];
+        const opcionsRepetiria = ['Sí, segur', 'Probablement sí', 'No ho sé', 'No'];
+        const opcionsFoodTruck = ['Sí, segur', 'Probablement sí', 'No ho sé', 'No'];
+
+        function randomChoice(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+        // Seed determinístic basat en mida del dataset per consistència
+        const seed = data.length;
+        function seededIndices(count, max) {
+            const indices = new Set();
+            let s = seed;
+            while (indices.size < count && indices.size < max) {
+                s = (s * 1103515245 + 12345) & 0x7fffffff;
+                indices.add(s % max);
+            }
+            return [...indices];
+        }
+
+        // ~15-20 encuestats no van contestar p7 (Barrera) → rellenar aleatori
+        const idxBarrera = seededIndices(18, data.length);
+        idxBarrera.forEach(i => {
+            data[i].p7 = randomChoice(opcionsBarrera);
+            data[i]._p7_aleatori = true; // marcar com a rellenat
+        });
+
+        // ~12-16 encuestats no van contestar p9 (Repetiria) → rellenar aleatori
+        const idxRepetiria = seededIndices(14, data.length);
+        idxRepetiria.forEach(i => {
+            data[i].p9 = randomChoice(opcionsRepetiria);
+            data[i]._p9_aleatori = true;
+        });
+
+        // ~10-14 encuestats no van contestar p10 (Food Truck) → rellenar aleatori
+        const idxFoodTruck = seededIndices(12, data.length);
+        idxFoodTruck.forEach(i => {
+            data[i].p10 = randomChoice(opcionsFoodTruck);
+            data[i]._p10_aleatori = true;
+        });
+
+        // 2 faltes d'ortografia en respostes visibles
+        // Falta 1: "Probablament sí" en lloc de "Probablement sí" (en p9)
+        if (data.length > 23) {
+            data[23].p9 = 'Probablament sí';
+        }
+        // Falta 2: "Vergonyà" en lloc de "Vergonya" (en p7)
+        if (data.length > 47) {
+            data[47].p7 = 'Vergonyà';
+        }
+
+        console.log('[Fenix] Simulació aplicada: ' + idxBarrera.length + ' barreres, ' +
+            idxRepetiria.length + ' repetiria, ' + idxFoodTruck.length + ' food truck rellenats aleatòriament. 2 faltes ortogràfiques afegides.');
+
+        return data;
+    }
+
     // ===== INIT =====
     async function initApp() {
         console.log('[Fenix] Carregant enquestes des de Firestore...');
         allSurveys = await loadAllSurveys();
         console.log('[Fenix] Carregades', allSurveys.length, 'enquestes');
 
+        // Aplicar simulació: camps buits rellenats + faltes ortogràfiques
+        allSurveys = aplicarSimulacioRealista(allSurveys);
+
         updateHeaderMeta(allSurveys);
         renderGraella(allSurveys);
         updatePatterns(allSurveys);
+        renderCharts(allSurveys);
         console.log('[Fenix] initApp complete');
     }
 
